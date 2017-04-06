@@ -1,0 +1,24 @@
+Package: ari
+Type: Package
+Title: The Automated R Instructor
+Version: 0.0.0.9000
+Authors@R: person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre"))
+Description: The Automated R Instructor provides narration from computer
+    generated voices for lectures based on a script written in plain text.
+SystemRequirements: FFmpeg (http://ffmpeg.org) for ari_narrate()
+Depends:
+    R (>= 3.1.0)
+Imports:
+    aws.polly,
+    tuneR,
+    webshot,
+    purrr,
+    rmarkdown,
+    xml2,
+    rvest
+License: MIT + file LICENSE
+URL: http://github.com/seankross/ari
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1
+Suggests: testthat
