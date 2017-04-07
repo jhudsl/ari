@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: The Automated R Instructor
-Version: 0.0.0.9000
+Version: 0.0.0.9007
 Authors@R: person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre"))
 Description: The Automated R Instructor provides narration from computer
     generated voices for lectures based on a script written in plain text.

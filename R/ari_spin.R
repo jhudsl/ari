@@ -6,13 +6,18 @@
 #' @param paragraphs A vector strings that will be spoken by Amazon Polly.
 #' @param output A path to the video file which will be created.
 #' @param voice The Amazon Polly voice you want to use. See \code{list_voices}.
-#' @importFrom aws.polly synthesize
+#' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
-#' 
+#' @export
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
-  output_dir <- dirname(output)
+  if(length(list_voices()) < 1){
+    stop("It appears you're not connected to Amazon Polly. Make sure you've", 
+         "set the appropriate environmental variables before you proceed.")
+  }
+  stopifnot(length(images) > 0)
+  images <- normalizePath(images)
+  output_dir <- normalizePath(dirname(output))
   stopifnot(
-    length(images) > 0, 
     length(paragraphs) > 0,
     identical(length(images), length(paragraphs)),
     all(file.exists(images)),

@@ -9,9 +9,10 @@
 #' @importFrom tuneR bind writeWave
 #' @export
 ari_stitch <- function(images, audio, output = "output.mp4"){
-  output_dir <- dirname(output)
+  stopifnot(length(images) > 0)
+  images <- normalizePath(images)
+  output_dir <- normalizePath(dirname(output))
   stopifnot(
-    length(images) > 0, 
     length(audio) > 0,
     identical(length(images), length(audio)),
     all(file.exists(images)),
@@ -29,7 +30,7 @@ ari_stitch <- function(images, audio, output = "output.mp4"){
   }
   cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
   
-  command <- paste("ffmpeg -f concat -safe 0 -i", input_txt_path, "-i", 
+  command <- paste("ffmpeg -y -f concat -safe 0 -i", input_txt_path, "-i", 
                    wav_path, "-c:v libx264 -c:a aac -b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
                    output)
   system(command)

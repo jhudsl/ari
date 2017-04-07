@@ -1,3 +1,3 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^smoke_test/$
+^smoke_test$

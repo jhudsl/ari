@@ -12,3 +12,13 @@ duration <- function(wav){
   stopifnot(is_Wave(wav))
   length(wav@left) / wav@samp.rate
 }
+
+# get from list
+# list, name of element, default
+gfl <- function(l, n, d){
+  if(is.null(l[[n]])){
+    d
+  } else {
+    l[[n]]
+  }
+}
