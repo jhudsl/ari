@@ -2,7 +2,7 @@
 % Please edit documentation in R/ari_spin.R
 \name{ari_spin}
 \alias{ari_spin}
-\title{Ari Spin}
+\title{Create a video from images and text}
 \usage{
 ari_spin(images, paragraphs, output = "output.mp4", voice)
 }
@@ -13,9 +13,36 @@ ari_spin(images, paragraphs, output = "output.mp4", voice)
 
 \item{output}{A path to the video file which will be created.}
 
-\item{voice}{The Amazon Polly voice you want to use. See \code{list_voices}.}
+\item{voice}{The Amazon Polly voice you want to use. See 
+\code{\link[aws.polly]{list_voices}} for more information about what voices
+are available.}
 }
 \description{
-Given images and text, make a video
+Given equal length vectors of paths to images (preferably \code{.jpg}s
+or \code{.png}s) and strings which will be
+\code{\link[aws.polly]{synthesize}}d by
+\href{https://aws.amazon.com/polly/}{Amazon Polly}, this function creates an
+\code{.mp4} video file where each image is shown with
+its corresponding narration.
+}
+\details{
+This function needs to connect to
+\href{https://aws.amazon.com/}{Amazon Web Services} in order to create the
+narration. You can find a guide for accessing AWS from R
+\href{http://seankross.com/}{here}. For more information about how R connects
+to Amazon Polly see the \code{\link[aws.polly]{aws.polly}} documentation 
+\href{https://github.com/cloudyr/aws.polly}{here}.
+}
+\examples{
+\dontrun{
+
+slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
+sentences <- c("Welome to my very interestig lecture.",
+               "Here are some fantastic equations I came up with.",
+               "Any questions?")
+ari_spin(slides, sentences, voice = "Joey")
+
+}
+
 }
 

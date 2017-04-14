@@ -2,7 +2,7 @@
 % Please edit documentation in R/ari_stitch.R
 \name{ari_stitch}
 \alias{ari_stitch}
-\title{Ari Stitch}
+\title{Create a video from images and audio}
 \usage{
 ari_stitch(images, audio, output = "output.mp4")
 }
@@ -14,11 +14,12 @@ ari_stitch(images, audio, output = "output.mp4")
 \item{output}{A path to the video file which will be created.}
 }
 \description{
-This function takes a vector of paths to images (preferably \code{.jpg}s
+Given a vector of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
-length and creates a \code{.mp4} video file where each image is shown with
-its corresponding audio. Take a look at the \code{\link[tuneR]{readWave}}
-function if you want to import your audio files into R.
+length this function will create an \code{.mp4} video file where each image 
+is shown with its corresponding audio. Take a look at the
+\code{\link[tuneR]{readWave}} function if you want to import your audio 
+files into R.
 }
 \details{
 This function uses \href{https://ffmpeg.org/}{FFmpeg}
@@ -26,5 +27,18 @@ which you should be sure is installed before using this function. If running
 \code{Sys.which("ffmpeg")} in your R console returns an empty string after
 installing FFmpeg then you should set the path to FFmpeg on you computer to
 an environmental variable using \code{Sys.setenv(ffmpeg = "path/to/ffmpeg")}.
+}
+\examples{
+\dontrun{
+
+library(tuneR)
+library(purrr)
+
+slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
+sound <- map(c("rec1.wav", "rec2.wav", "rec3.wav"), readWave)
+
+ari_stitch(slides, sound)
+
+}
 }
 

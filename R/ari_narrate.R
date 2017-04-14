@@ -1,4 +1,4 @@
-#' Ari Narrate
+#' Create a video from slides and a script
 #' 
 #' Given a script and slides, make a video.
 #'

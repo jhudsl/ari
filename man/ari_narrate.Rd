@@ -2,7 +2,7 @@
 % Please edit documentation in R/ari_narrate.R
 \name{ari_narrate}
 \alias{ari_narrate}
-\title{Ari Narrate}
+\title{Create a video from slides and a script}
 \usage{
 ari_narrate(script, slides, output = "output.mp4", voice, ws_args = list())
 }
