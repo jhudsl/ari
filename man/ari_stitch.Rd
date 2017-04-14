@@ -14,6 +14,17 @@ ari_stitch(images, audio, output = "output.mp4")
 \item{output}{A path to the video file which will be created.}
 }
 \description{
-Given images and wavs, make a video
+This function takes a vector of paths to images (preferably \code{.jpg}s
+or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
+length and creates a \code{.mp4} video file where each image is shown with
+its corresponding audio. Take a look at the \code{\link[tuneR]{readWave}}
+function if you want to import your audio files into R.
+}
+\details{
+This function uses \href{https://ffmpeg.org/}{FFmpeg}
+which you should be sure is installed before using this function. If running
+\code{Sys.which("ffmpeg")} in your R console returns an empty string after
+installing FFmpeg then you should set the path to FFmpeg on you computer to
+an environmental variable using \code{Sys.setenv(ffmpeg = "path/to/ffmpeg")}.
 }
 

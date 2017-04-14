@@ -1,11 +1,21 @@
 #' Ari Stitch
 #' 
-#' Given images and wavs, make a video
+#' This function takes a vector of paths to images (preferably \code{.jpg}s
+#' or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
+#' length and creates a \code{.mp4} video file where each image is shown with
+#' its corresponding audio. Take a look at the \code{\link[tuneR]{readWave}}
+#' function if you want to import your audio files into R.
+#' 
+#' This function uses \href{https://ffmpeg.org/}{FFmpeg}
+#' which you should be sure is installed before using this function. If running
+#' \code{Sys.which("ffmpeg")} in your R console returns an empty string after
+#' installing FFmpeg then you should set the path to FFmpeg on you computer to
+#' an environmental variable using \code{Sys.setenv(ffmpeg = "path/to/ffmpeg")}.
 #' 
 #' @param images A vector of paths to images.
 #' @param audio A list of \code{Wave}s from tuneR.
 #' @param output A path to the video file which will be created.
-#' @importFrom purrr reduce
+#' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
 ari_stitch <- function(images, audio, output = "output.mp4"){
@@ -30,7 +40,13 @@ ari_stitch <- function(images, audio, output = "output.mp4"){
   }
   cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
   
-  command <- paste("ffmpeg -y -f concat -safe 0 -i", input_txt_path, "-i", 
+  ffmpeg <- discard(c(Sys.getenv("ffmpeg"), Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
+  
+  if(is.na(ffmpeg)){
+    stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
+  }
+  
+  command <- paste(ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, "-i", 
                    wav_path, "-c:v libx264 -c:a aac -b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
                    output)
   system(command)
