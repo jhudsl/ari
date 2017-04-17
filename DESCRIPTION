@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: The Automated R Instructor
-Version: 0.0.0.9018
+Version: 0.0.0.9019
 Authors@R: person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre"))
 Description: The Automated R Instructor creates slideshows from images and audio
     files. These images can come from image files or HTML slides, and the audio

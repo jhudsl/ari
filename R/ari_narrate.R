@@ -20,7 +20,6 @@
 #' @importFrom purrr map_chr walk
 #' @importFrom webshot webshot
 #' @importFrom aws.polly list_voices
-#' @importFrom servr httd daemon_stop
 #' @export
 ari_narrate <- function(script, slides, output = "output.mp4", voice, 
                         ws_args = list()){
@@ -45,23 +44,14 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   paragraphs <- map_chr(html_text(html_nodes(read_html(html_path), "p")), 
                         function(x){gsub("\u2019", "'", x)})
   
-  
   img_paths <- rep(NA, length(paragraphs))
   
   for(i in 1:length(paragraphs)){
     img_paths[i] <- file.path(output_dir, paste0("ari_img_", i, "_", grs(), ".jpeg"))
     
     if(file.exists(slides)){
-      server_id <- httd(dirname(slides), host = "127.0.0.1", port = 5321, 
-                        browser = FALSE, daemon = TRUE)
-      slides <- paste0("http://127.0.0.1:5321/", basename(slides))
-      on.exit(daemon_stop(server_id))
+      slides <- paste0("file://localhost", slides)
     }
-    
-    # check if it's a file
-    # slides <- normalizePath(slides)
-    # file:///Users/sean/Developer/GitHub/ari/inst/test/ari_intro.html#1
-    # http://127.0.0.1:4321/ari_intro.html#1
     
     webshot(url = paste0(slides, "#", i), file = img_paths[i],
             vwidth = gfl(ws_args, "vwidth", 992),
@@ -74,7 +64,7 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
             eval = gfl(ws_args, "eval", NULL))
   }
   
+  on.exit(walk(img_paths, unlink, force = TRUE))
   ari_spin(img_paths, paragraphs, output, voice)
-  walk(img_paths, unlink, force = TRUE)
   invisible()
 }

@@ -47,6 +47,7 @@ ari_stitch <- function(images, audio, output = "output.mp4"){
   wav <- reduce(audio, bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", grs(), ".wav"))
   writeWave(wav, filename = wav_path)
+  on.exit(unlink(wav_path, force = TRUE))
   
   input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
   for(i in 1:length(images)){
@@ -66,7 +67,6 @@ ari_stitch <- function(images, audio, output = "output.mp4"){
                    output)
   system(command)
   
-  unlink(wav_path, force = TRUE)
-  unlink(input_txt_path, force = TRUE)
+  on.exit(unlink(input_txt_path, force = TRUE))
   invisible(file.exists(output) && file.size(output) > 0)
 }
