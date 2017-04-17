@@ -39,7 +39,7 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   )
   
   html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
-  on.exit(unlink(html_path, force = TRUE))
+  on.exit(unlink(html_path, force = TRUE), add = TRUE)
   render(script, output_format = html_document(), output_file = html_path)
   paragraphs <- map_chr(html_text(html_nodes(read_html(html_path), "p")), 
                         function(x){gsub("\u2019", "'", x)})
@@ -64,7 +64,7 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
             eval = gfl(ws_args, "eval", NULL))
   }
   
-  on.exit(walk(img_paths, unlink, force = TRUE))
+  on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
   ari_spin(img_paths, paragraphs, output, voice)
   invisible()
 }
