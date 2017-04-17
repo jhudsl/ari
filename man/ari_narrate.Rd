@@ -10,16 +10,21 @@ ari_narrate(script, slides, output = "output.mp4", voice, ws_args = list())
 \item{script}{A markdown file where every paragraph will be read over a
 corresponding slide.}
 
-\item{slides}{A URL for an HTML slideshow created with \code{rmarkdown},
-\code{xaringan}, or a similar package.}
+\item{slides}{A path or URL for an HTML slideshow created with 
+\code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a 
+similar package.}
 
-\item{output}{A path to the video file which will be created.}
+\item{output}{The path to the video file which will be created.}
 
-\item{voice}{The Amazon Polly voice you want to use. See \code{list_voices}.}
+\item{voice}{The Amazon Polly voice you want to use. See
+\code{\link[aws.polly]{list_voices}}.}
 
-\item{ws_args}{Arguments to be passed to \code{webshot}.}
+\item{ws_args}{Arguments to be passed to \code{\link[webshot]{webshot}}.}
 }
 \description{
-Given a script and slides, make a video.
+\code{ari_narrate} creates a video from a script written in markdown and HTML
+slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
+This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly} 
+via \code{\link{ari_spin}}.
 }
 

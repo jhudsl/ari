@@ -1,20 +1,26 @@
 #' Create a video from slides and a script
 #' 
-#' Given a script and slides, make a video.
+#' \code{ari_narrate} creates a video from a script written in markdown and HTML
+#' slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
+#' This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly} 
+#' via \code{\link{ari_spin}}.
 #'
 #' @param script A markdown file where every paragraph will be read over a
 #' corresponding slide.
-#' @param slides A URL for an HTML slideshow created with \code{rmarkdown},
-#' \code{xaringan}, or a similar package.
-#' @param output A path to the video file which will be created.
-#' @param voice The Amazon Polly voice you want to use. See \code{list_voices}.
-#' @param ws_args Arguments to be passed to \code{webshot}.
+#' @param slides A path or URL for an HTML slideshow created with 
+#' \code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a 
+#' similar package.
+#' @param output The path to the video file which will be created.
+#' @param voice The Amazon Polly voice you want to use. See
+#' \code{\link[aws.polly]{list_voices}}.
+#' @param ws_args Arguments to be passed to \code{\link[webshot]{webshot}}.
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text
 #' @importFrom rmarkdown render html_document
 #' @importFrom purrr map_chr walk
 #' @importFrom webshot webshot
 #' @importFrom aws.polly list_voices
+#' @importFrom servr httd daemon_stop
 #' @export
 ari_narrate <- function(script, slides, output = "output.mp4", voice, 
                         ws_args = list()){
@@ -24,21 +30,39 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   }
   
   output_dir <- normalizePath(dirname(output))
+  script <- normalizePath(script)
+  if(file.exists(slides)){
+    slides <- normalizePath(slides)
+  }
   stopifnot(
     file.exists(script),
     dir.exists(output_dir)
   )
   
   html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
+  on.exit(unlink(html_path, force = TRUE))
   render(script, output_format = html_document(), output_file = html_path)
   paragraphs <- map_chr(html_text(html_nodes(read_html(html_path), "p")), 
                         function(x){gsub("\u2019", "'", x)})
-  unlink(html_path, force = TRUE)
+  
   
   img_paths <- rep(NA, length(paragraphs))
   
   for(i in 1:length(paragraphs)){
     img_paths[i] <- file.path(output_dir, paste0("ari_img_", i, "_", grs(), ".jpeg"))
+    
+    if(file.exists(slides)){
+      server_id <- httd(dirname(slides), host = "127.0.0.1", port = 5321, 
+                        browser = FALSE, daemon = TRUE)
+      slides <- paste0("http://127.0.0.1:5321/", basename(slides))
+      on.exit(daemon_stop(server_id))
+    }
+    
+    # check if it's a file
+    # slides <- normalizePath(slides)
+    # file:///Users/sean/Developer/GitHub/ari/inst/test/ari_intro.html#1
+    # http://127.0.0.1:4321/ari_intro.html#1
+    
     webshot(url = paste0(slides, "#", i), file = img_paths[i],
             vwidth = gfl(ws_args, "vwidth", 992),
             vheight = gfl(ws_args, "vheight", 744),

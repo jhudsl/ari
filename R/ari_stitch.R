@@ -12,6 +12,8 @@
 #' \code{Sys.which("ffmpeg")} in your R console returns an empty string after
 #' installing FFmpeg then you should set the path to FFmpeg on you computer to
 #' an environmental variable using \code{Sys.setenv(ffmpeg = "path/to/ffmpeg")}.
+#' The environmental variable will always override the result of
+#' \code{Sys.which("ffmpeg")}.
 #' 
 #' @param images A vector of paths to images.
 #' @param audio A list of \code{Wave}s from tuneR.
