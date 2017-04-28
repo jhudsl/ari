@@ -1,0 +1,46 @@
+---
+title: "Ari Comments"
+author: "Sean Kross"
+---
+
+<!--
+Hello and welcome to this short presentation about Ari, the automated R
+instructor.
+-->
+
+## What is Ari?
+
+- Quickly create a lecture from plain text.
+- Update your lecture easily.
+- Your lecture is accessible.
+- The materials can be translated into other spoken and written languages.
+
+<!-- Ari is an R package which allows you to create lecture videos from plain
+text. Your lectures are therefore easy to edit, translate, and they are
+universally accessable. -->
+
+## Installation
+
+```{r, eval=FALSE}
+library(devtools)
+install_github("seankross/ari")
+```
+
+<!-- You can install Ari using the dev tools package. -->
+
+## Technology
+
+- Markdown
+- R
+- [Amazon Polly](https://aws.amazon.com/polly/)
+
+<!--
+Ari is just a bundling of existing technologies including, r markdown and Polly,
+a text to speech product from Amazon Web Services.
+-->
+
+## Conclusion
+
+<!--
+Thank you for watching this video and good luck using Ari!
+-->

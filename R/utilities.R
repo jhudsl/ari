@@ -22,3 +22,49 @@ gfl <- function(l, n, d){
     l[[n]]
   }
 }
+
+#' @importFrom purrr map_chr compose
+string_tirm <- function(s){
+  str_rev <- function(t){
+    paste(rev(strsplit(t, NULL)[[1]]), collapse = "")
+  }
+  
+  str_trim_right <- function(x){
+    sub("\\s+$", "", x)
+  }
+  
+  str_trim_left <- function(x){
+    x <- str_rev(x)
+    x <- str_trim_right(x)
+    str_rev(x)
+  }
+  
+  lr <- compose(str_trim_left, str_trim_right)
+  map_chr(s, lr)
+}
+
+# get text from html comments in an Rmd
+parse_html_comments <- function(path){
+  lines_ <- readLines(path, warn = FALSE)
+  starts <- grep("<!--", lines_)
+  ends <- grep("-->", lines_)
+  
+  if(length(starts) != length(ends)){
+    stop("There's a comment open/close mismatch.")
+  }
+  
+  result <- rep(NA, length(starts))
+  
+  for(i in seq_along(starts)){
+    if(starts[i] == ends[i]){ # Single line
+      result[i] <- lines_[starts[i]]
+    } else {                  # Multiple lines
+      result[i] <- paste(string_tirm(lines_[starts[i]:ends[i]]), collapse = " ")
+    }
+    result[i] <- sub("<!--", "", result[i])
+    result[i] <- sub("-->", "", result[i])
+  }
+  
+  string_tirm(result)
+}
+

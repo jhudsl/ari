@@ -7,8 +7,9 @@
 ari_narrate(script, slides, output = "output.mp4", voice, ws_args = list())
 }
 \arguments{
-\item{script}{A markdown file where every paragraph will be read over a
-corresponding slide.}
+\item{script}{Either a markdown file where every paragraph will be read over
+a corresponding slide, or an \code{.Rmd} file where each HTML comment will
+be used for narration.}
 
 \item{slides}{A path or URL for an HTML slideshow created with 
 \code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a 

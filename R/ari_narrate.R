@@ -5,8 +5,9 @@
 #' This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly} 
 #' via \code{\link{ari_spin}}.
 #'
-#' @param script A markdown file where every paragraph will be read over a
-#' corresponding slide.
+#' @param script Either a markdown file where every paragraph will be read over
+#' a corresponding slide, or an \code{.Rmd} file where each HTML comment will
+#' be used for narration.
 #' @param slides A path or URL for an HTML slideshow created with 
 #' \code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a 
 #' similar package.
@@ -20,7 +21,16 @@
 #' @importFrom purrr map_chr walk
 #' @importFrom webshot webshot
 #' @importFrom aws.polly list_voices
+#' @importFrom tools file_ext
 #' @export
+#' @examples 
+#' \dontrun{
+#' 
+#' ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
+#'             system.file("test", "ari_intro.html", package = "ari"),
+#'             voice = "Joey")
+#' 
+#' }
 ari_narrate <- function(script, slides, output = "output.mp4", voice, 
                         ws_args = list()){
   if(length(list_voices()) < 1){
@@ -38,11 +48,15 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
     dir.exists(output_dir)
   )
   
-  html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
-  on.exit(unlink(html_path, force = TRUE), add = TRUE)
-  render(script, output_format = html_document(), output_file = html_path)
-  paragraphs <- map_chr(html_text(html_nodes(read_html(html_path), "p")), 
-                        function(x){gsub("\u2019", "'", x)})
+  if(file_ext(script) %in% c("Rmd", "rmd")){
+    paragraphs <- parse_html_comments(script)
+  } else {
+    html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
+    on.exit(unlink(html_path, force = TRUE), add = TRUE)
+    render(script, output_format = html_document(), output_file = html_path)
+    paragraphs <- map_chr(html_text(html_nodes(read_html(html_path), "p")), 
+                          function(x){gsub("\u2019", "'", x)})
+  }
   
   img_paths <- rep(NA, length(paragraphs))
   
