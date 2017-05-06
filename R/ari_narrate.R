@@ -26,6 +26,7 @@
 #' @examples 
 #' \dontrun{
 #' 
+#' # 
 #' ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
 #'             system.file("test", "ari_intro.html", package = "ari"),
 #'             voice = "Joey")

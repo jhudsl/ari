@@ -22,6 +22,7 @@
 #' are available.
 #' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
+#' @importFrom purrr map reduce
 #' @export
 #' @examples 
 #' \dontrun{
@@ -54,7 +55,12 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
   ideal_duration <- rep(NA, length(paragraphs))
   
   for(i in par_along){
-    wav <- synthesize(paragraphs[i], voice)
+    if(nchar(paragraphs[i]) < 1500){
+      wav <- synthesize(paragraphs[i], voice)
+    } else {
+      chunks <- split_up_text(paragraphs[i])
+      wav <- reduce(map(chunks, synthesize, voice = voice), bind)
+    }
     ideal_duration[i] <- ceiling(length(wav@left) / wav@samp.rate)
     end_wav <- Wave(rep(0, wav@samp.rate * ideal_duration[i] - length(wav@left)),
                     bit = wav@bit, samp.rate = wav@samp.rate)

@@ -2,7 +2,7 @@ context("Test ari_narrate()")
 
 skip_narrate <- function(){
   if(Sys.getenv("SKIP_NARRATE") != ""){
-    skip()
+    skip("skipping ari_narrate()")
   }
 }
 

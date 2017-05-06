@@ -68,3 +68,11 @@ parse_html_comments <- function(path){
   string_tirm(result)
 }
 
+# split a big string into equal-ish sized pieces
+#' @importFrom purrr map
+split_up_text <- function(text){
+  pieces <- ceiling(nchar(text)/1500)
+  words <- strsplit(text, " ")[[1]]
+  chunks <- split(words, ceiling(seq_along(words)/(length(words)/pieces)))
+  map(chunks, paste, collapse = " ")
+}
