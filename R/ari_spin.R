@@ -10,7 +10,8 @@
 #' This function needs to connect to
 #' \href{https://aws.amazon.com/}{Amazon Web Services} in order to create the
 #' narration. You can find a guide for accessing AWS from R
-#' \href{http://seankross.com/}{here}. For more information about how R connects
+#' \href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
+#' For more information about how R connects
 #' to Amazon Polly see the \code{\link[aws.polly]{aws.polly}} documentation 
 #' \href{https://github.com/cloudyr/aws.polly}{here}.
 #' 
@@ -23,6 +24,7 @@
 #' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
 #' @importFrom purrr map reduce
+#' @importFrom progress progress_bar
 #' @export
 #' @examples 
 #' \dontrun{
@@ -54,6 +56,8 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
   par_along <- 1:length(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
   
+  pb <- progress_bar$new(format = "Fetching Narration [:bar] :percent", total = length(par_along))
+  
   for(i in par_along){
     if(nchar(paragraphs[i]) < 1500){
       wav <- synthesize(paragraphs[i], voice)
@@ -65,6 +69,7 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
     end_wav <- Wave(rep(0, wav@samp.rate * ideal_duration[i] - length(wav@left)),
                     bit = wav@bit, samp.rate = wav@samp.rate)
     wavs[[i]] <- bind(wav, end_wav)
+    pb$tick()
   }
   
   ari_stitch(images, wavs, output)

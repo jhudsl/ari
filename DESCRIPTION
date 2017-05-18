@@ -1,14 +1,15 @@
 Package: ari
 Type: Package
 Title: The Automated R Instructor
-Version: 0.0.0.9029
+Version: 0.0.0.9033
 Authors@R: person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre"))
 Description: The Automated R Instructor creates slideshows from images and audio
     files. These images can come from image files or HTML slides, and the audio
     files can be provided by the user or computer voice narration can be created
     using Amazon Polly. The purpose of this package is to allow users to create
     accessible, translatable, and programmatic lecture videos. 
-SystemRequirements: FFmpeg (http://ffmpeg.org) for ari_narrate() and ari_spin().
+SystemRequirements: FFmpeg (http://ffmpeg.org) for ari_narrate(), ari_spin(),
+    and ari_stitch().
 Depends:
     R (>= 3.1.0)
 Imports:
@@ -19,7 +20,8 @@ Imports:
     rmarkdown,
     xml2,
     rvest,
-    tools
+    tools,
+    progress
 Suggests:
     testthat,
     grDevices,

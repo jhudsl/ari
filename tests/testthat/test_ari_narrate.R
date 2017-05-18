@@ -10,6 +10,7 @@ video <- file.path(tempdir(), "output.mp4")
 
 test_that("Ari can make a video from local HTML slides.", {
   skip_on_cran()
+  skip_on_travis()
   skip_narrate()
   
   ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),

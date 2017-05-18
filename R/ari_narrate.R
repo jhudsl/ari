@@ -22,6 +22,7 @@
 #' @importFrom webshot webshot
 #' @importFrom aws.polly list_voices
 #' @importFrom tools file_ext
+#' @importFrom progress progress_bar
 #' @export
 #' @examples 
 #' \dontrun{
@@ -61,6 +62,8 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   
   img_paths <- rep(NA, length(paragraphs))
   
+  pb <- progress_bar$new(format = "Recording Slides [:bar] :percent", total = length(paragraphs))
+
   for(i in 1:length(paragraphs)){
     img_paths[i] <- file.path(output_dir, paste0("ari_img_", i, "_", grs(), ".jpeg"))
     
@@ -77,6 +80,7 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
             delay = gfl(ws_args, "delay", 0.2),
             zoom = gfl(ws_args, "zoom", 1),
             eval = gfl(ws_args, "eval", NULL))
+    pb$tick()
   }
   
   on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)

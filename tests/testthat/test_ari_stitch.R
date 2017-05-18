@@ -16,6 +16,9 @@ video <- file.path(temp_dir, "output.mp4")
 ari_stitch(graphs, sound, video)
 
 test_that("ari_stitch() can combine audio and images into a video", {
+  skip_on_cran()
+  skip_on_travis()
+  
   expect_true(file.size(video) > 50000)
 })
 

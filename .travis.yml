@@ -1,0 +1,15 @@
+language: r
+
+matrix:
+  include:
+  - r: release
+  - r: oldrel
+  - r: devel
+
+sudo: false
+cache: packages
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
