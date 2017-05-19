@@ -23,7 +23,8 @@ or \code{.png}s) and strings which will be
 \code{\link[aws.polly]{synthesize}}d by
 \href{https://aws.amazon.com/polly/}{Amazon Polly}, this function creates an
 \code{.mp4} video file where each image is shown with
-its corresponding narration.
+its corresponding narration. This function uses \code{\link{ari_stitch}} to
+create the video.
 }
 \details{
 This function needs to connect to

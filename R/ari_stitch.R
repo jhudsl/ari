@@ -5,7 +5,7 @@
 #' length this function will create an \code{.mp4} video file where each image 
 #' is shown with its corresponding audio. Take a look at the
 #' \code{\link[tuneR]{readWave}} function if you want to import your audio 
-#' files into R.
+#' files into R. Please be sure that all images have the same dimensions.
 #' 
 #' This function uses \href{https://ffmpeg.org/}{FFmpeg}
 #' which you should be sure is installed before using this function. If running

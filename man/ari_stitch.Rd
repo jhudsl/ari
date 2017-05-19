@@ -19,7 +19,7 @@ or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
 length this function will create an \code{.mp4} video file where each image 
 is shown with its corresponding audio. Take a look at the
 \code{\link[tuneR]{readWave}} function if you want to import your audio 
-files into R.
+files into R. Please be sure that all images have the same dimensions.
 }
 \details{
 This function uses \href{https://ffmpeg.org/}{FFmpeg}
