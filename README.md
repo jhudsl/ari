@@ -81,3 +81,24 @@ ari_stitch(
   ari_example(c("mab1.png", "mab2.png")),
   list(noise(), noise()))
 ```
+
+## Why Use Ari?
+
+Creating videos from plain text has some significant advantages:
+
+1. Video content can be version controlled with Git and GitHub - after all it's
+just plain text!
+2. Videos with explicit narration are more accessible to students. We don't have
+to rely on YouTube's often faulty captioning algorithm.
+3. Scripts can be automatically translated into other languages with services
+like the [Google Translation API](https://cloud.google.com/translate/docs/) and
+Amazon Polly can speak languages other than English. This means you can write
+a lecture once and generate slides and videos in multiple languages.
+
+At the [Johns Hopkins Data Science Lab](http://jhudatascience.org/) we rapidly
+develop highly technical content about the latest libraries and technologies
+available to data scientists. Video production requires a significant time
+investment and APIs are always changing. If the interface to a software library
+changes it's particularly arduous to re-record an entire lecture because some
+function arguments changed. By using Ari we hope to be able to rapidly create
+and update video content. 

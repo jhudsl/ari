@@ -23,6 +23,7 @@ unlink(video, force = TRUE)
 
 test_that("Ari can make a video from HTML slides on the web.", {
   skip_on_cran()
+  skip_on_travis()
   skip_narrate()
   
   ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
@@ -35,6 +36,7 @@ unlink(video, force = TRUE)
 
 test_that("Ari use an Rmd file with HTML comments for a script.", {
   skip_on_cran()
+  skip_on_travis()
   skip_narrate()
   
   ari_narrate(system.file("test", "ari_comments.Rmd", package = "ari"),
