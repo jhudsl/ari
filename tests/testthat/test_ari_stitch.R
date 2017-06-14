@@ -2,7 +2,7 @@ context("Test ari_stitch()")
 
 test_that("ari_stitch() can combine audio and images into a video", {
   skip_on_cran()
-  skip_on_travis()
+  #skip_on_travis()
   
   temp_dir <- tempdir()
   
