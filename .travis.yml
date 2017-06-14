@@ -9,7 +9,7 @@ cache: packages
 addons:
   apt:
     packages:
-    - ffmpeg=3.2.4
+    - ffmpeg=3.3.2
 notifications:
   email:
     on_success: always
