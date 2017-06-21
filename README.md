@@ -46,8 +46,9 @@ can start using Ari.
 ## Examples
 
 These examples make use of the `ari_example()` function. In order to view the
-files mentioned here you should use
-`file.show(ari_example("[file name]"))`.
+files mentioned here you should use `file.show(ari_example("[file name]"))`.
+You can watch an example of a video produced by Ari
+[here](https://youtu.be/dcIUu4GCOKU).
 
 ```R
 library(ari)
