@@ -43,4 +43,3 @@ ari_stitch(slides, sound)
 
 }
 }
-

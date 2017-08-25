@@ -14,7 +14,9 @@
 #' @param output The path to the video file which will be created.
 #' @param voice The Amazon Polly voice you want to use. See
 #' \code{\link[aws.polly]{list_voices}}.
-#' @param ws_args Arguments to be passed to \code{\link[webshot]{webshot}}.
+#' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
+#' The vectorized mode is faster though it can cause screens to repeat.
+#' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text
 #' @importFrom rmarkdown render html_document
@@ -22,7 +24,6 @@
 #' @importFrom webshot webshot
 #' @importFrom aws.polly list_voices
 #' @importFrom tools file_ext
-#' @importFrom progress progress_bar
 #' @export
 #' @examples 
 #' \dontrun{
@@ -33,17 +34,22 @@
 #'             voice = "Joey")
 #' 
 #' }
-ari_narrate <- function(script, slides, output = "output.mp4", voice, 
-                        ws_args = list()){
+ari_narrate <- function(script, slides, output = "output.mp4", voice,
+                        capture_method = "vectorized", ...){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've", 
          "set the appropriate environmental variables before you proceed.")
+  }
+  
+  if(!(capture_method %in% c("vectorized", "iterative"))) {
+    stop('capture_method must be either "vectorized" or "iterative"')
   }
   
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
   if(file.exists(slides)){
     slides <- normalizePath(slides)
+    slides <- paste0("file://localhost", slides)
   }
   stopifnot(
     file.exists(script),
@@ -60,27 +66,15 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
                           function(x){gsub("\u2019", "'", x)})
   }
   
-  img_paths <- rep(NA, length(paragraphs))
+  slide_nums <- 1:length(paragraphs)
+  img_paths <- file.path(output_dir, paste0("ari_img_", slide_nums, "_", grs(), ".jpeg"))
   
-  pb <- progress_bar$new(format = "Recording Slides [:bar] :percent", total = length(paragraphs))
-
-  for(i in 1:length(paragraphs)){
-    img_paths[i] <- file.path(output_dir, paste0("ari_img_", i, "_", grs(), ".jpeg"))
-    
-    if(file.exists(slides)){
-      slides <- paste0("file://localhost", slides)
+  if(capture_method == "vectorized"){
+    webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)
+  } else {
+    for(i in slide_nums){
+      webshot(url = paste0(slides, "#", i), file = img_paths[i], ...)
     }
-    
-    webshot(url = paste0(slides, "#", i), file = img_paths[i],
-            vwidth = gfl(ws_args, "vwidth", 992),
-            vheight = gfl(ws_args, "vheight", 744),
-            cliprect = gfl(ws_args, "cliprect", NULL),
-            selector = gfl(ws_args, "selector", NULL),
-            expand = gfl(ws_args, "expand", NULL),
-            delay = gfl(ws_args, "delay", 0.2),
-            zoom = gfl(ws_args, "zoom", 1),
-            eval = gfl(ws_args, "eval", NULL))
-    pb$tick()
   }
   
   on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
