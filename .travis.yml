@@ -4,12 +4,10 @@ matrix:
   - r: release
   - r: oldrel
   - r: devel
-sudo: false
+sudo: true
 cache: packages
-addons:
-  apt:
-    packages:
-    - ffmpeg
+before_install:
+  - sudo apt-get install ffmpeg=3.2.4
 notifications:
   email:
     on_success: always
