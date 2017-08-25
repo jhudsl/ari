@@ -17,4 +17,3 @@ the ari documentation.
 \examples{
 ari_example("ari_intro.Rmd")
 }
-

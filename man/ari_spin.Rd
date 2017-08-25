@@ -47,4 +47,3 @@ ari_spin(slides, sentences, voice = "Joey")
 }
 
 }
-

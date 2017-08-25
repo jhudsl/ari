@@ -4,7 +4,8 @@
 \alias{ari_narrate}
 \title{Create a video from slides and a script}
 \usage{
-ari_narrate(script, slides, output = "output.mp4", voice, ws_args = list())
+ari_narrate(script, slides, output = "output.mp4", voice,
+  capture_method = "vectorized", ...)
 }
 \arguments{
 \item{script}{Either a markdown file where every paragraph will be read over
@@ -20,7 +21,10 @@ similar package.}
 \item{voice}{The Amazon Polly voice you want to use. See
 \code{\link[aws.polly]{list_voices}}.}
 
-\item{ws_args}{Arguments to be passed to \code{\link[webshot]{webshot}}.}
+\item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
+The vectorized mode is faster though it can cause screens to repeat.}
+
+\item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
 }
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML
@@ -38,4 +42,3 @@ ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
 
 }
 }
-
