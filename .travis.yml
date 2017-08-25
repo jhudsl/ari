@@ -7,7 +7,7 @@ matrix:
 sudo: true
 cache: packages
 before_install:
-  - sudo apt-get install ffmpeg=3.2.4
+  - sudo apt-get install ffmpeg
 notifications:
   email:
     on_success: always
