@@ -4,10 +4,12 @@ matrix:
   - r: release
   - r: oldrel
   - r: devel
+dist: trusty
 sudo: true
 cache: packages
 before_install:
-  - sudo apt-get install ffmpeg
+  - curl -O https://gist.githubusercontent.com/seankross/51087e4f46327b9697757ca3e92a209a/raw/02d9552feda04909136f5317d2ec4421858bec92/install_ffmpeg_ubuntu.sh
+  - bash install_ffmpeg_ubuntu.sh
 notifications:
   email:
     on_success: always
