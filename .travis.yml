@@ -9,7 +9,7 @@ sudo: required
 cache: packages
 before_install:
   - cd
-  - curl -O https://gist.githubusercontent.com/seankross/51087e4f46327b9697757ca3e92a209a/raw/3e37a5565fe8e5e310914d99e1920cb3318a1988/install_ffmpeg_ubuntu.sh
+  - curl -O https://gist.githubusercontent.com/seankross/51087e4f46327b9697757ca3e92a209a/raw/aad5a9423d7a83abd2715feac02eb0835625447d/install_ffmpeg_ubuntu.sh
   - sudo bash install_ffmpeg_ubuntu.sh
 notifications:
   email:
