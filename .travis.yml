@@ -5,7 +5,7 @@ matrix:
   - r: oldrel
   - r: devel
 dist: trusty
-sudo: true
+sudo: required
 cache: packages
 before_install:
   - curl -O https://gist.githubusercontent.com/seankross/51087e4f46327b9697757ca3e92a209a/raw/a5589ede72ae87759b52d654231f9e82aea10078/install_ffmpeg_ubuntu.sh
