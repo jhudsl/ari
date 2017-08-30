@@ -15,20 +15,11 @@ cache: packages
 before_install:
   - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; 
       then
-      sudo apt-get -qq update ;
-      sudo apt-get -y install yasm ;
-      sudo apt-get -y install autoconf automake build-essential libass-dev libfreetype6-dev \
-              libsdl2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev \
-                      libxcb-xfixes0-dev pkg-config texinfo wget zlib1g-dev ;
-      fname=ffmpeg.tar.bz2 ;
-      wget -O ${fname} http://ffmpeg.org/releases/ffmpeg-3.3.3.tar.bz2 ;
-      ffmpeg_dir=`tar -tf ${fname} | head -n 1` ;
-      tar -xvjf ${fname}  ;
-      rm ${fname} ;
-      cd ${ffmpeg_dir} ;
-      ./configure && sudo make && sudo make install  ;
-      cd ../ ;
-      sudo rm -rf ${ffmpeg_dir} ;
+        sudo apt-get -qq update ;
+        sudo apt-get install -y software-properties-common ;
+        sudo add-apt-repository -y ppa:mc3man/trusty-media ;
+        sudo apt-get -qq update ;
+        sudo apt-get install -y ffmpeg ;
     fi 
   - if [[ "${TRAVIS_OS_NAME}" == "os" ]]; 
       then
