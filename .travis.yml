@@ -18,6 +18,7 @@ before_install:
       sudo apt-get -qq update; 
       sudo add-apt-repository ppa:mc3man/trusty-media ;
       sudo apt-get -qq update ;
+      sudo apt-get dist-upgrade ;
       sudo apt-get install -y ffmpeg gstreamer0.10-ffmpeg ;
       sudo apt-get install -y imagemagick;
     fi 
