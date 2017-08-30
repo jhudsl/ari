@@ -9,12 +9,12 @@ sudo: required
 cache: packages
 
 before_install:
-  - if [[ ${TRAVIS_OS_NAME} == "linux"]]; 
+  - if [[ ${TRAVIS_OS_NAME} == "linux" ]]; 
       then
       sudo apt-get -qq update; 
       sudo apt-get -y ffmpeg imagemagick;
     fi 
-  - if [[ ${TRAVIS_OS_NAME} == "os"]]; 
+  - if [[ ${TRAVIS_OS_NAME} == "os" ]]; 
       then
       brew install -y ffmpeg imagemagick;
     fi     
