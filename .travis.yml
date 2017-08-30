@@ -8,6 +8,7 @@ dist: trusty
 sudo: required
 cache: packages
 before_install:
+  - sudo apt-get -qq update
   - cd
   - curl -O https://gist.githubusercontent.com/seankross/51087e4f46327b9697757ca3e92a209a/raw/aad5a9423d7a83abd2715feac02eb0835625447d/install_ffmpeg_ubuntu.sh
   - sudo bash install_ffmpeg_ubuntu.sh
