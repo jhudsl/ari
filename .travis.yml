@@ -12,7 +12,7 @@ before_install:
   - if [[ ${TRAVIS_OS_NAME} == "linux" ]]; 
       then
       sudo apt-get -qq update; 
-      sudo apt-get -y ffmpeg imagemagick;
+      sudo apt-get install -y ffmpeg imagemagick;
     fi 
   - if [[ ${TRAVIS_OS_NAME} == "os" ]]; 
       then
