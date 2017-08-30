@@ -12,7 +12,10 @@ before_install:
   - if [[ ${TRAVIS_OS_NAME} == "linux" ]]; 
       then
       sudo apt-get -qq update; 
-      sudo apt-get install -y ffmpeg imagemagick;
+      sudo add-apt-repository ppa:mc3man/trusty-media ;
+      sudo apt-get -qq update ;
+      sudo apt-get install -y ffmpeg gstreamer0.10-ffmpeg ;
+      sudo apt-get install -y imagemagick;
     fi 
   - if [[ ${TRAVIS_OS_NAME} == "os" ]]; 
       then
