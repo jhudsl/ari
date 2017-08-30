@@ -2,6 +2,9 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/seankross/ari.svg?branch=master)](https://travis-ci.org/seankross/ari)
 
+muschellij2 badge:
+[![Travis-CI Build Status](https://travis-ci.org/muschellij2/ari.svg?branch=master)](https://travis-ci.org/muschellij2/ari)
+
 ### The Automated R Instructor
 
 Ari is an R package designed to help you make videos from plain text files. Ari
