@@ -5,8 +5,18 @@ r:
   - oldrel
   -  devel
 
-sudo: false
+sudo: required
 cache: packages
+
+before_install:
+  - if [[ ${TRAVIS_OS_NAME} == "linux"]]; 
+      then
+      sudo apt-get ffmpeg imagemagick;
+    fi 
+  - if [[ ${TRAVIS_OS_NAME} == "os"]]; 
+      then
+      brew install ffmpeg imagemagick;
+    fi     
 
 notifications:
   email:
