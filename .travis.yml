@@ -2,8 +2,8 @@ language: r
 dist: trusty
 r:
   - release
-  - oldrel
-  -  devel
+  # - oldrel
+  # -  devel
 
 os: 
   - linux
@@ -26,6 +26,8 @@ before_install:
       rm ${fname} ;
       cd ${ffmpeg_dir} ;
       ./configure && sudo make && sudo make install  ;
+      cd ../ ;
+      sudo rm -rf ${ffmpeg_dir} ;
     fi 
   - if [[ ${TRAVIS_OS_NAME} == "os" ]]; 
       then
