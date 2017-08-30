@@ -2,8 +2,8 @@ language: r
 matrix:
   include:
   - r: release
-#  - r: oldrel
-#  - r: devel
+  - r: oldrel
+  - r: devel
 dist: trusty
 sudo: required
 before_install:
