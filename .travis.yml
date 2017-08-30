@@ -6,7 +6,6 @@ matrix:
   - r: devel
 dist: trusty
 sudo: required
-cache: packages
 before_install:
   - sudo apt-get -qq update
   - cd
