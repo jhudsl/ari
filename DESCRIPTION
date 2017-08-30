@@ -8,8 +8,7 @@ Description: The Automated R Instructor creates slideshows from images and audio
     files can be provided by the user or computer voice narration can be created
     using Amazon Polly. The purpose of this package is to allow users to create
     accessible, translatable, and programmatic lecture videos. 
-SystemRequirements: FFmpeg (http://ffmpeg.org) for ari_narrate(), ari_spin(),
-    and ari_stitch().
+SystemRequirements: ffmpeg (>= 3.2.4)
 Depends:
     R (>= 3.1.0)
 Imports:
