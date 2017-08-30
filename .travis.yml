@@ -5,6 +5,10 @@ r:
   - oldrel
   -  devel
 
+os: 
+  - linux
+  - osx 
+
 sudo: required
 cache: packages
 
