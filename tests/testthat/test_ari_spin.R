@@ -55,7 +55,10 @@ This is she-")
 
 test_that("Ari can process text with over 1500 characters.", {
   skip_on_cran()
+<<<<<<< HEAD
   #skip_on_travis()
+=======
+>>>>>>> upstream/master
   skip_spin()
   
   ari_spin(system.file("test", c("mab1.png", "mab2.png"), package = "ari"),

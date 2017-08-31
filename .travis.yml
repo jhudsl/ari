@@ -1,30 +1,17 @@
 language: r
+matrix:
+  include:
+  - r: release
+  - r: oldrel
+  - r: devel
 dist: trusty
-r:
-  - release
-  # - oldrel
-  # -  devel
-
-os: 
-  - linux
-  - osx 
-
 sudo: required
-cache: packages
-
 before_install:
-  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; 
-      then
-        sudo apt-get -qq update ;
-        sudo apt-get install -y software-properties-common ;
-        sudo add-apt-repository -y ppa:mc3man/trusty-media ;
-        sudo apt-get -qq update ;
-        sudo apt-get install -y ffmpeg ;
-    fi 
-  - if [[ "${TRAVIS_OS_NAME}" == "os" ]]; 
-      then
-      brew install -y ffmpeg imagemagick;
-    fi     
+  - sudo apt-get -qq update
+  - sudo apt-get install -y software-properties-common
+  - sudo add-apt-repository -y ppa:mc3man/trusty-media
+  - sudo apt-get -qq update
+  - sudo apt-get install -y ffmpeg
 
 notifications:
   email:

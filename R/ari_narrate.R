@@ -15,7 +15,9 @@
 #' @param voice The Amazon Polly voice you want to use. See
 #' \code{\link[aws.polly]{list_voices}}.
 #' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
-#' The vectorized mode is faster though it can cause screens to repeat.
+#' The vectorized mode is faster though it can cause screens to repeat. If
+#' making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
+#' you should use \code{"iterative"}.
 #' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text

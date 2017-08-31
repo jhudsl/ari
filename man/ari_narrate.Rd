@@ -22,7 +22,9 @@ similar package.}
 \code{\link[aws.polly]{list_voices}}.}
 
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
-The vectorized mode is faster though it can cause screens to repeat.}
+The vectorized mode is faster though it can cause screens to repeat. If
+making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
+you should use \code{"iterative"}.}
 
 \item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
 }
