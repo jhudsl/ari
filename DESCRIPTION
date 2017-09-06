@@ -1,16 +1,17 @@
 Package: ari
 Type: Package
-Title: The Automated R Instructor
-Version: 0.0.0.9044
+Title: Automated R Instructor
+Version: 0.1.0
 Authors@R:  c(
     person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre")),
     person("John", "Muschelli", role = "ctb")
     )
-Description: The Automated R Instructor creates slideshows from images and audio
+Description: Create videos from 'R Markdown' documents, or images and audio
     files. These images can come from image files or HTML slides, and the audio
     files can be provided by the user or computer voice narration can be created
-    using Amazon Polly. The purpose of this package is to allow users to create
-    accessible, translatable, and programmatic lecture videos. 
+    using 'Amazon Polly'. The purpose of this package is to allow users to create
+    accessible, translatable, and reproducible lecture videos. See
+    <https://aws.amazon.com/polly/> for more information.
 SystemRequirements: ffmpeg (>= 3.2.4)
 Depends:
     R (>= 3.1.0)

@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^smoke_test$
 ^\.travis\.yml$
+^cran-comments\.md$
