@@ -51,7 +51,17 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   script <- normalizePath(script)
   if(file.exists(slides)){
     slides <- normalizePath(slides)
-    slides <- paste0("file://localhost", slides)
+    
+    ## webshot, if webshot webshot:::is_windows(),
+    ## call webshot:::fix_windows_url() which append his version of
+    ## "file:///"..., hence if this part run on window it brake the procedure.
+    #
+    if (!webshot:::is_windows()){ 
+      
+      ## slash was missing
+      #
+      slides <- paste0("file://localhost/", slides)
+    }
   }
   stopifnot(
     file.exists(script),
