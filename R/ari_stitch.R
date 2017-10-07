@@ -50,6 +50,11 @@ ari_stitch <- function(images, audio, output = "output.mp4"){
   on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   
   input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
+  
+  ## on windows ffmpeg cancats names adding the working directory, so if
+  ## complete url is provided it adds it twice.
+  #
+  if (webshot:::is_windows()) images <- basename(images) 
   for(i in 1:length(images)){
     cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
     cat(paste0("duration ", duration(audio[[i]]), "\n"), file = input_txt_path, append = TRUE)
