@@ -56,7 +56,7 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
     ## call webshot:::fix_windows_url() which append his version of
     ## "file:///"..., hence if this part run on window it brake the procedure.
     #
-    if (!webshot:::is_windows()){ 
+    if (!.Platform$OS.type == "windows"){ 
       
       ## slash was missing
       #
