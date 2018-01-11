@@ -4,7 +4,8 @@
 \alias{ari_spin}
 \title{Create a video from images and text}
 \usage{
-ari_spin(images, paragraphs, output = "output.mp4", voice)
+ari_spin(images, paragraphs, output = "output.mp4", voice,
+  subtitles = FALSE)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -16,6 +17,11 @@ ari_spin(images, paragraphs, output = "output.mp4", voice)
 \item{voice}{The Amazon Polly voice you want to use. See 
 \code{\link[aws.polly]{list_voices}} for more information about what voices
 are available.}
+
+\item{subtitles}{Should a \code{.srt} file be created with subtitles? The
+default value is \code{FALSE}. If \code{TRUE} then a file with the same name
+as the \code{output} argument will be created, but with the file extension
+\code{.srt}.}
 }
 \description{
 Given equal length vectors of paths to images (preferably \code{.jpg}s

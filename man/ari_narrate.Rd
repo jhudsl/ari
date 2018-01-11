@@ -5,7 +5,7 @@
 \title{Create a video from slides and a script}
 \usage{
 ari_narrate(script, slides, output = "output.mp4", voice,
-  capture_method = "vectorized", ...)
+  capture_method = "vectorized", subtitles = FALSE, ...)
 }
 \arguments{
 \item{script}{Either a markdown file where every paragraph will be read over
@@ -25,6 +25,11 @@ similar package.}
 The vectorized mode is faster though it can cause screens to repeat. If
 making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
 you should use \code{"iterative"}.}
+
+\item{subtitles}{Should a \code{.srt} file be created with subtitles? The
+default value is \code{FALSE}. If \code{TRUE} then a file with the same name
+as the \code{output} argument will be created, but with the file extension
+\code{.srt}.}
 
 \item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
 }

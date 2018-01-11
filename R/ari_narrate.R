@@ -18,6 +18,10 @@
 #' The vectorized mode is faster though it can cause screens to repeat. If
 #' making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
 #' you should use \code{"iterative"}.
+#' @param subtitles Should a \code{.srt} file be created with subtitles? The
+#' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
+#' as the \code{output} argument will be created, but with the file extension
+#' \code{.srt}.
 #' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text
@@ -37,7 +41,8 @@
 #' 
 #' }
 ari_narrate <- function(script, slides, output = "output.mp4", voice,
-                        capture_method = "vectorized", ...){
+                        capture_method = "vectorized",
+                        subtitles = FALSE, ...){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've", 
          "set the appropriate environmental variables before you proceed.")
@@ -80,6 +85,6 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   }
   
   on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
-  ari_spin(img_paths, paragraphs, output, voice)
+  ari_spin(img_paths, paragraphs, output, voice, subtitles)
   invisible()
 }
