@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: Automated R Instructor
-Version: 0.1.0
+Version: 0.1.0.9001
 Authors@R:  c(
     person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre")),
     person("John", "Muschelli", role = "ctb")
@@ -24,7 +24,8 @@ Imports:
     xml2,
     rvest,
     tools,
-    progress
+    progress,
+    hms
 Suggests:
     testthat,
     grDevices,

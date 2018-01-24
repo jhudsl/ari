@@ -22,10 +22,15 @@
 #' @param voice The Amazon Polly voice you want to use. See 
 #' \code{\link[aws.polly]{list_voices}} for more information about what voices
 #' are available.
+#' @param subtitles Should a \code{.srt} file be created with subtitles? The
+#' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
+#' as the \code{output} argument will be created, but with the file extension
+#' \code{.srt}.
 #' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
 #' @importFrom purrr map reduce
 #' @importFrom progress progress_bar
+#' @importFrom tools file_path_sans_ext
 #' @export
 #' @examples 
 #' \dontrun{
@@ -38,7 +43,8 @@
 #' 
 #' }
 #' 
-ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
+ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
+                     subtitles = FALSE){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've ", 
          "set the appropriate environmental variables before you proceed.")
@@ -53,7 +59,7 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
     dir.exists(output_dir)
   )
   
-  wavs <- list()
+  wavs <- vector(mode = "list", length = length(paragraphs))
   par_along <- 1:length(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
   
@@ -71,6 +77,10 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice){
                     bit = wav@bit, samp.rate = wav@samp.rate)
     wavs[[i]] <- bind(wav, end_wav)
     pb$tick()
+  }
+  
+  if (subtitles) {
+    ari_subtitles(paragraphs, wavs, paste0(file_path_sans_ext(output), ".srt"))
   }
   
   ari_stitch(images, wavs, output)
