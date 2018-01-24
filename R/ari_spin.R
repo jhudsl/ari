@@ -48,6 +48,7 @@
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
                      subtitles = FALSE,
                      verbose = TRUE){
+  
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've ", 
          "set the appropriate environmental variables before you proceed.")
@@ -55,6 +56,14 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
+  
+  if (length(paragraphs) == 1) {
+    if (file.exists(paragraphs)) {
+      paragraphs = readLines(paragraphs, warn = FALSE)
+      paragraphs = paragraphs[ !paragraphs %in% "" ]
+    }
+  }
+  
   stopifnot(
     length(paragraphs) > 0,
     identical(length(images), length(paragraphs)),
