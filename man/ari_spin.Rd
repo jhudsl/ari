@@ -5,7 +5,7 @@
 \title{Create a video from images and text}
 \usage{
 ari_spin(images, paragraphs, output = "output.mp4", voice,
-  subtitles = FALSE, verbose = FALSE)
+  subtitles = FALSE, ...)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -23,7 +23,7 @@ default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 as the \code{output} argument will be created, but with the file extension
 \code{.srt}.}
 
-\item{verbose}{print diagnostic messages.  If > 1, then more are printed}
+\item{...}{additional arguments to \code{\link{ari_stitch}}}
 }
 \description{
 Given equal length vectors of paths to images (preferably \code{.jpg}s

@@ -26,7 +26,7 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
-#' @param verbose print diagnostic messages.  If > 1, then more are printed
+#' @param ... additional arguments to \code{\link{ari_stitch}}
 #' 
 #' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
@@ -47,7 +47,7 @@
 #' 
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
                      subtitles = FALSE,
-                     verbose = FALSE){
+                     ...){
   
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've ", 
@@ -95,5 +95,5 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
     ari_subtitles(paragraphs, wavs, paste0(file_path_sans_ext(output), ".srt"))
   }
   
-  ari_stitch(images, wavs, output, verbose = verbose)
+  ari_stitch(images, wavs, output, ...)
 }

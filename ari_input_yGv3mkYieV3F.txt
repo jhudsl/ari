@@ -1,0 +1,11 @@
+file '/Users/johnmuschelli/Dropbox/Packages/ari/ari_img_1_SPRx6iuo8fEf.jpeg'
+duration 6
+file '/Users/johnmuschelli/Dropbox/Packages/ari/ari_img_2_SPRx6iuo8fEf.jpeg'
+duration 11
+file '/Users/johnmuschelli/Dropbox/Packages/ari/ari_img_3_SPRx6iuo8fEf.jpeg'
+duration 4
+file '/Users/johnmuschelli/Dropbox/Packages/ari/ari_img_4_SPRx6iuo8fEf.jpeg'
+duration 9
+file '/Users/johnmuschelli/Dropbox/Packages/ari/ari_img_5_SPRx6iuo8fEf.jpeg'
+duration 4
+file '/Users/johnmuschelli/Dropbox/Packages/ari/ari_img_5_SPRx6iuo8fEf.jpeg'

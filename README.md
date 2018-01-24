@@ -93,6 +93,18 @@ ari_stitch(
   list(noise(), noise()))
 ```
 
+### RMarkdown/HTML slide Problems
+
+Some html slides take a bit to render on webshot, and can be dark gray instead of white.  If you change the `delay` argument in `ari_narrate`, passed to `webshot`, this can resolve some issues, but may take a bit longer to run.  Also, using `capture_method = "vectorized"` is faster, but may have some issues, so run with `capture_method = "iterative"` if this is the case as so:
+
+```r
+ari_narrate(
+  ari_example("ari_comments.Rmd"),
+  ari_example("ari_intro.html"),
+  voice = "Kendra",
+  delay = 0.5,
+  capture_method = "iterative")
+```
 ## Why Use Ari?
 
 Creating videos from plain text has some significant advantages:

@@ -24,6 +24,8 @@
 #' \code{.srt}.
 #' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
+#' @param cleanup If \code{TRUE}, interim files are deleted
+#' 
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text
 #' @importFrom rmarkdown render html_document
@@ -42,14 +44,16 @@
 #' 
 #' }
 ari_narrate <- function(script, slides, output = "output.mp4", voice,
-                        capture_method = "vectorized",
+                        capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE, ...,
-                        verbose = FALSE){
+                        verbose = FALSE,
+                        cleanup = TRUE){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've", 
          "set the appropriate environmental variables before you proceed.")
   }
   
+  capture_method = match.arg(capture_method)
   if(!(capture_method %in% c("vectorized", "iterative"))) {
     stop('capture_method must be either "vectorized" or "iterative"')
   }
@@ -69,7 +73,9 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
     paragraphs <- parse_html_comments(script)
   } else {
     html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
-    on.exit(unlink(html_path, force = TRUE), add = TRUE)
+    if (cleanup) {
+      on.exit(unlink(html_path, force = TRUE), add = TRUE)
+    }
     render(script, output_format = html_document(), output_file = html_path)
     paragraphs <- map_chr(html_text(html_nodes(read_html(html_path), "p")), 
                           function(x){gsub("\u2019", "'", x)})
@@ -86,8 +92,10 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
     }
   }
   
-  on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
+  if (cleanup) {
+    on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
+  }
   ari_spin(img_paths, paragraphs, output, voice, subtitles, 
-           verbose = verbose)
+           verbose = verbose, cleanup = cleanup)
   invisible()
 }
