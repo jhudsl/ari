@@ -4,7 +4,8 @@
 \alias{ari_stitch}
 \title{Create a video from images and audio}
 \usage{
-ari_stitch(images, audio, output = "output.mp4", verbose = FALSE)
+ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
+  cleanup = TRUE)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -14,6 +15,8 @@ ari_stitch(images, audio, output = "output.mp4", verbose = FALSE)
 \item{output}{A path to the video file which will be created.}
 
 \item{verbose}{print diagnostic messages.  If > 1, then more are printed}
+
+\item{cleanup}{If \code{TRUE}, interim files are deleted}
 }
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s

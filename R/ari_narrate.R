@@ -23,6 +23,7 @@
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
 #' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
+#' @param verbose print diagnostic messages.  If > 1, then more are printed
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text
 #' @importFrom rmarkdown render html_document
@@ -42,7 +43,8 @@
 #' }
 ari_narrate <- function(script, slides, output = "output.mp4", voice,
                         capture_method = "vectorized",
-                        subtitles = FALSE, ...){
+                        subtitles = FALSE, ...,
+                        verbose = FALSE){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've", 
          "set the appropriate environmental variables before you proceed.")
@@ -85,6 +87,7 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   }
   
   on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
-  ari_spin(img_paths, paragraphs, output, voice, subtitles)
+  ari_spin(img_paths, paragraphs, output, voice, subtitles, 
+           verbose = verbose)
   invisible()
 }

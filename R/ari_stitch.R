@@ -19,6 +19,7 @@
 #' @param audio A list of \code{Wave}s from tuneR.
 #' @param output A path to the video file which will be created.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
+#' @param cleanup If \code{TRUE}, interim files are deleted
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
@@ -36,7 +37,8 @@
 #' }
 ari_stitch <- function(images, audio, 
                        output = "output.mp4",
-                       verbose = FALSE){
+                       verbose = FALSE,
+                       cleanup = TRUE){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -53,7 +55,9 @@ ari_stitch <- function(images, audio,
   wav <- reduce(audio, bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", grs(), ".wav"))
   writeWave(wav, filename = wav_path)
-  on.exit(unlink(wav_path, force = TRUE), add = TRUE)
+  if (cleanup) {
+    on.exit(unlink(wav_path, force = TRUE), add = TRUE)
+  }
   
   input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
   for(i in 1:length(images)){
@@ -83,6 +87,8 @@ ari_stitch <- function(images, audio,
     warning("Result was non-zero for ffmpeg")
   }
   
-  on.exit(unlink(input_txt_path, force = TRUE), add = TRUE)
+  if (cleanup) {
+    on.exit(unlink(input_txt_path, force = TRUE), add = TRUE)
+  }
   invisible(file.exists(output) && file.size(output) > 0)
 }
