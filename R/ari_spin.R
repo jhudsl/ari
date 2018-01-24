@@ -26,6 +26,8 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
+#' @param verbose print diagnostic messages.  If > 1, then more are printed
+#' 
 #' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
 #' @importFrom purrr map reduce
@@ -44,7 +46,8 @@
 #' }
 #' 
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
-                     subtitles = FALSE){
+                     subtitles = FALSE,
+                     verbose = TRUE){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've ", 
          "set the appropriate environmental variables before you proceed.")
@@ -83,5 +86,5 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
     ari_subtitles(paragraphs, wavs, paste0(file_path_sans_ext(output), ".srt"))
   }
   
-  ari_stitch(images, wavs, output)
+  ari_stitch(images, wavs, output, verbose = verbose)
 }
