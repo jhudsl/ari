@@ -36,7 +36,7 @@
 #' }
 ari_stitch <- function(images, audio, 
                        output = "output.mp4",
-                       verbose = TRUE){
+                       verbose = FALSE){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))

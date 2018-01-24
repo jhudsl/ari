@@ -47,7 +47,7 @@
 #' 
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
                      subtitles = FALSE,
-                     verbose = TRUE){
+                     verbose = FALSE){
   
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've ", 

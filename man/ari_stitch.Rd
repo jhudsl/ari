@@ -4,7 +4,7 @@
 \alias{ari_stitch}
 \title{Create a video from images and audio}
 \usage{
-ari_stitch(images, audio, output = "output.mp4", verbose = TRUE)
+ari_stitch(images, audio, output = "output.mp4", verbose = FALSE)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
