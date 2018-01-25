@@ -5,8 +5,8 @@
 \title{Create a video from slides and a script}
 \usage{
 ari_narrate(script, slides, output = "output.mp4", voice,
-  capture_method = "vectorized", subtitles = FALSE, ..., verbose = FALSE,
-  cleanup = TRUE)
+  capture_method = c("vectorized", "iterative"), subtitles = FALSE, ...,
+  verbose = FALSE, cleanup = TRUE)
 }
 \arguments{
 \item{script}{Either a markdown file where every paragraph will be read over

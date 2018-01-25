@@ -75,7 +75,9 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
   par_along <- 1:length(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
   
-  pb <- progress_bar$new(format = "Fetching Narration [:bar] :percent", total = length(par_along))
+  pb <- progress_bar$new(
+    format = "Fetching Narration [:bar] :percent", 
+    total = length(par_along))
   
   for(i in par_along){
     if(nchar(paragraphs[i]) < 1500){
