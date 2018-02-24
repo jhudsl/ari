@@ -1,11 +1,16 @@
 # paragraphs - strings of text
 # dutations - paragraph duration in seconds
 # path - path to .srt file output
-#' @importFrom purrr map map_dbl
+#' @importFrom purrr map map_dbl map2
 #' @importFrom hms hms
 ari_subtitles <- function(paragraphs, wavs, path) {
   durations <- map_dbl(wavs, ~ length(.x@left) / .x@samp.rate)
-  result <- seq_along(paragraphs)
+  
+  # Break down paragraphs so that they are more readable
+  paragraphs <- map(paragraphs, strwrap, width = 60)
+  lines_per_paragraph <- map_dbl(paragraphs, length)
+  durations <- rep(durations / lines_per_paragraph, times = lines_per_paragraph)
+  paragraphs <- unlist(paragraphs)
   
   cumdur <- cumsum(durations)
   cumdur <- map(cumdur, hms)
@@ -14,8 +19,9 @@ ari_subtitles <- function(paragraphs, wavs, path) {
   cumdur <- map(cumdur, gsub, pattern = "\\.", replacement = ",")
   cumdur <- c("00:00:00,000", unlist(cumdur))
   
+  result <- seq_along(paragraphs)
   result <- map(result, ~ c(.x, paste(cumdur[.x], "-->", cumdur[.x + 1]), 
-                            strwrap(paragraphs[.x], width = 60), ""))
+                            paragraphs[.x], ""))
   result <- unlist(result)
   writeLines(result, path)
 }

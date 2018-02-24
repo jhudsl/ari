@@ -33,7 +33,7 @@ test_that("Ari can make a video from HTML slides on the web.", {
 
 unlink(video, force = TRUE)
 
-test_that("Ari use an Rmd file with HTML comments for a script.", {
+test_that("Ari can use an Rmd file with HTML comments for a script.", {
   skip_on_cran()
   skip_narrate()
   
