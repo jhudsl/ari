@@ -5,7 +5,7 @@
 \title{Create a video from images and text}
 \usage{
 ari_spin(images, paragraphs, output = "output.mp4", voice,
-  subtitles = FALSE, burn_in_subtitles = FALSE, ...)
+  subtitles = FALSE, ...)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -22,9 +22,6 @@ are available.}
 default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 as the \code{output} argument will be created, but with the file extension
 \code{.srt}.}
-
-\item{burn_in_subtitles}{Should subtitles be burned into the video.
-Disregarded if \code{subtitles = FALSE}}
 
 \item{...}{additional arguments to \code{\link{ari_stitch}}}
 }
