@@ -74,7 +74,7 @@ ari_stitch <- function(images, audio,
   if (is.na(ffmpeg)){
     stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
   }
-  
+  ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
   command <- paste(
     ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, 
     "-i", wav_path, 
