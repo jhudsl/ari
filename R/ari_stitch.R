@@ -20,6 +20,8 @@
 #' @param output A path to the video file which will be created.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
 #' @param cleanup If \code{TRUE}, interim files are deleted
+#' @param ffmpeg_opts additional options to send to \code{ffmpeg}.
+#' This is an advanced option, use at your own risk
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
@@ -38,7 +40,8 @@
 ari_stitch <- function(images, audio, 
                        output = "output.mp4",
                        verbose = FALSE,
-                       cleanup = TRUE){
+                       cleanup = TRUE,
+                       ffmpeg_opts = ""){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -72,9 +75,12 @@ ari_stitch <- function(images, audio,
     stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
   }
   
-  command <- paste(ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, "-i", 
-                   wav_path, "-c:v libx264 -c:a aac -b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
-                   output)
+  command <- paste(
+    ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, 
+    "-i", wav_path, 
+    "-c:v libx264 -c:a aac -b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
+    ffmpeg_opts,
+    output)
   if (verbose > 0) {
     message(command)
   }
