@@ -26,6 +26,8 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
+#' @param burn_in_subtitles Should subtitles be burned into the video.
+#' Disregarded if \code{subtitles = FALSE}
 #' @param ... additional arguments to \code{\link{ari_stitch}}
 #' 
 #' @importFrom aws.polly list_voices synthesize
@@ -47,6 +49,7 @@
 #' 
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
                      subtitles = FALSE,
+                     burn_in_subtitles = FALSE,
                      ...){
   
   if(length(list_voices()) < 1){
@@ -93,9 +96,24 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
     pb$tick()
   }
   
+  args = list(...)
+  
   if (subtitles) {
-    ari_subtitles(paragraphs, wavs, paste0(file_path_sans_ext(output), ".srt"))
+    sub_file = paste0(file_path_sans_ext(output), ".srt")
+    ari_subtitles(paragraphs, wavs, sub_file)
+    if (burn_in_subtitles) {
+      args$ffmpeg_opts = paste(
+        paste0("-vf subtitles=", sub_file),
+        args$ffmpeg_opts
+        # paste0("-sub_charenc UTF-8 -i ", sub_file, " -scodec srt")
+      )
+    }
   }
   
-  ari_stitch(images, wavs, output, ...)
+  args$images = images
+  args$audio = wavs
+  args$output = output
+    
+  # ari_stitch(images, wavs, output, ...)
+  do.call("ari_stitch", args = args)
 }
