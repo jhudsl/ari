@@ -58,6 +58,9 @@ ari_stitch <- function(images, audio,
     dir.exists(output_dir)
   )
   
+  # Make a hard path
+  output = file.path(output_dir, basename(output))
+  
   if (verbose > 0) {
     message("Writing out Wav for audio")
   }
