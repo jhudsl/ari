@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: Automated R Instructor
-Version: 0.1.0.9003
+Version: 0.1.1.9000
 Authors@R: c(
     person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre")),
     person("John", "Muschelli", role = "ctb")

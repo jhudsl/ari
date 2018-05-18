@@ -22,6 +22,10 @@
 #' @param cleanup If \code{TRUE}, interim files are deleted
 #' @param ffmpeg_opts additional options to send to \code{ffmpeg}.
 #' This is an advanced option, use at your own risk
+#' @param audio_codec The audio encoder for the splicing.  If this
+#' fails, try \code{copy}.
+#' @param video_codec The video encoder for the splicing.  If this
+#' fails, see \code{ffmpeg -codecs}
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
@@ -41,7 +45,9 @@ ari_stitch <- function(images, audio,
                        output = "output.mp4",
                        verbose = FALSE,
                        cleanup = TRUE,
-                       ffmpeg_opts = ""){
+                       ffmpeg_opts = "",
+                       audio_codec = "aac",
+                       video_codec = "libx264"){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -71,14 +77,18 @@ ari_stitch <- function(images, audio,
   
   ffmpeg <- discard(c(Sys.getenv("ffmpeg"), Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
   
-  if (is.na(ffmpeg)){
+  if (is.na(ffmpeg)) {
     stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
   }
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
   command <- paste(
     ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, 
     "-i", wav_path, 
-    "-c:v libx264 -c:a aac -b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
+    "-c:v", 
+    video_codec, 
+    "-c:a", 
+    audio_codec, 
+    "-b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
     ffmpeg_opts,
     output)
   if (verbose > 0) {
