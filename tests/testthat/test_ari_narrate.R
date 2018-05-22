@@ -29,7 +29,7 @@ test_that("Ari can make a video from HTML slides on the web.", {
   skip_narrate()
   
   ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-              "http://seankross.com/ari/inst/test/ari_intro.html",
+              "https://seankross.com/ari/inst/test/ari_intro.html",
               video, voice = run_voice, 
               capture_method = "iterative")
   expect_true(file.size(video) > 50000)

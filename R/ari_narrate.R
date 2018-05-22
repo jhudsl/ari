@@ -60,9 +60,13 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
   
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
-  if(file.exists(slides)){
+  if (file.exists(slides)){
     slides <- normalizePath(slides)
-    slides <- paste0("file://localhost", slides)
+    if (.Platform$OS.type == "windows") {
+      slides <- paste0("file://localhost/", slides)
+    } else {
+      slides <- paste0("file://localhost", slides)
+    }
   }
   stopifnot(
     file.exists(script),
