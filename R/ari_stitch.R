@@ -93,7 +93,7 @@ ari_stitch <- function(images, audio,
     audio_codec, 
     "-b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
     ffmpeg_opts,
-    output)
+    shQuote(output))
   if (verbose > 0) {
     message(command)
   }
