@@ -46,8 +46,8 @@ ari_stitch <- function(images, audio,
                        verbose = FALSE,
                        cleanup = TRUE,
                        ffmpeg_opts = "",
-                       audio_codec = "aac",
-                       video_codec = "libx264"){
+                       audio_codec = get_audio_codec(),
+                       video_codec = get_video_codec()){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -78,11 +78,8 @@ ari_stitch <- function(images, audio,
   }
   cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
   
-  ffmpeg <- discard(c(Sys.getenv("ffmpeg"), Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
+  ffmpeg = ffmpeg_exec()
   
-  if (is.na(ffmpeg)) {
-    stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
-  }
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
   command <- paste(
     ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, 

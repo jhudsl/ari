@@ -5,8 +5,8 @@
 \title{Create a video from images and audio}
 \usage{
 ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
-  cleanup = TRUE, ffmpeg_opts = "", audio_codec = "aac",
-  video_codec = "libx264")
+  cleanup = TRUE, ffmpeg_opts = "", audio_codec = get_audio_codec(),
+  video_codec = get_video_codec())
 }
 \arguments{
 \item{images}{A vector of paths to images.}
