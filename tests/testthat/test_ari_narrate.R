@@ -39,7 +39,7 @@ test_that("Ari can use an Rmd file with HTML comments for a script.", {
   
   ari_narrate(system.file("test", "ari_comments.Rmd", package = "ari"),
               system.file("test", "ari_intro.html", package = "ari"),
-              video, voice = list_voices()$Id[1], capture_method = "iterative")
+              video, voice = list_voices()$Id[1], capture_method = "iterative", subtitles = TRUE)
   expect_true(file.size(video) > 50000)
 })
 
