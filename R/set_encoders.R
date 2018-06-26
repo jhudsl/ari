@@ -1,3 +1,8 @@
+get_os = function() {
+  sys_info = Sys.info()
+  os = tolower(sys_info[["sysname"]])
+  return(os)
+}
 #' Set Default Audio and Video Codecs
 #'
 #' @param codec The codec to use or get for audio/video.  Uses the
@@ -20,7 +25,15 @@
 #' get_video_codec()
 #' @rdname codecs
 #' @export
-set_audio_codec = function(codec = "aac") {
+set_audio_codec = function(codec) {
+  if (missing(codec)) {
+    os = get_os()
+    codec = switch(os,
+                   darwin = "libfdk_aac",
+                   windows = "aac",
+                   linux = "aac"
+                   )
+  }
   options(ffmpeg_audio_codec = codec)
 }
 
@@ -35,10 +48,15 @@ set_video_codec = function(codec = "libx264") {
 get_audio_codec = function() {
   codec = getOption("ffmpeg_audio_codec")
   if (is.null(codec)) {
-    codec = "aac"
-  }
+    os = get_os()
+    codec = switch(os,
+                   darwin = "libfdk_aac",
+                   windows = "aac",
+                   linux = "aac"
+    )
+    set_audio_codec(codec = codec)
+  }    
   return(codec)
-  options(ffmpeg_audio_codec = codec)
 }
 
 #' @export
@@ -47,6 +65,7 @@ get_video_codec = function() {
   codec = getOption("ffmpeg_video_codec")
   if (is.null(codec)) {
     codec = "libx264"
+    set_video_codec(codec = codec)
   }
   return(codec)
 }

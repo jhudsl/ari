@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: Automated R Instructor
-Version: 0.1.1.9000
+Version: 0.1.2.9000
 Authors@R:  c(
     person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre")),
     person("John", "Muschelli", role = "ctb")
@@ -29,7 +29,8 @@ Imports:
 Suggests:
     testthat,
     grDevices,
-    xaringan
+    xaringan,
+    aws.signature
 License: MIT + file LICENSE
 URL: http://github.com/seankross/ari
 Encoding: UTF-8
