@@ -22,6 +22,8 @@
 #' @param cleanup If \code{TRUE}, interim files are deleted
 #' @param ffmpeg_opts additional options to send to \code{ffmpeg}.
 #' This is an advanced option, use at your own risk
+#' @param divisible_height Make height divisible by 2, which may 
+#' be required if getting "height not divisible by 2" error.
 #' @param audio_codec The audio encoder for the splicing.  If this
 #' fails, try \code{copy}.
 #' @param video_codec The video encoder for the splicing.  If this
@@ -46,6 +48,7 @@ ari_stitch <- function(images, audio,
                        verbose = FALSE,
                        cleanup = TRUE,
                        ffmpeg_opts = "",
+                       divisible_height = FALSE,
                        audio_codec = get_audio_codec(),
                        video_codec = get_video_codec()){
   stopifnot(length(images) > 0)
@@ -72,6 +75,11 @@ ari_stitch <- function(images, audio,
   }
   
   input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
+  ## on windows ffmpeg cancats names adding the working directory, so if
+  ## complete url is provided it adds it twice.
+  # if (.Platform$OS.type == "windows") {
+  #   images <- basename(images)   
+  # }
   for(i in 1:length(images)){
     cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
     cat(paste0("duration ", duration(audio[[i]]), "\n"), file = input_txt_path, append = TRUE)
@@ -80,10 +88,16 @@ ari_stitch <- function(images, audio,
   
   ffmpeg = ffmpeg_exec()
   
+  if (divisible_height) {
+    ffmpeg_opts = c(ffmpeg_opts, 
+                    '-vf "scale=trunc(iw/2)*2:trunc(ih/2)*2"')
+  }
+  
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
+  # shQuote should seankross/ari#5
   command <- paste(
-    ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, 
-    "-i", wav_path, 
+    ffmpeg, "-y -f concat -safe 0 -i", shQuote(input_txt_path), 
+    "-i", shQuote(wav_path), 
     "-c:v", 
     video_codec, 
     "-c:a", 
