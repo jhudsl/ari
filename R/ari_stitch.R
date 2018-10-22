@@ -28,6 +28,8 @@
 #' fails, try \code{copy}.
 #' @param video_codec The video encoder for the splicing.  If this
 #' fails, see \code{ffmpeg -codecs}
+#' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
+#' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
@@ -43,14 +45,18 @@
 #' ari_stitch(slides, sound)
 #' 
 #' }
-ari_stitch <- function(images, audio, 
-                       output = "output.mp4",
-                       verbose = FALSE,
-                       cleanup = TRUE,
-                       ffmpeg_opts = "",
-                       divisible_height = FALSE,
-                       audio_codec = get_audio_codec(),
-                       video_codec = get_video_codec()){
+ari_stitch <- function(
+  images, audio, 
+  output = "output.mp4",
+  verbose = FALSE,
+  cleanup = TRUE,
+  ffmpeg_opts = "",
+  divisible_height = FALSE,
+  audio_codec = get_audio_codec(),
+  video_codec = get_video_codec(),
+  audio_bitrate = "192k",
+  video_bitrate = NULL
+){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -99,10 +105,14 @@ ari_stitch <- function(images, audio,
     ffmpeg, "-y -f concat -safe 0 -i", shQuote(input_txt_path), 
     "-i", shQuote(wav_path), 
     ifelse(!is.null(video_codec), paste("-c:v", video_codec),
-                   ""),
+           ""),
     ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
            ""),    
-    "-b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
+    ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
+           ""), 
+    ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
+           ""), 
+    " -shortest -vsync vfr -pix_fmt yuv420p",
     ffmpeg_opts,
     shQuote(output))
   if (verbose > 0) {

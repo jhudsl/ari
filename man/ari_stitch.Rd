@@ -6,7 +6,8 @@
 \usage{
 ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
   cleanup = TRUE, ffmpeg_opts = "", divisible_height = FALSE,
-  audio_codec = get_audio_codec(), video_codec = get_video_codec())
+  audio_codec = get_audio_codec(), video_codec = get_video_codec(),
+  audio_bitrate = "192k", video_bitrate = NULL)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -30,6 +31,10 @@ fails, try \code{copy}.}
 
 \item{video_codec}{The video encoder for the splicing.  If this
 fails, see \code{ffmpeg -codecs}}
+
+\item{audio_bitrate}{Bit rate for audio. Passed to \code{-b:a}.}
+
+\item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
 }
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
