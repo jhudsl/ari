@@ -5,7 +5,8 @@
 \title{Create a video from slides and a script}
 \usage{
 ari_narrate(script, slides, output = "output.mp4", voice,
-  capture_method = "vectorized", subtitles = FALSE, ...)
+  capture_method = c("vectorized", "iterative"), subtitles = FALSE, ...,
+  verbose = FALSE, cleanup = TRUE)
 }
 \arguments{
 \item{script}{Either a markdown file where every paragraph will be read over
@@ -32,6 +33,10 @@ as the \code{output} argument will be created, but with the file extension
 \code{.srt}.}
 
 \item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
+
+\item{verbose}{print diagnostic messages.  If > 1, then more are printed}
+
+\item{cleanup}{If \code{TRUE}, interim files are deleted}
 }
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML

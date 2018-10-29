@@ -26,6 +26,8 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
+#' @param ... additional arguments to \code{\link{ari_stitch}}
+#' 
 #' @importFrom aws.polly list_voices synthesize
 #' @importFrom tuneR bind Wave
 #' @importFrom purrr map reduce
@@ -44,14 +46,26 @@
 #' }
 #' 
 ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
-                     subtitles = FALSE){
-  if(length(list_voices()) < 1){
+                     subtitles = FALSE,
+                     ...){
+  # check for ffmpeg before any synthesizing
+  ffmpeg_exec()
+  
+  if (length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've ", 
          "set the appropriate environmental variables before you proceed.")
   }
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
+  
+  if (length(paragraphs) == 1) {
+    if (file.exists(paragraphs)) {
+      paragraphs = readLines(paragraphs, warn = FALSE)
+      paragraphs = paragraphs[ !paragraphs %in% "" ]
+    }
+  }
+  
   stopifnot(
     length(paragraphs) > 0,
     identical(length(images), length(paragraphs)),
@@ -63,7 +77,9 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
   par_along <- 1:length(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
   
-  pb <- progress_bar$new(format = "Fetching Narration [:bar] :percent", total = length(par_along))
+  pb <- progress_bar$new(
+    format = "Fetching Narration [:bar] :percent", 
+    total = length(par_along))
   
   for(i in par_along){
     if(nchar(paragraphs[i]) < 1500){
@@ -80,8 +96,10 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
   }
   
   if (subtitles) {
-    ari_subtitles(paragraphs, wavs, paste0(file_path_sans_ext(output), ".srt"))
+    sub_file = paste0(file_path_sans_ext(output), ".srt")
+    ari_subtitles(paragraphs, wavs, sub_file)
   }
-  
-  ari_stitch(images, wavs, output)
+
+    
+  ari_stitch(images, wavs, output, ...)
 }

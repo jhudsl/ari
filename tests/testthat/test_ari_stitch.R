@@ -11,14 +11,17 @@ test_that("ari_stitch() can combine audio and images into a video", {
     dev.off()
   }
   
-  sound <- replicate(3, Wave(round(rnorm(88200, 127, 20)), samp.rate = 44100, bit = 16))
+  sound <- replicate(
+    3, 
+    tuneR::Wave(round(rnorm(88200, 127, 20)), 
+                samp.rate = 44100, bit = 16))
   
   graphs <- file.path(temp_dir, paste0("plot", 1:3, ".jpg"))
   video <- file.path(temp_dir, "output.mp4")
   
   on.exit(walk(c(graphs, video), unlink, force = TRUE), add = TRUE)
   
-  ari_stitch(graphs, sound, video)
+  ari_stitch(graphs, sound, output = video)
   
   expect_true(file.size(video) > 50000)
 })

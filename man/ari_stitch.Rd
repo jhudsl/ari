@@ -4,7 +4,9 @@
 \alias{ari_stitch}
 \title{Create a video from images and audio}
 \usage{
-ari_stitch(images, audio, output = "output.mp4")
+ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
+  cleanup = TRUE, ffmpeg_opts = "", audio_codec = get_audio_codec(),
+  video_codec = get_video_codec())
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -12,6 +14,19 @@ ari_stitch(images, audio, output = "output.mp4")
 \item{audio}{A list of \code{Wave}s from tuneR.}
 
 \item{output}{A path to the video file which will be created.}
+
+\item{verbose}{print diagnostic messages.  If > 1, then more are printed}
+
+\item{cleanup}{If \code{TRUE}, interim files are deleted}
+
+\item{ffmpeg_opts}{additional options to send to \code{ffmpeg}.
+This is an advanced option, use at your own risk}
+
+\item{audio_codec}{The audio encoder for the splicing.  If this
+fails, try \code{copy}.}
+
+\item{video_codec}{The video encoder for the splicing.  If this
+fails, see \code{ffmpeg -codecs}}
 }
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
