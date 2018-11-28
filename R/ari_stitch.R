@@ -130,5 +130,10 @@ ari_stitch <- function(
   if (cleanup) {
     on.exit(unlink(input_txt_path, force = TRUE), add = TRUE)
   }
-  invisible(file.exists(output) && file.size(output) > 0)
+  res = file.exists(output) && file.size(output) > 0
+  if (!cleanup) {
+    attr(res, "txt_path") = input_txt_path
+    attr(res, "wav_path") = wav_path
+  }
+  invisible(res)
 }

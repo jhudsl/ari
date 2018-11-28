@@ -101,5 +101,14 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
   }
 
     
-  ari_stitch(images, wavs, output, ...)
+  res = ari_stitch(images, wavs, output, ...)
+  args = list(...)
+  cleanup = args$cleanup
+  if (is.null(cleanup)) {
+    cleanup = TRUE
+  }
+  if (!cleanup) {
+    attr(res, "wavs") = wavs
+  }
+  return(res)
 }
