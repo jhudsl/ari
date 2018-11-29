@@ -17,6 +17,10 @@ ari_subtitles <- function(paragraphs, wavs, path) {
   cumdur <- map(cumdur, as.character)
   cumdur <- map(cumdur, substr, start = 0, stop = 12)
   cumdur <- map(cumdur, gsub, pattern = "\\.", replacement = ",")
+  # need to check to see if no , so 00:00:27 doesn't happen
+  cumdur = unlist(cumdur)
+  add = !grepl(",", cumdur)
+  cumdur[ add ] = paste0(cumdur[add], ",0")
   cumdur <- c("00:00:00,000", unlist(cumdur))
   
   result <- seq_along(paragraphs)
