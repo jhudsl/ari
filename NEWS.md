@@ -1,3 +1,10 @@
+# ari 0.2.0
+
+- The `av` library has been fully integrated into `ari`.
+- `ari_talk()`: provides a simple interface for generating speech with the
+Amazon Polly API.
+
+
 # ari 0.1.0
 
 - First release.

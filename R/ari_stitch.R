@@ -20,6 +20,7 @@
 #' @param output A path to the video file which will be created.
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
+#' @importFrom av av_encode_video
 #' @export
 #' @examples 
 #' \dontrun{
@@ -33,7 +34,7 @@
 #' ari_stitch(slides, sound)
 #' 
 #' }
-ari_stitch <- function(images, audio, output = "output.mp4"){
+ari_stitch <- function(images, audio, output = "output.mp4", ...){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -49,24 +50,7 @@ ari_stitch <- function(images, audio, output = "output.mp4"){
   writeWave(wav, filename = wav_path)
   on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   
-  input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
-  for(i in 1:length(images)){
-    cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
-    cat(paste0("duration ", duration(audio[[i]]), "\n"), file = input_txt_path, append = TRUE)
-  }
-  cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
+  av_encode_video(images, output = output, audio = wav_path)
   
-  ffmpeg <- discard(c(Sys.getenv("ffmpeg"), Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
-  
-  if(is.na(ffmpeg)){
-    stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
-  }
-  
-  command <- paste(ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, "-i", 
-                   wav_path, "-c:v libx264 -c:a aac -b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
-                   output)
-  system(command)
-  
-  on.exit(unlink(input_txt_path, force = TRUE), add = TRUE)
   invisible(file.exists(output) && file.size(output) > 0)
 }
