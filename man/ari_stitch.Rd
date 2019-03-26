@@ -4,7 +4,10 @@
 \alias{ari_stitch}
 \title{Create a video from images and audio}
 \usage{
-ari_stitch(images, audio, output = "output.mp4")
+ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
+  cleanup = TRUE, ffmpeg_opts = "", divisible_height = FALSE,
+  audio_codec = get_audio_codec(), video_codec = get_video_codec(),
+  audio_bitrate = "192k", video_bitrate = NULL)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -12,6 +15,26 @@ ari_stitch(images, audio, output = "output.mp4")
 \item{audio}{A list of \code{Wave}s from tuneR.}
 
 \item{output}{A path to the video file which will be created.}
+
+\item{verbose}{print diagnostic messages.  If > 1, then more are printed}
+
+\item{cleanup}{If \code{TRUE}, interim files are deleted}
+
+\item{ffmpeg_opts}{additional options to send to \code{ffmpeg}.
+This is an advanced option, use at your own risk}
+
+\item{divisible_height}{Make height divisible by 2, which may 
+be required if getting "height not divisible by 2" error.}
+
+\item{audio_codec}{The audio encoder for the splicing.  If this
+fails, try \code{copy}.}
+
+\item{video_codec}{The video encoder for the splicing.  If this
+fails, see \code{ffmpeg -codecs}}
+
+\item{audio_bitrate}{Bit rate for audio. Passed to \code{-b:a}.}
+
+\item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
 }
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
@@ -39,7 +62,7 @@ library(purrr)
 slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
 sound <- map(c("rec1.wav", "rec2.wav", "rec3.wav"), readWave)
 
-ari_stitch(slides, sound)
+ari_stitch(slides, sound, audio_codec = "aac")
 
 }
 }

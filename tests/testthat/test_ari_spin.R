@@ -1,7 +1,7 @@
 context("Test ari_spin()")
 
 skip_spin <- function(){
-  if(Sys.getenv("SKIP_SPIN") != ""){
+  if (Sys.getenv("SKIP_SPIN") != "") {
     skip("Skipping ari_spin()")
   }
 }
@@ -9,7 +9,7 @@ skip_spin <- function(){
 video <- file.path(tempdir(), "output.mp4")
 
 qmm <- c("I will now perform the Mercutio's speech from Shakespeare's Romeo and Juliet.", 
-"O, then, I see Queen Mab hath been with you.
+         "O, then, I see Queen Mab hath been with you.
 She is the fairies' midwife, and she comes
 In shape no bigger than an agate-stone
 On the fore-finger of an alderman,
@@ -53,12 +53,26 @@ That presses them and learns them first to bear,
 Making them women of good carriage:
 This is she-")
 
+res = ffmpeg_audio_codecs()
+fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (fdk_enabled) {
+  audio_codec = "libfdk_aac"
+} else {
+  audio_codec = "aac"
+}
 test_that("Ari can process text with over 1500 characters.", {
   skip_on_cran()
   skip_spin()
   
-  ari_spin(system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
-           qmm, video, list_voices()$Id[1])
+  if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
+    run_voice = aws.polly::list_voices()$Id[1]
+  } else {
+    run_voice = "Joanna"
+  }
+  ari_spin(
+    system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
+    qmm, output = video, voice = run_voice,
+    audio_codec = audio_codec)
   
   expect_true(file.size(video) > 50000)
 })
