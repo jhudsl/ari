@@ -22,10 +22,14 @@
 #' @param cleanup If \code{TRUE}, interim files are deleted
 #' @param ffmpeg_opts additional options to send to \code{ffmpeg}.
 #' This is an advanced option, use at your own risk
+#' @param divisible_height Make height divisible by 2, which may 
+#' be required if getting "height not divisible by 2" error.
 #' @param audio_codec The audio encoder for the splicing.  If this
 #' fails, try \code{copy}.
 #' @param video_codec The video encoder for the splicing.  If this
 #' fails, see \code{ffmpeg -codecs}
+#' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
+#' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
@@ -41,13 +45,18 @@
 #' ari_stitch(slides, sound)
 #' 
 #' }
-ari_stitch <- function(images, audio, 
-                       output = "output.mp4",
-                       verbose = FALSE,
-                       cleanup = TRUE,
-                       ffmpeg_opts = "",
-                       audio_codec = get_audio_codec(),
-                       video_codec = get_video_codec()){
+ari_stitch <- function(
+  images, audio, 
+  output = "output.mp4",
+  verbose = FALSE,
+  cleanup = TRUE,
+  ffmpeg_opts = "",
+  divisible_height = FALSE,
+  audio_codec = get_audio_codec(),
+  video_codec = get_video_codec(),
+  audio_bitrate = "192k",
+  video_bitrate = NULL
+){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -72,6 +81,11 @@ ari_stitch <- function(images, audio,
   }
   
   input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
+  ## on windows ffmpeg cancats names adding the working directory, so if
+  ## complete url is provided it adds it twice.
+  # if (.Platform$OS.type == "windows") {
+  #   images <- basename(images)   
+  # }
   for(i in 1:length(images)){
     cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
     cat(paste0("duration ", duration(audio[[i]]), "\n"), file = input_txt_path, append = TRUE)
@@ -80,15 +94,25 @@ ari_stitch <- function(images, audio,
   
   ffmpeg = ffmpeg_exec()
   
+  if (divisible_height) {
+    ffmpeg_opts = c(ffmpeg_opts, 
+                    '-vf "scale=trunc(iw/2)*2:trunc(ih/2)*2"')
+  }
+  
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
+  # shQuote should seankross/ari#5
   command <- paste(
-    ffmpeg, "-y -f concat -safe 0 -i", input_txt_path, 
-    "-i", wav_path, 
-    "-c:v", 
-    video_codec, 
-    "-c:a", 
-    audio_codec, 
-    "-b:a 192k -shortest -vsync vfr -pix_fmt yuv420p",
+    ffmpeg, "-y -f concat -safe 0 -i", shQuote(input_txt_path), 
+    "-i", shQuote(wav_path), 
+    ifelse(!is.null(video_codec), paste("-c:v", video_codec),
+           ""),
+    ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
+           ""),    
+    ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
+           ""), 
+    ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
+           ""), 
+    " -shortest -vsync vfr -pix_fmt yuv420p",
     ffmpeg_opts,
     shQuote(output))
   if (verbose > 0) {
@@ -106,5 +130,10 @@ ari_stitch <- function(images, audio,
   if (cleanup) {
     on.exit(unlink(input_txt_path, force = TRUE), add = TRUE)
   }
-  invisible(file.exists(output) && file.size(output) > 0)
+  res = file.exists(output) && file.size(output) > 0
+  if (!cleanup) {
+    attr(res, "txt_path") = input_txt_path
+    attr(res, "wav_path") = wav_path
+  }
+  invisible(res)
 }

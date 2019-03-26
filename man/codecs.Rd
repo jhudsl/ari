@@ -9,7 +9,7 @@
 \alias{video_codec_encode}
 \title{Set Default Audio and Video Codecs}
 \usage{
-set_audio_codec(codec = "aac")
+set_audio_codec(codec)
 
 set_video_codec(codec = "libx264")
 

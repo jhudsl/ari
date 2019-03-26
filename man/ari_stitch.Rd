@@ -5,8 +5,9 @@
 \title{Create a video from images and audio}
 \usage{
 ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
-  cleanup = TRUE, ffmpeg_opts = "", audio_codec = get_audio_codec(),
-  video_codec = get_video_codec())
+  cleanup = TRUE, ffmpeg_opts = "", divisible_height = FALSE,
+  audio_codec = get_audio_codec(), video_codec = get_video_codec(),
+  audio_bitrate = "192k", video_bitrate = NULL)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -22,11 +23,18 @@ ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
 \item{ffmpeg_opts}{additional options to send to \code{ffmpeg}.
 This is an advanced option, use at your own risk}
 
+\item{divisible_height}{Make height divisible by 2, which may 
+be required if getting "height not divisible by 2" error.}
+
 \item{audio_codec}{The audio encoder for the splicing.  If this
 fails, try \code{copy}.}
 
 \item{video_codec}{The video encoder for the splicing.  If this
 fails, see \code{ffmpeg -codecs}}
+
+\item{audio_bitrate}{Bit rate for audio. Passed to \code{-b:a}.}
+
+\item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
 }
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
