@@ -6,6 +6,8 @@ library(purrr)
 library(aws.polly)
 
 if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
-  aws.signature::use_credentials(profile = "polly")
+  if (!identical(Sys.getenv("TRAVIS"), "true")) {
+    aws.signature::use_credentials(profile = "polly")
+  }
 }
 test_check("ari")
