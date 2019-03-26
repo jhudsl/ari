@@ -1,5 +1,13 @@
 context("Test ari_stitch()")
 
+res = ffmpeg_audio_codecs()
+fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (fdk_enabled) {
+  audio_codec = "libfdk_aac"
+} else {
+  audio_codec = "aac"
+}
+
 test_that("ari_stitch() can combine audio and images into a video", {
   skip_on_cran()
   
@@ -22,7 +30,7 @@ test_that("ari_stitch() can combine audio and images into a video", {
   on.exit(walk(c(graphs, video), unlink, force = TRUE), add = TRUE)
   
   ari_stitch(graphs, sound, output = video,
-             audio_codec = "aac")
+             audio_codec = audio_codec)
   
   expect_true(file.size(video) > 50000)
 })
