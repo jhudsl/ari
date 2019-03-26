@@ -19,7 +19,8 @@ test_that("Ari can make a video from local HTML slides.", {
               system.file("test", "ari_intro.html", package = "ari"),
               video, voice = run_voice, 
               capture_method = "iterative",
-              verbose = TRUE)
+              verbose = TRUE,
+              audio_codec = "aac")
   expect_true(file.size(video) > 50000)
 })
 
@@ -33,7 +34,8 @@ test_that("Ari can make a video from HTML slides on the web.", {
               "https://seankross.com/ari/inst/test/ari_intro.html",
               video, voice = run_voice, 
               capture_method = "iterative",
-              verbose = TRUE)
+              verbose = TRUE,
+              audio_codec = "aac")
   expect_true(file.size(video) > 50000)
 })
 
@@ -47,7 +49,8 @@ test_that("Ari can use an Rmd file with HTML comments for a script.", {
   ari_narrate(system.file("test", "ari_comments.Rmd", package = "ari"),
               system.file("test", "ari_intro.html", package = "ari"),
               video, voice = run_voice, capture_method = "iterative",
-              verbose = TRUE)
+              verbose = TRUE,
+              audio_codec = "aac")
   expect_true(file.size(video) > 50000)
 })
 

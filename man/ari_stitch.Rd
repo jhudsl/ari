@@ -62,7 +62,7 @@ library(purrr)
 slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
 sound <- map(c("rec1.wav", "rec2.wav", "rec3.wav"), readWave)
 
-ari_stitch(slides, sound)
+ari_stitch(slides, sound, audio_codec = "aac")
 
 }
 }

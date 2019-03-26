@@ -59,7 +59,8 @@ test_that("Ari can process text with over 1500 characters.", {
   
   ari_spin(
     system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
-    qmm, output = video, aws.polly::list_voices()$Id[1])
+    qmm, output = video, aws.polly::list_voices()$Id[1],
+    audio_codec = "aac")
   
   expect_true(file.size(video) > 50000)
 })
