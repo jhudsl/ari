@@ -53,13 +53,21 @@ That presses them and learns them first to bear,
 Making them women of good carriage:
 This is she-")
 
+res = ffmpeg_audio_codecs()
+fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (fdk_enabled) {
+  audio_codec = "libfdk_aac"
+} else {
+  audio_codec = "aac"
+}
 test_that("Ari can process text with over 1500 characters.", {
   skip_on_cran()
   skip_spin()
   
   ari_spin(
     system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
-    qmm, output = video, aws.polly::list_voices()$Id[1])
+    qmm, output = video, aws.polly::list_voices()$Id[1],
+    audio_codec = audio_codec)
   
   expect_true(file.size(video) > 50000)
 })

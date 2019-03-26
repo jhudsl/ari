@@ -24,6 +24,10 @@
 #' \code{.srt}.
 #' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
+#' @param audio_codec The audio encoder for the splicing.  If this
+#' fails, try \code{copy}.
+#' @param video_codec The video encoder for the splicing.  If this
+#' fails, see \code{ffmpeg -codecs}
 #' @param cleanup If \code{TRUE}, interim files are deleted
 #' 
 #' @importFrom xml2 read_html
@@ -47,6 +51,8 @@ ari_narrate <- function(script, slides, output = "output.mp4", voice,
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE, ...,
                         verbose = FALSE,
+                        audio_codec = get_audio_codec(),
+                        video_codec = get_video_codec(),                        
                         cleanup = TRUE){
   if(length(list_voices()) < 1){
     stop("It appears you're not connected to Amazon Polly. Make sure you've", 

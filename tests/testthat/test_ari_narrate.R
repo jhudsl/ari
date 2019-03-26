@@ -1,6 +1,13 @@
 context("Test ari_narrate()")
 
 run_voice = aws.polly::list_voices()$Id[1]
+res = ffmpeg_audio_codecs()
+fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (fdk_enabled) {
+  audio_codec = "libfdk_aac"
+} else {
+  audio_codec = "aac"
+}
 
 skip_narrate <- function(){
   if (Sys.getenv("SKIP_NARRATE") != "") {
@@ -19,7 +26,8 @@ test_that("Ari can make a video from local HTML slides.", {
               system.file("test", "ari_intro.html", package = "ari"),
               video, voice = run_voice,
               capture_method = "iterative",
-              verbose = TRUE)
+              verbose = TRUE,
+              audio_codec = audio_codec)
   expect_true(file.size(video) > 50000)
 })
 
@@ -33,7 +41,8 @@ test_that("Ari can make a video from HTML slides on the web.", {
               "https://seankross.com/ari/inst/test/ari_intro.html",
               video, voice = run_voice, 
               capture_method = "iterative",
-              verbose = TRUE)
+              verbose = TRUE,
+              audio_codec = audio_codec)
   expect_true(file.size(video) > 50000)
 })
 
@@ -47,7 +56,8 @@ test_that("Ari can use an Rmd file with HTML comments for a script.", {
   ari_narrate(system.file("test", "ari_comments.Rmd", package = "ari"),
               system.file("test", "ari_intro.html", package = "ari"),
               video, voice = run_voice, capture_method = "iterative",
-              verbose = TRUE)
+              verbose = TRUE,
+              audio_codec = audio_codec)
   expect_true(file.size(video) > 50000)
 })
 

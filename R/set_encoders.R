@@ -49,8 +49,15 @@ get_audio_codec = function() {
   codec = getOption("ffmpeg_audio_codec")
   if (is.null(codec)) {
     os = get_os()
+    res = ffmpeg_audio_codecs()
+    fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+    if (fdk_enabled) {
+      os_audio_codec = "libfdk_aac"
+    } else {
+      os_audio_codec = "aac"
+    }
     codec = switch(os,
-                   darwin = "libfdk_aac",
+                   darwin = os_audio_codec,
                    windows = "aac",
                    linux = "aac"
     )
