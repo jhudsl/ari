@@ -66,7 +66,9 @@ ari_stitch <- function(
     all(file.exists(images)),
     dir.exists(output_dir)
   )
-  
+  if (is.character(audio)) {
+    audio = lapply(audio, tuneR::readMP3)
+  }
   # Make a hard path
   output = file.path(output_dir, basename(output))
   
