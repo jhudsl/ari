@@ -68,6 +68,22 @@ ari_stitch <- function(
   )
   if (is.character(audio)) {
     audio = lapply(audio, tuneR::readMP3)
+    audio = lapply(audio, function(wav) {
+      ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
+      left = rep(0, 
+                 wav@samp.rate * ideal_duration - length(wav@left))
+      right = numeric(0)
+      if (wav@stereo) {
+        right = left
+      }
+      end_wav = tuneR::Wave(
+        left = left,
+        right = right,
+        bit = wav@bit, samp.rate = wav@samp.rate)         
+      wav <- bind(wav, end_wav)
+      wav = tuneR:::normalize(object = wav, unit = as.character(wav@bit))
+      wav      
+    })
   }
   # Make a hard path
   output = file.path(output_dir, basename(output))
@@ -75,7 +91,7 @@ ari_stitch <- function(
   if (verbose > 0) {
     message("Writing out Wav for audio")
   }
-  wav <- reduce(audio, bind)
+  wav <- purrr::reduce(audio, bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", grs(), ".wav"))
   writeWave(wav, filename = wav_path)
   if (cleanup) {
@@ -137,5 +153,6 @@ ari_stitch <- function(
     attr(res, "txt_path") = input_txt_path
     attr(res, "wav_path") = wav_path
   }
+  attr(res, "outfile") = output
   invisible(res)
 }
