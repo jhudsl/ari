@@ -81,7 +81,6 @@ ari_stitch <- function(
         right = right,
         bit = wav@bit, samp.rate = wav@samp.rate)         
       wav <- bind(wav, end_wav)
-      wav = tuneR:::normalize(object = wav, unit = as.character(wav@bit))
       wav      
     })
   }
