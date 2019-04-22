@@ -47,7 +47,7 @@
 #' }
 ari_stitch <- function(
   images, audio, 
-  output = "output.mp4",
+  output = tempfile(fileext = ".mp4"),
   verbose = FALSE,
   cleanup = TRUE,
   ffmpeg_opts = "",

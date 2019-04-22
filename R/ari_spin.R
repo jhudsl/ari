@@ -45,9 +45,12 @@
 #' 
 #' }
 #' 
-ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
-                     subtitles = FALSE,
-                     ...){
+ari_spin <- function(
+  images, paragraphs, 
+  output = tempfile(fileext = ".mp4"),
+  voice = "Joanna",
+  subtitles = FALSE,
+  ...){
   # check for ffmpeg before any synthesizing
   ffmpeg_exec()
   
@@ -99,8 +102,8 @@ ari_spin <- function(images, paragraphs, output = "output.mp4", voice,
     sub_file = paste0(file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wavs, sub_file)
   }
-
-    
+  
+  
   res = ari_stitch(images, wavs, output, ...)
   args = list(...)
   cleanup = args$cleanup
