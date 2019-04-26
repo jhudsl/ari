@@ -81,3 +81,27 @@ ffmpeg_audio_codecs = function() {
 }
 
 
+
+#' @rdname ffmpeg_codecs
+#' @export
+ffmpeg_muxers = function() {
+  ffmpeg = ffmpeg_exec()
+  cmd = paste(ffmpeg, "-muxers")
+  res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
+  res = trimws(res)
+  res = res[grepl("^E", res)]
+  res = strsplit(res, " ")
+  res = t(sapply(res, function(x) {
+    x = trimws(x)
+    x = x[ x != ""]
+    if (length(x) >= 3) {
+      x[3:length(x)] = paste(x[3:length(x)], collapse = " ")
+    }
+    return(x[1:3])
+  }))
+  colnames(res) = c("capabilities", "muxer", "muxer_name")
+  res = as.data.frame(res, stringsAsFactors = FALSE)
+  res$capabilities = trimws(res$capabilities)
+  
+  return(res)
+}
