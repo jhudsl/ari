@@ -47,7 +47,9 @@
 #'             voice = "Joey")
 #' 
 #' }
-ari_narrate <- function(script, slides, output = "output.mp4", voice,
+ari_narrate <- function(script, slides, 
+                        output = tempfile(fileext = ".mp4"),
+                        voice = "Joanna",
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE, ...,
                         verbose = FALSE,
