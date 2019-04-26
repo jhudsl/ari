@@ -1,6 +1,7 @@
 ---
 title: "Ari Comments"
 author: "Sean Kross"
+output: ioslides_presentation
 ---
 
 <!--

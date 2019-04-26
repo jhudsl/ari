@@ -68,6 +68,11 @@ ari_narrate <- function(script, slides,
   
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
+  if (file_ext(script) %in% c("Rmd", "rmd") & missing(slides)){
+    tfile = tempfile(fileext = ".html")
+    slides = rmarkdown::render(input = script, output_file = tfile)
+  } 
+  
   if (file.exists(slides)){
     slides <- normalizePath(slides)
     if (.Platform$OS.type == "windows") {
@@ -109,5 +114,4 @@ ari_narrate <- function(script, slides,
   }
   ari_spin(img_paths, paragraphs, output, voice, subtitles, 
            verbose = verbose, cleanup = cleanup)
-  invisible()
 }
