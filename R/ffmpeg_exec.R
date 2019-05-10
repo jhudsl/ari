@@ -14,3 +14,12 @@ ffmpeg_exec = function() {
   }
   return(ffmpeg)
 }
+
+#' @export
+#' @rdname ffmpeg_exec
+have_ffmpeg_exec = function() {
+  exec = try({
+    ari::ffmpeg_exec()
+  })
+  inherits(exec, "try-error")
+}

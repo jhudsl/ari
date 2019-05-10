@@ -1,3 +1,9 @@
+# ari 0.3.0
+
+- Added in `text2speech` package for use of other audio generation engines.
+- Added `have_ffmpeg_exec` to check if the user has `ffmpeg` installed
+- Example for `ari_stitch` now is run.
+
 # ari 0.2.0
 
 - Second CRAN release, to be used with `didactr` package.

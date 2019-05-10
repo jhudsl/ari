@@ -34,16 +34,11 @@
 #' @importFrom tuneR bind writeWave
 #' @export
 #' @examples 
-#' \dontrun{
-#' 
 #' library(tuneR)
-#' library(purrr)
-#' 
-#' slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
-#' sound <- map(c("rec1.wav", "rec2.wav", "rec3.wav"), readWave)
-#' 
-#' ari_stitch(slides, sound, audio_codec = "aac")
-#' 
+#' if (have_ffmpeg_exec()) {
+#' result = ari_stitch(
+#' ari_example(c("mab1.png", "mab2.png")),
+#' list(noise(), noise()))
 #' }
 ari_stitch <- function(
   images, audio, 

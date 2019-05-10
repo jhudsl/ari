@@ -2,9 +2,12 @@
 % Please edit documentation in R/ffmpeg_exec.R
 \name{ffmpeg_exec}
 \alias{ffmpeg_exec}
+\alias{have_ffmpeg_exec}
 \title{Get Path to ffmpeg Executable}
 \usage{
 ffmpeg_exec()
+
+have_ffmpeg_exec()
 }
 \value{
 The path to the \code{ffmpeg} executable, or an error.
