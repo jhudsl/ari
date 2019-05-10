@@ -30,6 +30,7 @@ test_that("Ari can make a video from local HTML slides.", {
               system.file("test", "ari_intro.html", package = "ari"),
               video, voice = run_voice, 
               capture_method = "iterative",
+              service = "amazon",
               verbose = TRUE,
               audio_codec = audio_codec)
   expect_true(file.size(video) > 50000)

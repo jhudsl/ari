@@ -12,8 +12,11 @@
 #' \code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a 
 #' similar package.
 #' @param output The path to the video file which will be created.
-#' @param voice The Amazon Polly voice you want to use. See
-#' \code{\link[aws.polly]{list_voices}}.
+#' @param voice The voice you want to use. See 
+#' \code{\link[text2speech]{tts_voices}} for more information 
+#' about what voices are available.
+#' @param service speech synthesis service to use,
+#' passed to \code{\link[text2speech]{tts}}.
 #' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
 #' The vectorized mode is faster though it can cause screens to repeat. If
 #' making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
@@ -35,7 +38,6 @@
 #' @importFrom rmarkdown render html_document
 #' @importFrom purrr map_chr walk
 #' @importFrom webshot webshot
-#' @importFrom aws.polly list_voices
 #' @importFrom tools file_ext
 #' @export
 #' @examples 
@@ -50,30 +52,37 @@
 ari_narrate <- function(script, slides, 
                         output = tempfile(fileext = ".mp4"),
                         voice = "Joanna",
+                        service = "amazon",
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE, ...,
                         verbose = FALSE,
                         audio_codec = get_audio_codec(),
                         video_codec = get_video_codec(),                        
                         cleanup = TRUE){
-  if(length(list_voices()) < 1){
-    stop("It appears you're not connected to Amazon Polly. Make sure you've", 
-         "set the appropriate environmental variables before you proceed.")
+  
+  auth = text2speech::tts_auth(service = service)
+  if (!auth) {
+    stop(paste0("It appears you're not authenticated with ", 
+                service, ". Make sure you've ", 
+                "set the appropriate environmental variables ", 
+                "before you proceed.")
+    )
   }
   
+  
   capture_method = match.arg(capture_method)
-  if(!(capture_method %in% c("vectorized", "iterative"))) {
+  if (!(capture_method %in% c("vectorized", "iterative"))) {
     stop('capture_method must be either "vectorized" or "iterative"')
   }
   
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
-  if (file_ext(script) %in% c("Rmd", "rmd") & missing(slides)){
+  if (file_ext(script) %in% c("Rmd", "rmd") & missing(slides)) {
     tfile = tempfile(fileext = ".html")
     slides = rmarkdown::render(input = script, output_file = tfile)
   } 
   
-  if (file.exists(slides)){
+  if (file.exists(slides)) {
     slides <- normalizePath(slides)
     if (.Platform$OS.type == "windows") {
       slides <- paste0("file://localhost/", slides)
@@ -86,7 +95,7 @@ ari_narrate <- function(script, slides,
     dir.exists(output_dir)
   )
   
-  if(file_ext(script) %in% c("Rmd", "rmd")){
+  if (file_ext(script) %in% c("Rmd", "rmd")) {
     paragraphs <- parse_html_comments(script)
   } else {
     html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
@@ -101,10 +110,10 @@ ari_narrate <- function(script, slides,
   slide_nums <- 1:length(paragraphs)
   img_paths <- file.path(output_dir, paste0("ari_img_", slide_nums, "_", grs(), ".jpeg"))
   
-  if(capture_method == "vectorized"){
+  if (capture_method == "vectorized") {
     webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)
   } else {
-    for(i in slide_nums){
+    for (i in slide_nums) {
       webshot(url = paste0(slides, "#", i), file = img_paths[i], ...)
     }
   }
@@ -112,6 +121,8 @@ ari_narrate <- function(script, slides,
   if (cleanup) {
     on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
   }
-  ari_spin(img_paths, paragraphs, output, voice, subtitles, 
+  ari_spin(images = img_paths, paragraphs = paragraphs, 
+           output = output, voice = voice, 
+           service = service, subtitles = subtitles, 
            verbose = verbose, cleanup = cleanup)
 }

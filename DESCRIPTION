@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: Automated R Instructor
-Version: 0.2.4
+Version: 0.3.0
 Authors@R: c(
     person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre")),
     person("John", "Muschelli", role = "ctb")
@@ -16,7 +16,7 @@ SystemRequirements: ffmpeg (>= 3.2.4)
 Depends:
     R (>= 3.1.0)
 Imports:
-    aws.polly,
+    text2speech,
     tuneR,
     webshot,
     purrr,
@@ -30,7 +30,8 @@ Suggests:
     testthat,
     grDevices,
     xaringan,
-    aws.signature
+    aws.signature,
+    aws.polly
 License: MIT + file LICENSE
 URL: http://github.com/seankross/ari
 BugReports: http://github.com/seankross/ari/issues

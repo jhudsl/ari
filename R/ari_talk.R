@@ -1,20 +1,27 @@
 #' Create spoken audio files
 #' 
-#' A simple function for demoing how spoken text from
-#' \href{https://aws.amazon.com/polly/}{Amazon Polly} will sound.
+#' A simple function for demoing how spoken text will sound.
 #' @param paragraphs A vector strings that will be spoken by Amazon Polly.
 #' @param output A path to the audio file which will be created.
-#' @param voice The Amazon Polly voice you want to use. See 
-#' \code{\link[aws.polly]{list_voices}} for more information about what voices
-#' are available.
-#' @importFrom aws.polly list_voices synthesize
+#' @param voice The  voice you want to use. See 
+#' \code{\link[text2speech]{tts_voices}} for more information 
+#' about what voices are available.
+#' @param service speech synthesis service to use,
+#' passed to \code{\link[text2speech]{tts}}
+#' @importFrom text2speech tts_auth tts
 #' @importFrom tuneR bind Wave writeWave
 #' @importFrom purrr map reduce
 #' @export
-ari_talk <- function(paragraphs, output = "output.wav", voice) {
-  if(length(list_voices()) < 1){
-    stop("It appears you're not connected to Amazon Polly. Make sure you've ", 
-         "set the appropriate environmental variables before you proceed.")
+ari_talk <- function(paragraphs, output = "output.wav",
+                     voice = "Joanna",
+                     service = "amazon") {
+  auth = text2speech::tts_auth(service = service)
+  if (!auth) {
+    stop(paste0("It appears you're not authenticated with ", 
+                service, ". Make sure you've ", 
+                "set the appropriate environmental variables ", 
+                "before you proceed.")
+    )
   }
   output_dir <- normalizePath(dirname(output))
   stopifnot(
@@ -25,13 +32,13 @@ ari_talk <- function(paragraphs, output = "output.wav", voice) {
   wavs <- vector(mode = "list", length = length(paragraphs))
   par_along <- 1:length(paragraphs)
   
-  for(i in par_along) {
-    if(nchar(paragraphs[i]) < 1500){
-      wav <- synthesize(paragraphs[i], voice)
-    } else {
-      chunks <- split_up_text(paragraphs[i])
-      wav <- reduce(map(chunks, synthesize, voice = voice), bind)
-    }
+  for (i in par_along) {
+    wav <- text2speech::tts(
+      text = paragraphs[i], 
+      voice = voice,
+      service = service,
+      bind_audio = TRUE)
+    wav = reduce(wav$wav, bind)
     wavs[[i]] <- wav
   }
   

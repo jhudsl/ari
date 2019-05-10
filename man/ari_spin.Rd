@@ -5,7 +5,7 @@
 \title{Create a video from images and text}
 \usage{
 ari_spin(images, paragraphs, output = tempfile(fileext = ".mp4"),
-  voice = "Joanna", subtitles = FALSE, ...)
+  voice = "Joanna", service = "amazon", subtitles = FALSE, ...)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -14,9 +14,12 @@ ari_spin(images, paragraphs, output = tempfile(fileext = ".mp4"),
 
 \item{output}{A path to the video file which will be created.}
 
-\item{voice}{The Amazon Polly voice you want to use. See 
-\code{\link[aws.polly]{list_voices}} for more information about what voices
-are available.}
+\item{voice}{The voice you want to use. See 
+\code{\link[text2speech]{tts_voices}} for more information 
+about what voices are available.}
+
+\item{service}{speech synthesis service to use,
+passed to \code{\link[text2speech]{tts}}}
 
 \item{subtitles}{Should a \code{.srt} file be created with subtitles? The
 default value is \code{FALSE}. If \code{TRUE} then a file with the same name
@@ -29,7 +32,9 @@ as the \code{output} argument will be created, but with the file extension
 Given equal length vectors of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and strings which will be
 \code{\link[aws.polly]{synthesize}}d by
-\href{https://aws.amazon.com/polly/}{Amazon Polly}, this function creates an
+\href{https://aws.amazon.com/polly/}{Amazon Polly} or 
+any other synthesizer available in
+\code{\link[text2speech]{tts}}, this function creates an
 \code{.mp4} video file where each image is shown with
 its corresponding narration. This function uses \code{\link{ari_stitch}} to
 create the video.
@@ -46,10 +51,10 @@ to Amazon Polly see the \code{\link[aws.polly]{aws.polly}} documentation
 \examples{
 \dontrun{
 
-slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
-sentences <- c("Welome to my very interestig lecture.",
-               "Here are some fantastic equations I came up with.",
-               "Any questions?")
+slides <- system.file("test", c("mab2.png", "mab1.png"),
+package = "ari")
+sentences <- c("Welome to my very interesting lecture.",
+               "Here are some fantastic equations I came up with.")
 ari_spin(slides, sentences, voice = "Joey")
 
 }

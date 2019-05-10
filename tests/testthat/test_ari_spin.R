@@ -72,6 +72,7 @@ test_that("Ari can process text with over 1500 characters.", {
   ari_spin(
     system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
     qmm, output = video, voice = run_voice,
+    service = "amazon",
     audio_codec = audio_codec)
   
   expect_true(file.size(video) > 50000)
