@@ -10,10 +10,10 @@ if (fdk_enabled) {
 
 test_that("ari_stitch() can combine audio and images into a video", {
   skip_on_cran()
-  
+  # should work without polly
   temp_dir <- tempdir()
   
-  for(i in 1:3){
+  for (i in 1:3) {
     jpeg(file.path(temp_dir, paste0("plot", i, ".jpg")))
     plot(1:5 * i, 1:5, main = i)
     dev.off()

@@ -10,4 +10,10 @@ if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
     aws.signature::use_credentials(profile = "polly")
   }
 }
+skip_amazon_not_authorized = function() {
+  if (!text2speech::tts_amazon_authenticated()) {
+    skip("skipping because amazon not authenticated()")
+  }
+}
+
 test_check("ari")

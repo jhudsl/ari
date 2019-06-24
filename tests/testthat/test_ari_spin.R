@@ -63,6 +63,7 @@ if (fdk_enabled) {
 test_that("Ari can process text with over 1500 characters.", {
   skip_on_cran()
   skip_spin()
+  skip_amazon_not_authorized()
   
   if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
     run_voice = aws.polly::list_voices()$Id[1]
