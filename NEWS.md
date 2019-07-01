@@ -3,6 +3,7 @@
 - Added in `text2speech` package for use of other audio generation engines.
 - Added `have_ffmpeg_exec` to check if the user has `ffmpeg` installed
 - Example for `ari_stitch` now is run.
+- Some documentation changes fro `BiocCheck` compliance (just more rigid).
 
 # ari 0.2.0
 
