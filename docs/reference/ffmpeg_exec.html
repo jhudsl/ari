@@ -123,7 +123,9 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>ffmpeg_exec</span>()</div><div class='output co'>#&gt;                  ffmpeg 
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>have_ffmpeg_exec</span>()) {
+<span class='fu'>ffmpeg_exec</span>()
+}</div><div class='output co'>#&gt;                  ffmpeg 
 #&gt; "/usr/local/bin/ffmpeg" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

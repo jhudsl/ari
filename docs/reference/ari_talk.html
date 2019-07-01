@@ -113,8 +113,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>ari_talk</span>(<span class='no'>paragraphs</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"output.wav"</span>, <span class='kw'>voice</span> <span class='kw'>=</span> <span class='st'>"Joanna"</span>,
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"amazon"</span>)</pre>
+    <pre class="usage"><span class='fu'>ari_talk</span>(<span class='no'>paragraphs</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>(<span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".wav"</span>),
+  <span class='kw'>voice</span> <span class='kw'>=</span> <span class='st'>"Joanna"</span>, <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"amazon"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,7 +142,8 @@ passed to <code><a href='https://www.rdocumentation.org/packages/text2speech/top
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>Wave</code> output object</p>
+    <p>A <code>Wave</code> output object, with the attribute <code>outfile</code>
+of the output file name.</p>
     
 
   </div>
