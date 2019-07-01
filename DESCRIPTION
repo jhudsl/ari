@@ -26,7 +26,6 @@ Imports:
     tools,
     progress,
     hms
-Remotes: muschellij2/text2speech
 Suggests:
     testthat,
     grDevices,

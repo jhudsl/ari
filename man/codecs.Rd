@@ -26,6 +26,9 @@ video_codec_encode(codec)
 \code{ffmpeg_audio_codec} and \code{ffmpeg_video_codec} options
 to store this information.}
 }
+\value{
+A \code{NULL} output
+}
 \description{
 Set Default Audio and Video Codecs
 }

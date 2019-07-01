@@ -15,7 +15,8 @@ ari_burn_subtitles = function(video, srt, verbose = FALSE) {
                       Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
   
   if (is.na(ffmpeg)) {
-    stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
+    stop(paste0("Could not find ffmpeg. See the documentation for ", 
+                "ari_stitch() for more details."))
   }
   if (verbose > 0) {
     message("Burning in Subtitles")

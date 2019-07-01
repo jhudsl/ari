@@ -50,6 +50,9 @@ fails, see \code{ffmpeg -codecs}}
 
 \item{cleanup}{If \code{TRUE}, interim files are deleted}
 }
+\value{
+The output from \code{\link{ari_spin}}
+}
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML
 slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.

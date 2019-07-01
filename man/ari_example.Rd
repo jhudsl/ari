@@ -10,6 +10,9 @@ ari_example(path = NULL)
 \item{path}{The name of the file. If no argument is provided then
 all of the example files will be listed.}
 }
+\value{
+A character string
+}
 \description{
 This function allows you to quickly access files that are used in
 the ari documentation.

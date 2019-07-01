@@ -13,7 +13,7 @@
 #' This function needs to connect to
 #' \href{https://aws.amazon.com/}{Amazon Web Services} in order to create the
 #' narration. You can find a guide for accessing AWS from R
-#' \href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
+#' \href{http://bit.ly/ariAWScreate}{here}.
 #' For more information about how R connects
 #' to Amazon Polly see the \code{\link[aws.polly]{aws.polly}} documentation 
 #' \href{https://github.com/cloudyr/aws.polly}{here}.
@@ -31,6 +31,8 @@
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
 #' @param ... additional arguments to \code{\link{ari_stitch}}
+#' 
+#' @return The output from \code{\link{ari_stitch}}
 #' 
 #' @importFrom text2speech tts_auth tts
 #' @importFrom tuneR bind Wave
@@ -87,7 +89,7 @@ ari_spin <- function(
   )
   
   wavs <- vector(mode = "list", length = length(paragraphs))
-  par_along <- 1:length(paragraphs)
+  par_along <- seq_along(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
   
   pb <- progress_bar$new(

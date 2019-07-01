@@ -33,6 +33,7 @@
 #' fails, see \code{ffmpeg -codecs}
 #' @param cleanup If \code{TRUE}, interim files are deleted
 #' 
+#' @return The output from \code{\link{ari_spin}}
 #' @importFrom xml2 read_html
 #' @importFrom rvest html_nodes html_text
 #' @importFrom rmarkdown render html_document
@@ -57,7 +58,7 @@ ari_narrate <- function(script, slides,
                         subtitles = FALSE, ...,
                         verbose = FALSE,
                         audio_codec = get_audio_codec(),
-                        video_codec = get_video_codec(),                        
+                        video_codec = get_video_codec(),
                         cleanup = TRUE){
   
   auth = text2speech::tts_auth(service = service)
@@ -107,8 +108,11 @@ ari_narrate <- function(script, slides,
                           function(x){gsub("\u2019", "'", x)})
   }
   
-  slide_nums <- 1:length(paragraphs)
-  img_paths <- file.path(output_dir, paste0("ari_img_", slide_nums, "_", grs(), ".jpeg"))
+  slide_nums <- seq_along(paragraphs)
+  img_paths <- file.path(output_dir, 
+                         paste0("ari_img_", 
+                                slide_nums, "_", 
+                                grs(), ".jpeg"))
   
   if (capture_method == "vectorized") {
     webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)

@@ -19,6 +19,9 @@ about what voices are available.}
 \item{service}{speech synthesis service to use,
 passed to \code{\link[text2speech]{tts}}}
 }
+\value{
+A \code{Wave} output object
+}
 \description{
 A simple function for demoing how spoken text will sound.
 }

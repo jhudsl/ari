@@ -10,7 +10,9 @@ ffmpeg_exec = function() {
                       Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
   
   if (is.na(ffmpeg)) {
-    stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
+    stop(paste("Could not find ffmpeg. See the documentation ", 
+               "for ari_stitch() ", 
+               "for more details."))
   }
   return(ffmpeg)
 }

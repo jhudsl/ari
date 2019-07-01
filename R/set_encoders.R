@@ -3,13 +3,14 @@ get_os = function() {
   os = tolower(sys_info[["sysname"]])
   return(os)
 }
+
 #' Set Default Audio and Video Codecs
 #'
 #' @param codec The codec to use or get for audio/video.  Uses the
 #' \code{ffmpeg_audio_codec} and \code{ffmpeg_video_codec} options
 #' to store this information.
 #' @seealso \code{\link{ffmpeg_codecs}} for options
-#' @return NULL
+#' @return A \code{NULL} output
 #'
 #' @examples
 #' get_audio_codec()

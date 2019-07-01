@@ -37,6 +37,10 @@ fails, see \code{ffmpeg -codecs}}
 
 \item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
 }
+\value{
+A logical value, with the attribute \code{outfile} for the
+output file.
+}
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal

@@ -14,14 +14,14 @@ ffmpeg_codecs = function() {
   res = trimws(res)
   res = res[grepl("^([.]|D)", res)]
   res = strsplit(res, " ")
-  res = t(sapply(res, function(x) {
+  res = t(vapply(res, function(x) {
     x = trimws(x)
     x = x[ x != ""]
     if (length(x) >= 3) {
       x[3:length(x)] = paste(x[3:length(x)], collapse = " ")
     }
-    return(x[1:3])
-  }))
+    return(x[seq(3)])
+  }, FUN.VALUE = character(3)))
   colnames(res) = c("capabilities", "codec", "codec_name")
   res = as.data.frame(res, stringsAsFactors = FALSE)
   res$capabilities = trimws(res$capabilities)
@@ -30,8 +30,6 @@ ffmpeg_codecs = function() {
   res = res[ res$codec != "=", ]
   
   cap = do.call("rbind", strsplit(res$capabilities, split = ""))
-  
-  # cap = t(sapply(cap, function(x) x == "."))
   
   cap_defns$codec_name = tolower(cap_defns$codec_name)
   cap_defns$codec_name = gsub(" ", "_", cap_defns$codec_name)
@@ -91,14 +89,14 @@ ffmpeg_muxers = function() {
   res = trimws(res)
   res = res[grepl("^E", res)]
   res = strsplit(res, " ")
-  res = t(sapply(res, function(x) {
+  res = t(vapply(res, function(x) {
     x = trimws(x)
     x = x[ x != ""]
     if (length(x) >= 3) {
       x[3:length(x)] = paste(x[3:length(x)], collapse = " ")
     }
-    return(x[1:3])
-  }))
+    return(x[seq(3)])
+  }, FUN.VALUE = character(3)))
   colnames(res) = c("capabilities", "muxer", "muxer_name")
   res = as.data.frame(res, stringsAsFactors = FALSE)
   res$capabilities = trimws(res$capabilities)

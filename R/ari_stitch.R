@@ -30,6 +30,10 @@
 #' fails, see \code{ffmpeg -codecs}
 #' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
 #' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
+#' 
+#' @return A logical value, with the attribute \code{outfile} for the
+#' output file.
+
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
@@ -92,17 +96,23 @@ ari_stitch <- function(
     on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   }
   
-  input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
+  input_txt_path <- file.path(output_dir, 
+                              paste0("ari_input_", 
+                                     grs(), 
+                                     ".txt"))
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   # if (.Platform$OS.type == "windows") {
   #   images <- basename(images)   
   # }
-  for(i in 1:length(images)){
-    cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
-    cat(paste0("duration ", duration(audio[[i]]), "\n"), file = input_txt_path, append = TRUE)
+  for(i in seq_along(images)){
+    cat(paste0("file ", "'", images[i], "'", "\n"), 
+        file = input_txt_path, append = TRUE)
+    cat(paste0("duration ", duration(audio[[i]]), "\n"), 
+        file = input_txt_path, append = TRUE)
   }
-  cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
+  cat(paste0("file ", "'", images[i], "'", "\n"), 
+      file = input_txt_path, append = TRUE)
   
   ffmpeg = ffmpeg_exec()
   

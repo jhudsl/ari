@@ -8,6 +8,8 @@
 #' about what voices are available.
 #' @param service speech synthesis service to use,
 #' passed to \code{\link[text2speech]{tts}}
+#' 
+#' @return A \code{Wave} output object
 #' @importFrom text2speech tts_auth tts
 #' @importFrom tuneR bind Wave writeWave
 #' @importFrom purrr map reduce
@@ -30,7 +32,7 @@ ari_talk <- function(paragraphs, output = "output.wav",
   )
   
   wavs <- vector(mode = "list", length = length(paragraphs))
-  par_along <- 1:length(paragraphs)
+  par_along <- seq_along(paragraphs)
   
   for (i in par_along) {
     wav <- text2speech::tts(
