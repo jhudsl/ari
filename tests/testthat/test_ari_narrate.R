@@ -1,7 +1,12 @@
 context("Test ari_narrate()")
 
-res = ffmpeg_audio_codecs()
-fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+
+if (have_ffmpeg_exec()) {
+  res = ffmpeg_audio_codecs()
+  fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+} else {
+  fdk_enabled = FALSE
+}
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
@@ -16,7 +21,7 @@ skip_narrate <- function(){
 
 video <- file.path(tempdir(), "output.mp4")
 #video <- file.path(getwd(), "output.mp4")
-if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
+if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
   run_voice = aws.polly::list_voices()$Id[1]
 } else {
   run_voice = "Joanna"

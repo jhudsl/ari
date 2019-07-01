@@ -1,7 +1,11 @@
 context("Test ari_stitch()")
 
-res = ffmpeg_audio_codecs()
-fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (have_ffmpeg_exec()) {
+  res = ffmpeg_audio_codecs()
+  fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+} else {
+  fdk_enabled = FALSE
+}
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
