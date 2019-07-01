@@ -22,6 +22,6 @@ ffmpeg_exec = function() {
 have_ffmpeg_exec = function() {
   exec = try({
     ari::ffmpeg_exec()
-  })
-  inherits(exec, "try-error")
+  }, silent = TRUE)
+  !inherits(exec, "try-error")
 }
