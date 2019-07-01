@@ -11,9 +11,10 @@ if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
   }
 }
 skip_amazon_not_authorized = function() {
-  if (!text2speech::tts_amazon_authenticated()) {
-    skip("skipping because amazon not authenticated()")
+  if (text2speech::tts_amazon_authenticated()) {
+    return(invisible(TRUE))
   }
+  skip("Amazon not authenticated()")
 }
 
 test_check("ari")
