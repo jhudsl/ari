@@ -16,5 +16,7 @@ The path to the \code{ffmpeg} executable, or an error.
 Get Path to ffmpeg Executable
 }
 \examples{
+if (have_ffmpeg_exec()) { 
 ffmpeg_exec()
+}
 }

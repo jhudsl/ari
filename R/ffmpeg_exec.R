@@ -4,7 +4,9 @@
 #' @export
 #'
 #' @examples
+#' if (have_ffmpeg_exec()) { 
 #' ffmpeg_exec()
+#' }
 ffmpeg_exec = function() {
   ffmpeg <- discard(c(Sys.getenv("ffmpeg"), 
                       Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
