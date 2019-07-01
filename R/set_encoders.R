@@ -13,6 +13,7 @@ get_os = function() {
 #' @return A \code{NULL} output
 #'
 #' @examples
+#' if (have_ffmpeg_exec()) {
 #' get_audio_codec()
 #' set_audio_codec(codec = "libfdk_aac")
 #' get_audio_codec()
@@ -24,6 +25,7 @@ get_os = function() {
 #' get_video_codec()
 #' set_video_codec(codec = "libx264")
 #' get_video_codec()
+#' }
 #' @rdname codecs
 #' @export
 set_audio_codec = function(codec) {

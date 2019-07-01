@@ -9,12 +9,14 @@
 #' @param service speech synthesis service to use,
 #' passed to \code{\link[text2speech]{tts}}
 #' 
-#' @return A \code{Wave} output object
+#' @return A \code{Wave} output object, with the attribute \code{outfile}
+#' of the output file name.
 #' @importFrom text2speech tts_auth tts
 #' @importFrom tuneR bind Wave writeWave
 #' @importFrom purrr map reduce
 #' @export
-ari_talk <- function(paragraphs, output = "output.wav",
+ari_talk <- function(paragraphs, 
+                     output = tempfile(fileext = ".wav"),
                      voice = "Joanna",
                      service = "amazon") {
   auth = text2speech::tts_auth(service = service)
@@ -46,4 +48,6 @@ ari_talk <- function(paragraphs, output = "output.wav",
   
   audio <- reduce(wavs, bind)
   writeWave(audio, output)
+  attr(audio, "outfile") = output
+  return(audio)
 }
