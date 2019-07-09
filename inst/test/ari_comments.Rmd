@@ -1,6 +1,7 @@
 ---
 title: "Ari Comments"
 author: "Sean Kross"
+output: ioslides_presentation
 ---
 
 <!--
@@ -44,3 +45,4 @@ a text to speech product from Amazon Web Services.
 <!--
 Thank you for watching this video and good luck using Ari!
 -->
+

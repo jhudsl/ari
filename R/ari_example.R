@@ -5,6 +5,8 @@
 #'
 #' @param path The name of the file. If no argument is provided then
 #' all of the example files will be listed.
+#' 
+#' @return A character string
 #' @export
 #' @examples
 #' ari_example("ari_intro.Rmd")

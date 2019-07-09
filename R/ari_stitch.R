@@ -30,24 +30,22 @@
 #' fails, see \code{ffmpeg -codecs}
 #' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
 #' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
+#' 
+#' @return A logical value, with the attribute \code{outfile} for the
+#' output file.
+
 #' @importFrom purrr reduce discard
 #' @importFrom tuneR bind writeWave
 #' @export
 #' @examples 
-#' \dontrun{
-#' 
-#' library(tuneR)
-#' library(purrr)
-#' 
-#' slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
-#' sound <- map(c("rec1.wav", "rec2.wav", "rec3.wav"), readWave)
-#' 
-#' ari_stitch(slides, sound, audio_codec = "aac")
-#' 
+#' if (have_ffmpeg_exec()) {
+#' result = ari_stitch(
+#' ari_example(c("mab1.png", "mab2.png")),
+#' list(tuneR::noise(), tuneR::noise()))
 #' }
 ari_stitch <- function(
   images, audio, 
-  output = "output.mp4",
+  output = tempfile(fileext = ".mp4"),
   verbose = FALSE,
   cleanup = TRUE,
   ffmpeg_opts = "",
@@ -66,31 +64,54 @@ ari_stitch <- function(
     all(file.exists(images)),
     dir.exists(output_dir)
   )
-  
+  if (is.character(audio)) {
+    audio = lapply(audio, tuneR::readMP3)
+    audio = lapply(audio, function(wav) {
+      ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
+      left = rep(0, 
+                 wav@samp.rate * ideal_duration - length(wav@left))
+      right = numeric(0)
+      if (wav@stereo) {
+        right = left
+      }
+      end_wav = tuneR::Wave(
+        left = left,
+        right = right,
+        bit = wav@bit, samp.rate = wav@samp.rate)         
+      wav <- bind(wav, end_wav)
+      wav      
+    })
+  }
   # Make a hard path
   output = file.path(output_dir, basename(output))
   
   if (verbose > 0) {
     message("Writing out Wav for audio")
   }
-  wav <- reduce(audio, bind)
+  wav <- purrr::reduce(audio, bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", grs(), ".wav"))
   writeWave(wav, filename = wav_path)
   if (cleanup) {
     on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   }
   
-  input_txt_path <- file.path(output_dir, paste0("ari_input_", grs(), ".txt"))
+  input_txt_path <- file.path(output_dir, 
+                              paste0("ari_input_", 
+                                     grs(), 
+                                     ".txt"))
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   # if (.Platform$OS.type == "windows") {
   #   images <- basename(images)   
   # }
-  for(i in 1:length(images)){
-    cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
-    cat(paste0("duration ", duration(audio[[i]]), "\n"), file = input_txt_path, append = TRUE)
+  for(i in seq_along(images)){
+    cat(paste0("file ", "'", images[i], "'", "\n"), 
+        file = input_txt_path, append = TRUE)
+    cat(paste0("duration ", duration(audio[[i]]), "\n"), 
+        file = input_txt_path, append = TRUE)
   }
-  cat(paste0("file ", "'", images[i], "'", "\n"), file = input_txt_path, append = TRUE)
+  cat(paste0("file ", "'", images[i], "'", "\n"), 
+      file = input_txt_path, append = TRUE)
   
   ffmpeg = ffmpeg_exec()
   
@@ -135,5 +156,6 @@ ari_stitch <- function(
     attr(res, "txt_path") = input_txt_path
     attr(res, "wav_path") = wav_path
   }
+  attr(res, "outfile") = output
   invisible(res)
 }

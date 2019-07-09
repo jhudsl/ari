@@ -1,5 +1,6 @@
 # ari
 
+<!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/seankross/ari.svg?branch=master)](https://travis-ci.org/seankross/ari)
 [![CRAN version](http://www.r-pkg.org/badges/version/ari)](https://cran.r-project.org/package=ari)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ari)](http://cran-logs.rstudio.com/)
@@ -7,6 +8,8 @@
 muschellij2 badge:
 
 [![Travis-CI Build Status](https://travis-ci.org/muschellij2/ari.svg?branch=master)](https://travis-ci.org/muschellij2/ari)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/muschellij2/ari?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/ari)
+<!-- badges: end -->
 
 ### The Automated R Instructor
 

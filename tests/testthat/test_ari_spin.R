@@ -53,8 +53,12 @@ That presses them and learns them first to bear,
 Making them women of good carriage:
 This is she-")
 
-res = ffmpeg_audio_codecs()
-fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (have_ffmpeg_exec()) {
+  res = ffmpeg_audio_codecs()
+  fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+} else {
+  fdk_enabled = FALSE
+}
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
@@ -63,8 +67,9 @@ if (fdk_enabled) {
 test_that("Ari can process text with over 1500 characters.", {
   skip_on_cran()
   skip_spin()
+  skip_amazon_not_authorized()
   
-  if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
+  if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
     run_voice = aws.polly::list_voices()$Id[1]
   } else {
     run_voice = "Joanna"
@@ -72,6 +77,7 @@ test_that("Ari can process text with over 1500 characters.", {
   ari_spin(
     system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
     qmm, output = video, voice = run_voice,
+    service = "amazon",
     audio_codec = audio_codec)
   
   expect_true(file.size(video) > 50000)

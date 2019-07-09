@@ -4,7 +4,8 @@ is_Wave <- function(x){
 
 # get random string
 grs <- function(){
-  paste(sample(c(1:10, letters, LETTERS), size = 12, replace = TRUE), collapse = "")
+  paste(sample(c(seq(10), letters, LETTERS), 
+               size = 12, replace = TRUE), collapse = "")
 }
 
 # how long is a wav?
@@ -58,8 +59,10 @@ parse_html_comments <- function(path){
   for(i in seq_along(starts)){
     if(starts[i] == ends[i]){ # Single line
       result[i] <- lines_[starts[i]]
-    } else {                  # Multiple lines
-      result[i] <- paste(string_tirm(lines_[starts[i]:ends[i]]), collapse = " ")
+    } else {
+      # Multiple lines
+      result[i] <- paste(string_tirm(lines_[starts[i]:ends[i]]), 
+                         collapse = " ")
     }
     result[i] <- sub("<!--", "", result[i])
     result[i] <- sub("-->", "", result[i])

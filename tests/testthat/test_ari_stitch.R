@@ -1,7 +1,11 @@
 context("Test ari_stitch()")
 
-res = ffmpeg_audio_codecs()
-fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+if (have_ffmpeg_exec()) {
+  res = ffmpeg_audio_codecs()
+  fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+} else {
+  fdk_enabled = FALSE
+}
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
@@ -10,10 +14,10 @@ if (fdk_enabled) {
 
 test_that("ari_stitch() can combine audio and images into a video", {
   skip_on_cran()
-  
+  # should work without polly
   temp_dir <- tempdir()
   
-  for(i in 1:3){
+  for (i in 1:3) {
     jpeg(file.path(temp_dir, paste0("plot", i, ".jpg")))
     plot(1:5 * i, 1:5, main = i)
     dev.off()

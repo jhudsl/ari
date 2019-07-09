@@ -11,12 +11,7 @@
 #'
 #' @return Name of output video
 ari_burn_subtitles = function(video, srt, verbose = FALSE) {
-  ffmpeg <- discard(c(Sys.getenv("ffmpeg"), 
-                      Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
-  
-  if (is.na(ffmpeg)) {
-    stop("Could not find ffmpeg. See the documentation for ari_stitch() for more details.")
-  }
+  ffmpeg = ffmpeg_exec()
   if (verbose > 0) {
     message("Burning in Subtitles")
   }

@@ -1,7 +1,12 @@
 context("Test ari_narrate()")
 
-res = ffmpeg_audio_codecs()
-fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+
+if (have_ffmpeg_exec()) {
+  res = ffmpeg_audio_codecs()
+  fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+} else {
+  fdk_enabled = FALSE
+}
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
@@ -16,7 +21,7 @@ skip_narrate <- function(){
 
 video <- file.path(tempdir(), "output.mp4")
 #video <- file.path(getwd(), "output.mp4")
-if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
+if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
   run_voice = aws.polly::list_voices()$Id[1]
 } else {
   run_voice = "Joanna"
@@ -25,11 +30,13 @@ if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
 test_that("Ari can make a video from local HTML slides.", {
   skip_on_cran()
   skip_narrate()
+  skip_amazon_not_authorized()
 
   ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
               system.file("test", "ari_intro.html", package = "ari"),
               video, voice = run_voice,
               capture_method = "iterative",
+              service = "amazon",
               verbose = TRUE,
               audio_codec = audio_codec)
   expect_true(file.size(video) > 50000)
@@ -40,6 +47,7 @@ unlink(video, force = TRUE)
 test_that("Ari can make a video from HTML slides on the web.", {
   skip_on_cran()
   skip_narrate()
+  skip_amazon_not_authorized()
 
   ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
               "https://seankross.com/ari/inst/test/ari_intro.html",
@@ -54,8 +62,8 @@ unlink(video, force = TRUE)
 
 test_that("Ari can use an Rmd file with HTML comments for a script.", {
   skip_on_cran()
-
   skip_narrate()
+  skip_amazon_not_authorized()
 
   ari_narrate(system.file("test", "ari_comments.Rmd", package = "ari"),
               system.file("test", "ari_intro.html", package = "ari"),

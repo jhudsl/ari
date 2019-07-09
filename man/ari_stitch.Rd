@@ -4,10 +4,11 @@
 \alias{ari_stitch}
 \title{Create a video from images and audio}
 \usage{
-ari_stitch(images, audio, output = "output.mp4", verbose = FALSE,
-  cleanup = TRUE, ffmpeg_opts = "", divisible_height = FALSE,
-  audio_codec = get_audio_codec(), video_codec = get_video_codec(),
-  audio_bitrate = "192k", video_bitrate = NULL)
+ari_stitch(images, audio, output = tempfile(fileext = ".mp4"),
+  verbose = FALSE, cleanup = TRUE, ffmpeg_opts = "",
+  divisible_height = FALSE, audio_codec = get_audio_codec(),
+  video_codec = get_video_codec(), audio_bitrate = "192k",
+  video_bitrate = NULL)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -36,6 +37,10 @@ fails, see \code{ffmpeg -codecs}}
 
 \item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
 }
+\value{
+A logical value, with the attribute \code{outfile} for the
+output file.
+}
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
@@ -54,15 +59,9 @@ The environmental variable will always override the result of
 \code{Sys.which("ffmpeg")}.
 }
 \examples{
-\dontrun{
-
-library(tuneR)
-library(purrr)
-
-slides <- c("intro.jpeg", "equations.jpeg", "questions.jpeg")
-sound <- map(c("rec1.wav", "rec2.wav", "rec3.wav"), readWave)
-
-ari_stitch(slides, sound, audio_codec = "aac")
-
+if (have_ffmpeg_exec()) {
+result = ari_stitch(
+ari_example(c("mab1.png", "mab2.png")),
+list(tuneR::noise(), tuneR::noise()))
 }
 }
