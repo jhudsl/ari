@@ -95,16 +95,15 @@ ari_stitch <- function(
     on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   }
   
-  input_txt_path <- file.path(output_dir, 
-                              paste0("ari_input_", 
+  input_txt_path <-  paste0("ari_input_", 
                                      grs(), 
-                                     ".txt"))
+                                     ".txt")
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   # if (.Platform$OS.type == "windows") {
   #   images <- basename(images)   
   # }
-  for(i in seq_along(images)){
+  for (i in seq_along(images)) {
     cat(paste0("file ", "'", images[i], "'", "\n"), 
         file = input_txt_path, append = TRUE)
     cat(paste0("duration ", duration(audio[[i]]), "\n"), 
@@ -112,6 +111,10 @@ ari_stitch <- function(
   }
   cat(paste0("file ", "'", images[i], "'", "\n"), 
       file = input_txt_path, append = TRUE)
+  # needed for users as per 
+  # https://superuser.com/questions/718027/
+  # ffmpeg-concat-doesnt-work-with-absolute-path
+  # input_txt_path = normalizePath(input_txt_path, winslash = "\\")
   
   ffmpeg = ffmpeg_exec()
   
