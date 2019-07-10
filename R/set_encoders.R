@@ -7,50 +7,39 @@ get_os = function() {
 #' Set Default Audio and Video Codecs
 #'
 #' @param codec The codec to use or get for audio/video.  Uses the
-#' \code{ffmpeg_audio_codec} and \code{ffmpeg_video_codec} options
+#' `ffmpeg_audio_codec` and `ffmpeg_video_codec` options
 #' to store this information.
-#' @seealso \code{\link{ffmpeg_codecs}} for options
-#' @return A \code{NULL} output
-#' 
+#' @seealso [ffmpeg_codecs()] for options
+#' @return A `NULL` output
+#'
 #' 
 #' @rdname codecs
 #' @export
 #' 
 #' @examples
+#' 
 #' if (have_ffmpeg_exec()) {
+#' print(ffmpeg_version())
 #' get_audio_codec()
 #' set_audio_codec(codec = "libfdk_aac")
 #' get_audio_codec()
 #' set_audio_codec(codec = "aac")
 #' get_audio_codec()
-#' set_audio_codec()
-#' get_audio_codec()
 #' }
-#' 
-#' 
-#' # let's look at the video codec
 #' if (have_ffmpeg_exec()) {
-#'  get_video_codec() 
-#'  set_video_codec(codec="libx265")
-#'  
-#'  get_video_codec() 
-#' 
-#'  set_video_codec(codec = "libx264") 
-#'  get_video_codec() 
-#' 
-#' # adding it back in
-#' set_video_codec() 
-#' get_video_codec() 
-#' 
+#' get_video_codec()
+#' set_video_codec(codec = "libx265") 
+#' get_video_codec()
+#' set_video_codec(codec = "libx264")
+#' get_video_codec()
 #' }
-#' 
-#' # checking for encoders
+#' ## empty thing
 #' if (have_ffmpeg_exec()) {
-#' 
 #' video_codec_encode("libx264")
-#' audio_codec_encode("aac")
 #' 
+#' audio_codec_encode("aac")
 #' }
+#' 
 set_audio_codec = function(codec) {
   if (missing(codec)) {
     os = get_os()
@@ -58,7 +47,7 @@ set_audio_codec = function(codec) {
                    darwin = "libfdk_aac",
                    windows = "ac3",
                    linux = "aac"
-                   )
+    )
   }
   options(ffmpeg_audio_codec = codec)
 }
@@ -76,7 +65,11 @@ get_audio_codec = function() {
   if (is.null(codec)) {
     os = get_os()
     res = ffmpeg_audio_codecs()
-    fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+    if (is.null(res)) {
+      fdk_enabled = FALSE
+    } else {
+      fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+    }
     if (fdk_enabled) {
       os_audio_codec = "libfdk_aac"
     } else {
@@ -108,6 +101,10 @@ get_video_codec = function() {
 #' @export
 audio_codec_encode = function(codec) {
   res = ffmpeg_audio_codecs()
+  if (is.null(res)) {
+    warning("Codec could not be checked")
+    return(NA)
+  }  
   stopifnot(length(codec) == 1)
   res = res[ res$codec %in% codec | 
                grepl(codec, res$codec_name), ]
@@ -118,6 +115,10 @@ audio_codec_encode = function(codec) {
 #' @export
 video_codec_encode = function(codec) {
   res = ffmpeg_video_codecs()
+  if (is.null(res)) {
+    warning("Codec could not be checked")
+    return(NA)
+  }  
   stopifnot(length(codec) == 1)
   res = res[ res$codec %in% codec | 
                grepl(codec, res$codec_name), ]
