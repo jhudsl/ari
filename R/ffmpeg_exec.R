@@ -16,6 +16,9 @@ ffmpeg_exec = function() {
                "for ari_stitch() ", 
                "for more details."))
   }
+  if (!ffmpeg %in% c("ffmpeg", "ffmpeg.exe")) {
+    ffmpeg = normalizePath(ffmpeg, winslash = "/")
+  }
   return(ffmpeg)
 }
 

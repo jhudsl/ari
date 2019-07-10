@@ -11,34 +11,46 @@ get_os = function() {
 #' to store this information.
 #' @seealso \code{\link{ffmpeg_codecs}} for options
 #' @return A \code{NULL} output
-#'
+#' 
 #' 
 #' @rdname codecs
 #' @export
 #' 
 #' @examples
-#' 
 #' if (have_ffmpeg_exec()) {
 #' get_audio_codec()
 #' set_audio_codec(codec = "libfdk_aac")
 #' get_audio_codec()
 #' set_audio_codec(codec = "aac")
 #' get_audio_codec()
+#' set_audio_codec()
+#' get_audio_codec()
 #' }
+#' 
+#' 
+#' # let's look at the video codec
 #' if (have_ffmpeg_exec()) {
-#' get_video_codec()
-#' set_video_codec(codec = "libx265") 
-#' get_video_codec()
-#' set_video_codec(codec = "libx264")
-#' get_video_codec()
+#'  get_video_codec() 
+#'  set_video_codec(codec = "libx265") 
+#'  
+#'  get_video_codec() 
+#' 
+#'  set_video_codec(codec = "libx264") 
+#'  get_video_codec() 
+#' 
+#' # adding it back in
+#' set_video_codec() 
+#' get_video_codec() 
+#' 
 #' }
-#' ## empty thing
+#' 
+#' # checking for encoders
 #' if (have_ffmpeg_exec()) {
+#' 
 #' video_codec_encode("libx264")
-#' 
 #' audio_codec_encode("aac")
-#' }
 #' 
+#' }
 set_audio_codec = function(codec) {
   if (missing(codec)) {
     os = get_os()

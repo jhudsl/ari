@@ -38,7 +38,7 @@
 #' @importFrom tuneR bind writeWave
 #' @export
 #' @examples 
-#' if (have_ffmpeg_exec()) {
+#' if (ffmpeg_version_sufficient()) {
 #' result = ari_stitch(
 #' ari_example(c("mab1.png", "mab2.png")),
 #' list(tuneR::noise(), tuneR::noise()))

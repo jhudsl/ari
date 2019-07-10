@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @examples
-#' if (have_ffmpeg_exec()) {
+#' if (ffmpeg_version_sufficient()) {
 #' ffmpeg_codecs()
 #' ffmpeg_audio_codecs()
 #' ffmpeg_video_codecs()
@@ -104,4 +104,42 @@ ffmpeg_muxers = function() {
   res$capabilities = trimws(res$capabilities)
   
   return(res)
+}
+
+#' @rdname ffmpeg_codecs
+#' @export
+ffmpeg_version = function() {
+  ffmpeg = ffmpeg_exec()
+  cmd = paste(ffmpeg, "-version")
+  res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
+  res = trimws(res)
+  res = res[grepl("^ffmpeg version", res)]
+  res = sub("ffmpeg version (.*) Copyright .*", "\\1", res)
+  res = trimws(res)
+  return(res)
+}
+
+#' @rdname ffmpeg_codecs
+#' @export
+ffmpeg_version_sufficient = function() {
+  if (have_ffmpeg_exec()) {
+    ver = package_version("3.2.4")
+    ff_ver = package_version(ffmpeg_version())
+    res = ff_ver >= ver
+  } else {
+    res = FALSE
+  }
+  res
+}
+
+#' @rdname ffmpeg_codecs
+#' @export
+check_ffmpeg_version = function() {
+  if (!ffmpeg_version_sufficient()) {
+    ff = ffmpeg_version()
+    stop(paste0(
+      "ffmpeg version is not high enough,", 
+      " ffmpeg version is: ", ff))
+  }
+  return(invisible(NULL))
 }
