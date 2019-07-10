@@ -56,7 +56,7 @@ set_audio_codec = function(codec) {
     os = get_os()
     codec = switch(os,
                    darwin = "libfdk_aac",
-                   windows = "aac",
+                   windows = "ac3",
                    linux = "aac"
                    )
   }
@@ -84,7 +84,7 @@ get_audio_codec = function() {
     }
     codec = switch(os,
                    darwin = os_audio_codec,
-                   windows = "aac",
+                   windows = "ac3",
                    linux = "aac"
     )
     set_audio_codec(codec = codec)
