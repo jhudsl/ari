@@ -34,7 +34,7 @@ test_that("ari_stitch() can combine audio and images into a video", {
   on.exit(walk(c(graphs, video), unlink, force = TRUE), add = TRUE)
   
   ari_stitch(graphs, sound, output = video,
-             audio_codec = audio_codec)
+             audio_codec = audio_codec, verbose = 2)
   
   expect_true(file.size(video) > 50000)
 })
