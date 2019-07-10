@@ -31,7 +31,7 @@ get_os = function() {
 #' # let's look at the video codec
 #' if (have_ffmpeg_exec()) {
 #'  get_video_codec() 
-#'  set_video_codec(codec = "libx265") 
+#'  set_video_codec(codec="libx265")
 #'  
 #'  get_video_codec() 
 #' 
