@@ -15,6 +15,9 @@ ffmpeg_codecs = function() {
   result = system(cmd,  ignore.stderr = TRUE, ignore.stdout = TRUE)
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
+  if (length(res) == 0) {
+    res = ""
+  }    
   if (result != 0 & res %in% "") {
     warning("No codecs output from ffmpeg for codecs")
     return(NULL)
@@ -106,6 +109,9 @@ ffmpeg_muxers = function() {
   result = system(cmd, ignore.stderr = TRUE, ignore.stdout = TRUE)
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
+  if (length(res) == 0) {
+    res = ""
+  }    
   if (result != 0 & res %in% "") {
     warning("No codecs output from ffmpeg for muxers")
     return(NULL)
@@ -139,6 +145,9 @@ ffmpeg_version = function() {
   result = system(cmd, ignore.stderr = TRUE, ignore.stdout = TRUE)
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
+  if (length(res) == 0) {
+    res = ""
+  }    
   if (result != 0 & res %in% "") {
     warning("No codecs output from ffmpeg for version")
     return(NULL)
