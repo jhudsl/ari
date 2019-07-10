@@ -9,7 +9,7 @@ if (have_ffmpeg_exec()) {
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
-  audio_codec = "aac"
+  audio_codec = "ac3"
 }
 
 test_that("ari_stitch() can combine audio and images into a video", {

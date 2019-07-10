@@ -10,7 +10,7 @@ if (have_ffmpeg_exec()) {
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
-  audio_codec = "aac"
+  audio_codec = "ac3"
 }
 
 skip_narrate <- function(){
