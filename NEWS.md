@@ -4,6 +4,7 @@
 - Added `have_ffmpeg_exec` to check if the user has `ffmpeg` installed
 - Example for `ari_stitch` now is run.
 - Some documentation changes for `BiocCheck` compliance (just more rigid).
+- Added `ffmpeg_version` and `ffmpeg_version_sufficient` to check `ffmpeg`.
 
 # ari 0.2.0
 
