@@ -165,7 +165,9 @@ ffmpeg_version_sufficient = function() {
     ver = package_version("3.2.4")
     ff_ver = ffmpeg_version()
     if (is.null(ff_ver)) {
-      stop("Cannot get ffmpeg version from ffmpeg_version")
+      warning(paste0("Cannot get ffmpeg version from ", 
+                     "ffmpeg_version, returning FALSE"))
+      return(FALSE)
     }
     ff_ver = package_version(ff_ver)
     res = ff_ver >= ver
