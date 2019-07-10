@@ -10,7 +10,7 @@
 #' ffmpeg_video_codecs()
 #' }
 ffmpeg_codecs = function() {
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   cmd = paste(ffmpeg, "-codecs")
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
@@ -85,7 +85,7 @@ ffmpeg_audio_codecs = function() {
 #' @rdname ffmpeg_codecs
 #' @export
 ffmpeg_muxers = function() {
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   cmd = paste(ffmpeg, "-muxers")
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
@@ -109,7 +109,7 @@ ffmpeg_muxers = function() {
 #' @rdname ffmpeg_codecs
 #' @export
 ffmpeg_version = function() {
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   cmd = paste(ffmpeg, "-version")
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)

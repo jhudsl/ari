@@ -116,7 +116,7 @@ ari_stitch <- function(
   # ffmpeg-concat-doesnt-work-with-absolute-path
   # input_txt_path = normalizePath(input_txt_path, winslash = "\\")
   
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   
   if (divisible_height) {
     ffmpeg_opts = c(ffmpeg_opts, 
