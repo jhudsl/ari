@@ -5,6 +5,9 @@
 \alias{ffmpeg_video_codecs}
 \alias{ffmpeg_audio_codecs}
 \alias{ffmpeg_muxers}
+\alias{ffmpeg_version}
+\alias{ffmpeg_version_sufficient}
+\alias{check_ffmpeg_version}
 \title{Get Codecs for ffmpeg}
 \usage{
 ffmpeg_codecs()
@@ -14,6 +17,12 @@ ffmpeg_video_codecs()
 ffmpeg_audio_codecs()
 
 ffmpeg_muxers()
+
+ffmpeg_version()
+
+ffmpeg_version_sufficient()
+
+check_ffmpeg_version()
 }
 \value{
 A `data.frame` of codec names and capabilities
@@ -22,9 +31,9 @@ A `data.frame` of codec names and capabilities
 Get Codecs for ffmpeg
 }
 \examples{
-if (have_ffmpeg_exec()) {
+if (ffmpeg_version_sufficient()) {
 ffmpeg_codecs()
-ffmpeg_audio_codecs()
 ffmpeg_video_codecs()
+ffmpeg_audio_codecs()
 }
 }
