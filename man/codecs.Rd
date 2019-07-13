@@ -33,7 +33,7 @@ A \code{NULL} output
 Set Default Audio and Video Codecs
 }
 \examples{
-
+\dontrun{
 if (have_ffmpeg_exec()) {
 get_audio_codec()
 set_audio_codec(codec = "libfdk_aac")
@@ -54,7 +54,7 @@ video_codec_encode("libx264")
 
 audio_codec_encode("aac")
 }
-
+}
 }
 \seealso{
 \code{\link{ffmpeg_codecs}} for options

@@ -22,9 +22,11 @@ A `data.frame` of codec names and capabilities
 Get Codecs for ffmpeg
 }
 \examples{
+\dontrun{
 if (have_ffmpeg_exec()) {
 ffmpeg_codecs()
 ffmpeg_audio_codecs()
 ffmpeg_video_codecs()
+}
 }
 }
