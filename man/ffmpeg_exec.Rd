@@ -5,15 +5,23 @@
 \alias{have_ffmpeg_exec}
 \title{Get Path to ffmpeg Executable}
 \usage{
-ffmpeg_exec()
+ffmpeg_exec(quote = FALSE)
 
 have_ffmpeg_exec()
+}
+\arguments{
+\item{quote}{should \code{\link{shQuote}} be run before returning?}
 }
 \value{
 The path to the \code{ffmpeg} executable, or an error.
 }
 \description{
 Get Path to ffmpeg Executable
+}
+\note{
+This looks using `Sys.getenv("ffmpeg")` and `Sys.which("ffmpeg")`
+to find `ffmpeg`.  If `ffmpeg` is not in your PATH, then please set the
+path to `ffmpeg` using `Sys.setenv(ffmpeg = "/path/to/ffmpeg")`
 }
 \examples{
 \dontrun{

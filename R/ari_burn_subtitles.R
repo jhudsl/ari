@@ -11,7 +11,7 @@
 #'
 #' @return Name of output video
 ari_burn_subtitles = function(video, srt, verbose = FALSE) {
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   if (verbose > 0) {
     message("Burning in Subtitles")
   }

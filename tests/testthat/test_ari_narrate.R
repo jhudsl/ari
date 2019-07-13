@@ -1,16 +1,20 @@
 context("Test ari_narrate()")
 
 
-if (have_ffmpeg_exec()) {
+if (ffmpeg_version_sufficient()) {
   res = ffmpeg_audio_codecs()
-  fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+  if (is.null(res)) {
+    fdk_enabled = FALSE
+  } else {
+    fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
+  }  
 } else {
   fdk_enabled = FALSE
 }
 if (fdk_enabled) {
   audio_codec = "libfdk_aac"
 } else {
-  audio_codec = "aac"
+  audio_codec = "ac3"
 }
 
 skip_narrate <- function(){

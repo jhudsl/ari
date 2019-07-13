@@ -23,11 +23,11 @@ video_codec_encode(codec)
 }
 \arguments{
 \item{codec}{The codec to use or get for audio/video.  Uses the
-\code{ffmpeg_audio_codec} and \code{ffmpeg_video_codec} options
+`ffmpeg_audio_codec` and `ffmpeg_video_codec` options
 to store this information.}
 }
 \value{
-A \code{NULL} output
+A `NULL` output
 }
 \description{
 Set Default Audio and Video Codecs
@@ -35,6 +35,7 @@ Set Default Audio and Video Codecs
 \examples{
 \dontrun{
 if (have_ffmpeg_exec()) {
+print(ffmpeg_version())
 get_audio_codec()
 set_audio_codec(codec = "libfdk_aac")
 get_audio_codec()
@@ -57,5 +58,5 @@ audio_codec_encode("aac")
 }
 }
 \seealso{
-\code{\link{ffmpeg_codecs}} for options
+[ffmpeg_codecs()] for options
 }

@@ -5,17 +5,25 @@
 #'
 #' @examples
 #' \dontrun{
-#' if (have_ffmpeg_exec()) {
+#' if (ffmpeg_version_sufficient()) {
 #' ffmpeg_codecs()
-#' ffmpeg_audio_codecs()
 #' ffmpeg_video_codecs()
+#' ffmpeg_audio_codecs()
 #' }
 #' }
 ffmpeg_codecs = function() {
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   cmd = paste(ffmpeg, "-codecs")
+  result = system(cmd,  ignore.stderr = TRUE, ignore.stdout = TRUE)
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
+  if (length(res) == 0) {
+    res = ""
+  }
+  if (result != 0 & all(res %in% "")) {
+    warning("No codecs output from ffmpeg for codecs")
+    return(NULL)
+  }
   res = res[grepl("^([.]|D)", res)]
   res = strsplit(res, " ")
   res = t(vapply(res, function(x) {
@@ -28,6 +36,11 @@ ffmpeg_codecs = function() {
   }, FUN.VALUE = character(3)))
   colnames(res) = c("capabilities", "codec", "codec_name")
   res = as.data.frame(res, stringsAsFactors = FALSE)
+  
+  if (nrow(res) == 0) {
+    warning("No codecs output from ffmpeg for codecs")
+    return(NULL)
+  }   
   res$capabilities = trimws(res$capabilities)
   
   cap_defns = res[ res$codec == "=", ]
@@ -68,6 +81,9 @@ ffmpeg_codecs = function() {
 #' @export
 ffmpeg_video_codecs = function() {
   res = ffmpeg_codecs()
+  if (is.null(res)) {
+    return(NULL)
+  }
   res = res[ res$video_codec, ]
   res$video_codec = res$audio_codec = res$subtitle_codec = NULL
   res
@@ -77,6 +93,9 @@ ffmpeg_video_codecs = function() {
 #' @export
 ffmpeg_audio_codecs = function() {
   res = ffmpeg_codecs()
+  if (is.null(res)) {
+    return(NULL)
+  }  
   res = res[ res$audio_codec, ]
   res$video_codec = res$audio_codec = res$subtitle_codec = NULL
   res
@@ -87,10 +106,18 @@ ffmpeg_audio_codecs = function() {
 #' @rdname ffmpeg_codecs
 #' @export
 ffmpeg_muxers = function() {
-  ffmpeg = ffmpeg_exec()
+  ffmpeg = ffmpeg_exec(quote = TRUE)
   cmd = paste(ffmpeg, "-muxers")
+  result = system(cmd, ignore.stderr = TRUE, ignore.stdout = TRUE)
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   res = trimws(res)
+  if (length(res) == 0) {
+    res = ""
+  }  
+  if (result != 0 & all(res %in% "")) {
+    warning("No codecs output from ffmpeg for muxers")
+    return(NULL)
+  }   
   res = res[grepl("^E", res)]
   res = strsplit(res, " ")
   res = t(vapply(res, function(x) {
@@ -103,7 +130,64 @@ ffmpeg_muxers = function() {
   }, FUN.VALUE = character(3)))
   colnames(res) = c("capabilities", "muxer", "muxer_name")
   res = as.data.frame(res, stringsAsFactors = FALSE)
+  if (nrow(res) == 0) {
+    warning("No codecs output from ffmpeg for muxers")
+    return(NULL)
+  }   
   res$capabilities = trimws(res$capabilities)
   
   return(res)
+}
+
+#' @rdname ffmpeg_codecs
+#' @export
+ffmpeg_version = function() {
+  ffmpeg = ffmpeg_exec(quote = TRUE)
+  cmd = paste(ffmpeg, "-version")
+  result = system(cmd, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
+  res = trimws(res)
+  if (length(res) == 0) {
+    res = ""
+  }  
+  if (result != 0 & all(res %in% "")) {
+    warning("No codecs output from ffmpeg for version")
+    return(NULL)
+  }  
+  res = res[grepl("^ffmpeg version", res)]
+  res = sub("ffmpeg version (.*) Copyright .*", "\\1", res)
+  res = sub("(ubuntu|debian).*", "", res)
+  res = trimws(res)
+  return(res)
+}
+
+#' @rdname ffmpeg_codecs
+#' @export
+ffmpeg_version_sufficient = function() {
+  if (have_ffmpeg_exec()) {
+    ver = package_version("3.2.4")
+    ff_ver = ffmpeg_version()
+    if (is.null(ff_ver)) {
+      warning(paste0("Cannot get ffmpeg version from ", 
+                     "ffmpeg_version, returning FALSE"))
+      return(FALSE)
+    }
+    ff_ver = package_version(ff_ver)
+    res = ff_ver >= ver
+  } else {
+    res = FALSE
+  }
+  res
+}
+
+#' @rdname ffmpeg_codecs
+#' @export
+check_ffmpeg_version = function() {
+  if (!ffmpeg_version_sufficient()) {
+    ff = ffmpeg_version()
+    stop(paste0(
+      "ffmpeg version is not high enough,", 
+      " ffmpeg version is: ", ff))
+  }
+  return(invisible(NULL))
 }
