@@ -3,3 +3,8 @@
 ^smoke_test$
 ^\.travis\.yml$
 ^cran-comments\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^CRAN-RELEASE$
+^appveyor\.yml$

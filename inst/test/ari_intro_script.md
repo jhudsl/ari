@@ -7,7 +7,7 @@ instructor.
 
 Ari is an R package which allows you to create lecture videos from plain text.
 Your lectures are therefore easy to edit, translate, and they are universally
-accessable.
+accessible.
 
 ## Installation
 

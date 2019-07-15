@@ -4,8 +4,11 @@
 \alias{ari_narrate}
 \title{Create a video from slides and a script}
 \usage{
-ari_narrate(script, slides, output = "output.mp4", voice,
-  capture_method = "vectorized", ...)
+ari_narrate(script, slides, output = tempfile(fileext = ".mp4"),
+  voice = "Joanna", service = "amazon",
+  capture_method = c("vectorized", "iterative"), subtitles = FALSE,
+  ..., verbose = FALSE, audio_codec = get_audio_codec(),
+  video_codec = get_video_codec(), cleanup = TRUE)
 }
 \arguments{
 \item{script}{Either a markdown file where every paragraph will be read over
@@ -18,15 +21,37 @@ similar package.}
 
 \item{output}{The path to the video file which will be created.}
 
-\item{voice}{The Amazon Polly voice you want to use. See
-\code{\link[aws.polly]{list_voices}}.}
+\item{voice}{The voice you want to use. See 
+\code{\link[text2speech]{tts_voices}} for more information 
+about what voices are available.}
+
+\item{service}{speech synthesis service to use,
+passed to \code{\link[text2speech]{tts}}.}
 
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
 The vectorized mode is faster though it can cause screens to repeat. If
 making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
 you should use \code{"iterative"}.}
 
+\item{subtitles}{Should a \code{.srt} file be created with subtitles? The
+default value is \code{FALSE}. If \code{TRUE} then a file with the same name
+as the \code{output} argument will be created, but with the file extension
+\code{.srt}.}
+
 \item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
+
+\item{verbose}{print diagnostic messages.  If > 1, then more are printed}
+
+\item{audio_codec}{The audio encoder for the splicing.  If this
+fails, try \code{copy}.}
+
+\item{video_codec}{The video encoder for the splicing.  If this
+fails, see \code{ffmpeg -codecs}}
+
+\item{cleanup}{If \code{TRUE}, interim files are deleted}
+}
+\value{
+The output from \code{\link{ari_spin}}
 }
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML

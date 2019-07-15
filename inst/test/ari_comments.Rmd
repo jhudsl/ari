@@ -1,6 +1,7 @@
 ---
 title: "Ari Comments"
 author: "Sean Kross"
+output: ioslides_presentation
 ---
 
 <!--
@@ -17,7 +18,7 @@ instructor.
 
 <!-- Ari is an R package which allows you to create lecture videos from plain
 text. Your lectures are therefore easy to edit, translate, and they are
-universally accessable. -->
+universally accessible. -->
 
 ## Installation
 
@@ -44,3 +45,4 @@ a text to speech product from Amazon Web Services.
 <!--
 Thank you for watching this video and good luck using Ari!
 -->
+
