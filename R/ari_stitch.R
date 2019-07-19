@@ -158,6 +158,7 @@ ari_stitch <- function(
   if (!cleanup) {
     attr(res, "txt_path") = input_txt_path
     attr(res, "wav_path") = wav_path
+    attr(res, "cmd") = command
   }
   attr(res, "outfile") = output
   invisible(res)
