@@ -1,4 +1,4 @@
-# ari 0.3.1
+# ari 0.3.2
 
 - Fixed bug in `ffmpeg_version_sufficient` if `ffmpeg` is a development version.
 
