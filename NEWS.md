@@ -1,3 +1,7 @@
+# ari 0.3.1
+
+- Fixed bug in `ffmpeg_version_sufficient` if `ffmpeg` is a development version.
+
 # ari 0.3.0
 
 - Added in `text2speech` package for use of other audio generation engines.
