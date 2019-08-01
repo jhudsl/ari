@@ -126,5 +126,7 @@ ari_spin <- function(
   if (!cleanup) {
     attr(res, "wavs") = wavs
   }
+  attr(res, "voice") = voice
+  attr(res, "service") = service
   return(res)
 }

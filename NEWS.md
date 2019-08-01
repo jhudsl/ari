@@ -1,6 +1,7 @@
 # ari 0.3.2
 
 - Fixed bug in `ffmpeg_version_sufficient` if `ffmpeg` is a development version.
+- Added attributes to `ari_spin` for voice and such.
 
 # ari 0.3.0
 
