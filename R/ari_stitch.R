@@ -35,7 +35,11 @@
 #' @param pixel_format pixel format to encode for `ffmpeg`.
 #' @param fast_start Adding `faststart` flags for YouTube and other sites,
 #' see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}
-#' 
+#' @param deinterlace should the video be de-interlaced, 
+#' see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for 
+#' YouTube
+#' @param stereo_audio should the audio be forced to stereo,
+#' corresponds to `-ac 2`
 #' @return A logical value, with the attribute \code{outfile} for the
 #' output file.
 
@@ -57,11 +61,13 @@ ari_stitch <- function(
   divisible_height = FALSE,
   audio_codec = get_audio_codec(),
   video_codec = get_video_codec(),
-  video_sync_method = "auto", 
-  audio_bitrate = "192k",
+  video_sync_method = "-1", 
+  audio_bitrate = NULL,
   video_bitrate = NULL,
   pixel_format = "yuv420p",
-  fast_start = TRUE
+  fast_start = TRUE,
+  deinterlace = TRUE,
+  stereo_audio = TRUE
 ){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
@@ -151,11 +157,13 @@ ari_stitch <- function(
            ""),
     ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
            ""),    
+    ifelse(stereo_audio, "-ac 2", ""),
     ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
            ""), 
     ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
            ""), 
     " -shortest", 
+    ifelse(deinterlace, "-vf yadif", ""),
     ifelse(!is.null(video_sync_method), paste("-vsync", video_sync_method),
            ""), 
     ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),
