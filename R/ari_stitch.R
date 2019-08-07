@@ -30,6 +30,11 @@
 #' fails, see \code{ffmpeg -codecs}
 #' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
 #' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
+#' @param video_sync_method Video sync method.  Should be 
+#' "auto" or `"vfr"` or a numeric.  See \url{https://ffmpeg.org/ffmpeg.html}.
+#' @param pixel_format pixel format to encode for `ffmpeg`.
+#' @param fast_start Adding `faststart` flags for YouTube and other sites,
+#' see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}
 #' 
 #' @return A logical value, with the attribute \code{outfile} for the
 #' output file.
@@ -52,8 +57,11 @@ ari_stitch <- function(
   divisible_height = FALSE,
   audio_codec = get_audio_codec(),
   video_codec = get_video_codec(),
+  video_sync_method = "auto", 
   audio_bitrate = "192k",
-  video_bitrate = NULL
+  video_bitrate = NULL,
+  pixel_format = "yuv420p",
+  fast_start = TRUE
 ){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
@@ -96,8 +104,8 @@ ari_stitch <- function(
   }
   
   input_txt_path <-  paste0("ari_input_", 
-                                     grs(), 
-                                     ".txt")
+                            grs(), 
+                            ".txt")
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   # if (.Platform$OS.type == "windows") {
@@ -124,9 +132,20 @@ ari_stitch <- function(
   }
   
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
+  
+  # workaround for older ffmpeg 
+  # https://stackoverflow.com/questions/32931685/
+  # the-encoder-aac-is-experimental-but-experimental-codecs-are-not-enabled
+  experimental = FALSE
+  if (!is.null(audio_codec)) {
+    if (audio_codec == "aac") {
+      experimental = TRUE
+    }
+  }
   # shQuote should seankross/ari#5
   command <- paste(
-    ffmpeg, "-y -f concat -safe 0 -i", shQuote(input_txt_path), 
+    ffmpeg, "-y", 
+    "-f concat -safe 0 -i", shQuote(input_txt_path), 
     "-i", shQuote(wav_path), 
     ifelse(!is.null(video_codec), paste("-c:v", video_codec),
            ""),
@@ -136,8 +155,14 @@ ari_stitch <- function(
            ""), 
     ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
            ""), 
-    " -shortest -vsync vfr -pix_fmt yuv420p",
+    " -shortest", 
+    ifelse(!is.null(video_sync_method), paste("-vsync", video_sync_method),
+           ""), 
+    ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),
+           ""),     
+    ifelse(fast_start, "-movflags +faststart", ""),
     ffmpeg_opts,
+    ifelse(experimental, "-strict experimental", ""),
     shQuote(output))
   if (verbose > 0) {
     message(command)

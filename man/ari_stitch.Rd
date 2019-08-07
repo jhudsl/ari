@@ -7,8 +7,9 @@
 ari_stitch(images, audio, output = tempfile(fileext = ".mp4"),
   verbose = FALSE, cleanup = TRUE, ffmpeg_opts = "",
   divisible_height = FALSE, audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(), audio_bitrate = "192k",
-  video_bitrate = NULL)
+  video_codec = get_video_codec(), video_sync_method = "auto",
+  audio_bitrate = "192k", video_bitrate = NULL,
+  pixel_format = "yuv420p", fast_start = TRUE)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -33,9 +34,17 @@ fails, try \code{copy}.}
 \item{video_codec}{The video encoder for the splicing.  If this
 fails, see \code{ffmpeg -codecs}}
 
+\item{video_sync_method}{Video sync method.  Should be 
+"auto" or `"vfr"` or a numeric.  See \url{https://ffmpeg.org/ffmpeg.html}.}
+
 \item{audio_bitrate}{Bit rate for audio. Passed to \code{-b:a}.}
 
 \item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
+
+\item{pixel_format}{pixel format to encode for `ffmpeg`.}
+
+\item{fast_start}{Adding `faststart` flags for YouTube and other sites,
+see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}}
 }
 \value{
 A logical value, with the attribute \code{outfile} for the
