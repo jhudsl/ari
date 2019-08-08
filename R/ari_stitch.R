@@ -194,5 +194,6 @@ ari_stitch <- function(
     attr(res, "cmd") = command
   }
   attr(res, "outfile") = output
+  attr(res, "images") = images
   invisible(res)
 }
