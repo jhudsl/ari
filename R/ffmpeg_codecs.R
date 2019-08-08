@@ -155,6 +155,7 @@ ffmpeg_version = function() {
   res = res[grepl("^ffmpeg version", res)]
   res = sub("ffmpeg version (.*) Copyright .*", "\\1", res)
   res = sub("(ubuntu|debian).*", "", res)
+  res = sub("-.*", "", res)
   res = trimws(res)
   return(res)
 }
