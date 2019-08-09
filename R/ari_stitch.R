@@ -58,7 +58,7 @@ ari_stitch <- function(
   verbose = FALSE,
   cleanup = TRUE,
   ffmpeg_opts = "",
-  divisible_height = FALSE,
+  divisible_height = TRUE,
   audio_codec = get_audio_codec(),
   video_codec = get_video_codec(),
   video_sync_method = "-1", 
