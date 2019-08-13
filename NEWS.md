@@ -2,6 +2,7 @@
 
 - Fixed bug in `ffmpeg_version_sufficient` if `ffmpeg` is a development version.
 - Added attributes to `ari_spin` for voice and such.
+- Fixed `ffmpeg_version` for versions with a `+` for CRAN.
 
 # ari 0.3.0
 
