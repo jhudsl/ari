@@ -81,6 +81,12 @@ ari_spin <- function(
     }
   }
   
+  semi_colon = trimws(paragraphs) == ";"
+  if (any(semi_colon)) {
+    warning(paste0("Some paragraphs are simply a semicolon - ",
+                   "likely needs to be replaced or slide removed!"))
+  }  
+  
   stopifnot(
     length(paragraphs) > 0,
     identical(length(images), length(paragraphs)),
@@ -126,5 +132,7 @@ ari_spin <- function(
   if (!cleanup) {
     attr(res, "wavs") = wavs
   }
+  attr(res, "voice") = voice
+  attr(res, "service") = service
   return(res)
 }
