@@ -157,6 +157,8 @@ ffmpeg_version = function() {
   res = res[grepl("^ffmpeg version", res)]
   res = sub("ffmpeg version (.*) Copyright .*", "\\1", res)
   res = sub("(ubuntu|debian).*", "", res)
+  res = sub("-.*", "", res)
+  res = sub("[+].*", "", res)
   res = trimws(res)
   return(res)
 }
@@ -172,7 +174,18 @@ ffmpeg_version_sufficient = function() {
                      "ffmpeg_version, returning FALSE"))
       return(FALSE)
     }
-    ff_ver = package_version(ff_ver)
+    ff_ver_char = ff_ver
+    ff_ver = package_version(ff_ver, strict = FALSE)
+    if (is.na(ff_ver)) {
+      warning(
+        paste0(
+          "ffmpeg version is not parsed, probably a development version,",
+          "version was ", ff_ver_char, ", make sure you have >= ", 
+          as.character(ver)
+        )
+      )
+      return(TRUE)
+    }
     res = ff_ver >= ver
   } else {
     res = FALSE
