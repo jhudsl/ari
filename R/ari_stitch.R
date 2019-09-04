@@ -61,12 +61,12 @@ ari_stitch <- function(
   divisible_height = TRUE,
   audio_codec = get_audio_codec(),
   video_codec = get_video_codec(),
-  video_sync_method = "-1", 
+  video_sync_method = "2", 
   audio_bitrate = NULL,
   video_bitrate = NULL,
   pixel_format = "yuv420p",
   fast_start = TRUE,
-  deinterlace = FALSE,
+  deinterlace = TRUE,
   stereo_audio = TRUE
 ){
   stopifnot(length(images) > 0)
