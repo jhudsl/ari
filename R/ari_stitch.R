@@ -66,7 +66,7 @@ ari_stitch <- function(
   video_bitrate = NULL,
   pixel_format = "yuv420p",
   fast_start = TRUE,
-  deinterlace = TRUE,
+  deinterlace = FALSE,
   stereo_audio = TRUE
 ){
   stopifnot(length(images) > 0)

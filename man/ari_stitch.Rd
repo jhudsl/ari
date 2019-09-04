@@ -9,7 +9,7 @@ ari_stitch(images, audio, output = tempfile(fileext = ".mp4"),
   divisible_height = TRUE, audio_codec = get_audio_codec(),
   video_codec = get_video_codec(), video_sync_method = "-1",
   audio_bitrate = NULL, video_bitrate = NULL,
-  pixel_format = "yuv420p", fast_start = TRUE, deinterlace = TRUE,
+  pixel_format = "yuv420p", fast_start = TRUE, deinterlace = FALSE,
   stereo_audio = TRUE)
 }
 \arguments{
