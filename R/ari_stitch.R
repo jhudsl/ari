@@ -30,7 +30,16 @@
 #' fails, see \code{ffmpeg -codecs}
 #' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
 #' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
-#' 
+#' @param video_sync_method Video sync method.  Should be 
+#' "auto" or `"vfr"` or a numeric.  See \url{https://ffmpeg.org/ffmpeg.html}.
+#' @param pixel_format pixel format to encode for `ffmpeg`.
+#' @param fast_start Adding `faststart` flags for YouTube and other sites,
+#' see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}
+#' @param deinterlace should the video be de-interlaced, 
+#' see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for 
+#' YouTube
+#' @param stereo_audio should the audio be forced to stereo,
+#' corresponds to `-ac 2`
 #' @return A logical value, with the attribute \code{outfile} for the
 #' output file.
 
@@ -49,11 +58,16 @@ ari_stitch <- function(
   verbose = FALSE,
   cleanup = TRUE,
   ffmpeg_opts = "",
-  divisible_height = FALSE,
+  divisible_height = TRUE,
   audio_codec = get_audio_codec(),
   video_codec = get_video_codec(),
-  audio_bitrate = "192k",
-  video_bitrate = NULL
+  video_sync_method = "-1", 
+  audio_bitrate = NULL,
+  video_bitrate = NULL,
+  pixel_format = "yuv420p",
+  fast_start = TRUE,
+  deinterlace = TRUE,
+  stereo_audio = TRUE
 ){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
@@ -96,8 +110,8 @@ ari_stitch <- function(
   }
   
   input_txt_path <-  paste0("ari_input_", 
-                                     grs(), 
-                                     ".txt")
+                            grs(), 
+                            ".txt")
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   # if (.Platform$OS.type == "windows") {
@@ -124,20 +138,39 @@ ari_stitch <- function(
   }
   
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
+  
+  # workaround for older ffmpeg 
+  # https://stackoverflow.com/questions/32931685/
+  # the-encoder-aac-is-experimental-but-experimental-codecs-are-not-enabled
+  experimental = FALSE
+  if (!is.null(audio_codec)) {
+    if (audio_codec == "aac") {
+      experimental = TRUE
+    }
+  }
   # shQuote should seankross/ari#5
   command <- paste(
-    ffmpeg, "-y -f concat -safe 0 -i", shQuote(input_txt_path), 
+    ffmpeg, "-y", 
+    "-f concat -safe 0 -i", shQuote(input_txt_path), 
     "-i", shQuote(wav_path), 
     ifelse(!is.null(video_codec), paste("-c:v", video_codec),
            ""),
     ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
            ""),    
+    ifelse(stereo_audio, "-ac 2", ""),
     ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
            ""), 
     ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
            ""), 
-    " -shortest -vsync vfr -pix_fmt yuv420p",
+    " -shortest", 
+    ifelse(deinterlace, "-vf yadif", ""),
+    ifelse(!is.null(video_sync_method), paste("-vsync", video_sync_method),
+           ""), 
+    ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),
+           ""),     
+    ifelse(fast_start, "-movflags +faststart", ""),
     ffmpeg_opts,
+    ifelse(experimental, "-strict experimental", ""),
     shQuote(output))
   if (verbose > 0) {
     message(command)
@@ -158,7 +191,9 @@ ari_stitch <- function(
   if (!cleanup) {
     attr(res, "txt_path") = input_txt_path
     attr(res, "wav_path") = wav_path
+    attr(res, "cmd") = command
   }
   attr(res, "outfile") = output
+  attr(res, "images") = images
   invisible(res)
 }
