@@ -79,7 +79,15 @@ ari_stitch <- function(
     dir.exists(output_dir)
   )
   if (is.character(audio)) {
-    audio = lapply(audio, tuneR::readMP3)
+    
+    audio = lapply(audio, function(x) {
+      ext = tolower(tools::file_ext(x))
+      func = switch(ext,
+                    wav = tuneR::readWave,
+                    mp3 = tuneR::readMP3, 
+                    tuneR::readMP3)
+      func(x)
+    })
     audio = lapply(audio, function(wav) {
       ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
       left = rep(0, 
