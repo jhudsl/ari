@@ -76,9 +76,11 @@ The environmental variable will always override the result of
 \code{Sys.which("ffmpeg")}.
 }
 \examples{
+\dontrun{
 if (ffmpeg_version_sufficient()) {
 result = ari_stitch(
 ari_example(c("mab1.png", "mab2.png")),
 list(tuneR::noise(), tuneR::noise()))
+} 
 }
 }

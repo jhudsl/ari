@@ -1,7 +1,7 @@
 Package: ari
 Type: Package
 Title: Automated R Instructor
-Version: 0.3.2
+Version: 0.3.2.9000
 Authors@R: c(
     person("Sean", "Kross", email = "sean@seankross.com", role = c("aut", "cre")),
     person("John", "Muschelli", role = "ctb")
@@ -31,10 +31,12 @@ Suggests:
     grDevices,
     xaringan,
     aws.signature,
-    aws.polly
+    aws.polly,
+    knitr
 License: MIT + file LICENSE
 URL: http://github.com/seankross/ari
 BugReports: http://github.com/seankross/ari/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr

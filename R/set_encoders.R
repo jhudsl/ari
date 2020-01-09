@@ -17,7 +17,7 @@ get_os = function() {
 #' @export
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' if (have_ffmpeg_exec()) {
 #' print(ffmpeg_version())
 #' get_audio_codec()
@@ -39,7 +39,7 @@ get_os = function() {
 #' 
 #' audio_codec_encode("aac")
 #' }
-#' 
+#' }
 set_audio_codec = function(codec) {
   if (missing(codec)) {
     os = get_os()

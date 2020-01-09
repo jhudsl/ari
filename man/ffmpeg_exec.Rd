@@ -24,7 +24,9 @@ to find `ffmpeg`.  If `ffmpeg` is not in your PATH, then please set the
 path to `ffmpeg` using `Sys.setenv(ffmpeg = "/path/to/ffmpeg")`
 }
 \examples{
+\dontrun{
 if (have_ffmpeg_exec()) { 
 ffmpeg_exec()
+}
 }
 }

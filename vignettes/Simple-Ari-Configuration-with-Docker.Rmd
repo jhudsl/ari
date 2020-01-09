@@ -1,0 +1,62 @@
+---
+title: "Simple Ari Configuration with Docker"
+author: "Sean Kross"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simple-Ari-Configuration-with-Docker}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Behind the scenes, Ari makes extensive use of FFmpeg, a tool and a collection
+of open source software for editing audio and video files. Managing your
+computer's configuration of FFmpeg can be challenging, so we have provided a
+Docker container to help you quickly get started making videos with Ari. This
+guide will help you install Docker and retrieve the Docker image we have
+prepared. This Docker image will launch an RStudio session in your web browser
+with all of Ari's dependencies already configured.
+
+## Installing Docker
+
+If you do not have Docker installed already, download and install Docker 
+Desktop for [Windows](https://docs.docker.com/docker-for-windows/install/) or 
+[Mac](https://docs.docker.com/docker-for-mac/install/), or download the Docker
+command line interface for your [Linux distribution](https://docs.docker.com/install/).
+After you have installed Docker, open PowerShell on Windows or Terminal on Mac 
+or Linux.
+
+## Starting ari-on-docker
+
+No matter which command line interface you are using, run the following command
+to download the ari-on-docker image:
+
+```{bash, eval=FALSE}
+docker pull seankross/ari-on-docker
+```
+
+Once the image is finished downloading, run the following command to start
+RStudio in the browser:
+
+```{bash, eval=FALSE}
+docker run -dp 8787:8787 -e PASSWORD=ari -e ROOT=TRUE seankross/ari-on-docker
+```
+
+After executing this command, navigate to <http://localhost:8787/> in your web
+browser. The RStudio login screen should appear: use username `admin` and 
+password `ari` to get access to RStudio. All of Ari's
+dependencies should be configured, so you can get started making videos.
+
+## Further Details
+
+If you are interested in how the ari-on-docker image is built, it is currently
+being developed here: https://github.com/seankross/ari-on-docker. Looking at
+the `Dockerfile` in this repository may also help you configure FFmpeg for Ari 
+on your own computer.
