@@ -63,7 +63,7 @@ ari_stitch <- function(
   divisible_height = TRUE,
   audio_codec = get_audio_codec(),
   video_codec = get_video_codec(),
-  video_sync_method = "-1", 
+  video_sync_method = "2", 
   audio_bitrate = NULL,
   video_bitrate = NULL,
   pixel_format = "yuv420p",
@@ -81,7 +81,15 @@ ari_stitch <- function(
     dir.exists(output_dir)
   )
   if (is.character(audio)) {
-    audio = lapply(audio, tuneR::readMP3)
+    
+    audio = lapply(audio, function(x) {
+      ext = tolower(tools::file_ext(x))
+      func = switch(ext,
+                    wav = tuneR::readWave,
+                    mp3 = tuneR::readMP3, 
+                    tuneR::readMP3)
+      func(x)
+    })
     audio = lapply(audio, function(wav) {
       ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
       left = rep(0, 
