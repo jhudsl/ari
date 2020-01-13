@@ -33,7 +33,7 @@ A `NULL` output
 Set Default Audio and Video Codecs
 }
 \examples{
-
+\dontrun{
 if (have_ffmpeg_exec()) {
 print(ffmpeg_version())
 get_audio_codec()
@@ -55,7 +55,7 @@ video_codec_encode("libx264")
 
 audio_codec_encode("aac")
 }
-
+}
 }
 \seealso{
 [ffmpeg_codecs()] for options

@@ -68,7 +68,7 @@ files into R. Please be sure that all images have the same dimensions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ari</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -125,9 +125,11 @@ files into R. Please be sure that all images have the same dimensions.</p>
 
     <pre class="usage"><span class='fu'>ari_stitch</span>(<span class='no'>images</span>, <span class='no'>audio</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>(<span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".mp4"</span>),
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ffmpeg_opts</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>divisible_height</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>audio_codec</span> <span class='kw'>=</span> <span class='fu'><a href='codecs.html'>get_audio_codec</a></span>(),
-  <span class='kw'>video_codec</span> <span class='kw'>=</span> <span class='fu'><a href='codecs.html'>get_video_codec</a></span>(), <span class='kw'>audio_bitrate</span> <span class='kw'>=</span> <span class='st'>"192k"</span>,
-  <span class='kw'>video_bitrate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>divisible_height</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>audio_codec</span> <span class='kw'>=</span> <span class='fu'><a href='codecs.html'>get_audio_codec</a></span>(),
+  <span class='kw'>video_codec</span> <span class='kw'>=</span> <span class='fu'><a href='codecs.html'>get_video_codec</a></span>(), <span class='kw'>video_sync_method</span> <span class='kw'>=</span> <span class='st'>"-1"</span>,
+  <span class='kw'>audio_bitrate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>video_bitrate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pixel_format</span> <span class='kw'>=</span> <span class='st'>"yuv420p"</span>, <span class='kw'>fast_start</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>deinterlace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>stereo_audio</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,12 +175,37 @@ fails, try <code>copy</code>.</p></td>
 fails, see <code>ffmpeg -codecs</code></p></td>
     </tr>
     <tr>
+      <th>video_sync_method</th>
+      <td><p>Video sync method.  Should be 
+"auto" or `"vfr"` or a numeric.  See <a href='https://ffmpeg.org/ffmpeg.html'>https://ffmpeg.org/ffmpeg.html</a>.</p></td>
+    </tr>
+    <tr>
       <th>audio_bitrate</th>
       <td><p>Bit rate for audio. Passed to <code>-b:a</code>.</p></td>
     </tr>
     <tr>
       <th>video_bitrate</th>
       <td><p>Bit rate for video. Passed to <code>-b:v</code>.</p></td>
+    </tr>
+    <tr>
+      <th>pixel_format</th>
+      <td><p>pixel format to encode for `ffmpeg`.</p></td>
+    </tr>
+    <tr>
+      <th>fast_start</th>
+      <td><p>Adding `faststart` flags for YouTube and other sites,
+see <a href='https://trac.ffmpeg.org/wiki/Encode/YouTube'>https://trac.ffmpeg.org/wiki/Encode/YouTube</a></p></td>
+    </tr>
+    <tr>
+      <th>deinterlace</th>
+      <td><p>should the video be de-interlaced, 
+see <a href='https://ffmpeg.org/ffmpeg-filters.html'>https://ffmpeg.org/ffmpeg-filters.html</a>, generally for 
+YouTube</p></td>
+    </tr>
+    <tr>
+      <th>stereo_audio</th>
+      <td><p>should the audio be forced to stereo,
+corresponds to `-ac 2`</p></td>
     </tr>
     </table>
     

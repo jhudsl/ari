@@ -8,8 +8,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' if (have_ffmpeg_exec()) { 
 #' ffmpeg_exec()
+#' }
 #' }
 ffmpeg_exec = function(quote = FALSE) {
   ffmpeg <- discard(c(Sys.getenv("ffmpeg"), 

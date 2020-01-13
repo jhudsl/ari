@@ -7,7 +7,7 @@
 ari_stitch(images, audio, output = tempfile(fileext = ".mp4"),
   verbose = FALSE, cleanup = TRUE, ffmpeg_opts = "",
   divisible_height = TRUE, audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(), video_sync_method = "-1",
+  video_codec = get_video_codec(), video_sync_method = "2",
   audio_bitrate = NULL, video_bitrate = NULL,
   pixel_format = "yuv420p", fast_start = TRUE, deinterlace = TRUE,
   stereo_audio = TRUE)
@@ -76,9 +76,11 @@ The environmental variable will always override the result of
 \code{Sys.which("ffmpeg")}.
 }
 \examples{
+\dontrun{
 if (ffmpeg_version_sufficient()) {
 result = ari_stitch(
 ari_example(c("mab1.png", "mab2.png")),
 list(tuneR::noise(), tuneR::noise()))
+} 
 }
 }
