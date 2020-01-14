@@ -52,8 +52,8 @@
 #' }
 ari_narrate <- function(script, slides, 
                         output = tempfile(fileext = ".mp4"),
-                        voice = "Joanna",
-                        service = "amazon",
+                        voice =  text2speech::tts_default_voice(service = service),
+                        service = ifelse(have_polly(), "amazon", "google"),
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE, ...,
                         verbose = FALSE,

@@ -7,8 +7,8 @@
 ari_talk(
   paragraphs,
   output = tempfile(fileext = ".wav"),
-  voice = "Joanna",
-  service = "amazon"
+  voice = text2speech::tts_default_voice(service = service),
+  service = ifelse(have_polly(), "amazon", "google")
 )
 }
 \arguments{
