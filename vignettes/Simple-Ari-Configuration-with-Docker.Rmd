@@ -49,7 +49,7 @@ RStudio in the browser:
 docker run -dp 8787:8787 -e PASSWORD=ari -e ROOT=TRUE seankross/ari-on-docker
 ```
 
-After executing this command, navigate to <http://localhost:8787/> in your web
+After executing this command, navigate to `http://localhost:8787/` in your web
 browser. The RStudio login screen should appear: use username `admin` and 
 password `ari` to get access to RStudio. All of Ari's
 dependencies should be configured, so you can get started making videos.
