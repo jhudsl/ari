@@ -4,13 +4,24 @@
 \alias{ari_stitch}
 \title{Create a video from images and audio}
 \usage{
-ari_stitch(images, audio, output = tempfile(fileext = ".mp4"),
-  verbose = FALSE, cleanup = TRUE, ffmpeg_opts = "",
-  divisible_height = TRUE, audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(), video_sync_method = "2",
-  audio_bitrate = NULL, video_bitrate = NULL,
-  pixel_format = "yuv420p", fast_start = TRUE, deinterlace = TRUE,
-  stereo_audio = TRUE)
+ari_stitch(
+  images,
+  audio,
+  output = tempfile(fileext = ".mp4"),
+  verbose = FALSE,
+  cleanup = TRUE,
+  ffmpeg_opts = "",
+  divisible_height = TRUE,
+  audio_codec = get_audio_codec(),
+  video_codec = get_video_codec(),
+  video_sync_method = "2",
+  audio_bitrate = NULL,
+  video_bitrate = NULL,
+  pixel_format = "yuv420p",
+  fast_start = TRUE,
+  deinterlace = TRUE,
+  stereo_audio = TRUE
+)
 }
 \arguments{
 \item{images}{A vector of paths to images.}

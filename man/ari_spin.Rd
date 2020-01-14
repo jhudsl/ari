@@ -4,8 +4,15 @@
 \alias{ari_spin}
 \title{Create a video from images and text}
 \usage{
-ari_spin(images, paragraphs, output = tempfile(fileext = ".mp4"),
-  voice = "Joanna", service = "amazon", subtitles = FALSE, ...)
+ari_spin(
+  images,
+  paragraphs,
+  output = tempfile(fileext = ".mp4"),
+  voice = "Joanna",
+  service = "amazon",
+  subtitles = FALSE,
+  ...
+)
 }
 \arguments{
 \item{images}{A vector of paths to images.}

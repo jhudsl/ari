@@ -4,8 +4,12 @@
 \alias{ari_talk}
 \title{Create spoken audio files}
 \usage{
-ari_talk(paragraphs, output = tempfile(fileext = ".wav"),
-  voice = "Joanna", service = "amazon")
+ari_talk(
+  paragraphs,
+  output = tempfile(fileext = ".wav"),
+  voice = "Joanna",
+  service = "amazon"
+)
 }
 \arguments{
 \item{paragraphs}{A vector strings that will be spoken by Amazon Polly.}
