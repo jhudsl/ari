@@ -8,21 +8,25 @@
 
 <title>Get Codecs for ffmpeg — ffmpeg_codecs • ari</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +34,11 @@
 
 
 
-<meta property="og:title" content="Get Codecs for ffmpeg — ffmpeg_codecs" />
 
+<meta property="og:title" content="Get Codecs for ffmpeg — ffmpeg_codecs" />
 <meta property="og:description" content="Get Codecs for ffmpeg" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -45,6 +50,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -63,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ari</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
       </span>
     </div>
 
@@ -71,22 +77,33 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Simple-Ari-Configuration-with-Docker.html">Simple Ari Configuration with Docker</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/seankross/ari">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,6 +114,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -108,9 +126,7 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Get Codecs for ffmpeg</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>ffmpeg_codecs</span>()
@@ -126,737 +142,31 @@
 <span class='fu'>ffmpeg_version_sufficient</span>()
 
 <span class='fu'>check_ffmpeg_version</span>()</pre>
-        
+
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A `data.frame` of codec names and capabilities</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>ffmpeg_version_sufficient</span>()) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>if</span> (<span class='fu'>ffmpeg_version_sufficient</span>()) {
 <span class='fu'>ffmpeg_codecs</span>()
 <span class='fu'>ffmpeg_video_codecs</span>()
 <span class='fu'>ffmpeg_audio_codecs</span>()
-}</div><div class='output co'>#&gt;     capabilities             codec
-#&gt; 246       ..A.L.               4gv
-#&gt; 247       D.A.L.          8svx_exp
-#&gt; 248       D.A.L.          8svx_fib
-#&gt; 249       DEA.L.               aac
-#&gt; 250       D.A.L.          aac_latm
-#&gt; 251       DEA.L.               ac3
-#&gt; 252       D.A.L.         adpcm_4xm
-#&gt; 253       DEA.L.         adpcm_adx
-#&gt; 254       D.A.L.         adpcm_afc
-#&gt; 255       D.A.L.        adpcm_aica
-#&gt; 256       D.A.L.          adpcm_ct
-#&gt; 257       D.A.L.         adpcm_dtk
-#&gt; 258       D.A.L.          adpcm_ea
-#&gt; 259       D.A.L. adpcm_ea_maxis_xa
-#&gt; 260       D.A.L.       adpcm_ea_r1
-#&gt; 261       D.A.L.       adpcm_ea_r2
-#&gt; 262       D.A.L.       adpcm_ea_r3
-#&gt; 263       D.A.L.      adpcm_ea_xas
-#&gt; 264       DEA.L.        adpcm_g722
-#&gt; 265       DEA.L.        adpcm_g726
-#&gt; 266       DEA.L.      adpcm_g726le
-#&gt; 267       D.A.L.     adpcm_ima_amv
-#&gt; 268       D.A.L.     adpcm_ima_apc
-#&gt; 269       D.A.L.    adpcm_ima_dat4
-#&gt; 270       D.A.L.     adpcm_ima_dk3
-#&gt; 271       D.A.L.     adpcm_ima_dk4
-#&gt; 272       D.A.L. adpcm_ima_ea_eacs
-#&gt; 273       D.A.L. adpcm_ima_ea_sead
-#&gt; 274       D.A.L.     adpcm_ima_iss
-#&gt; 275       D.A.L.     adpcm_ima_oki
-#&gt; 276       DEA.L.      adpcm_ima_qt
-#&gt; 277       D.A.L.     adpcm_ima_rad
-#&gt; 278       D.A.L.  adpcm_ima_smjpeg
-#&gt; 279       DEA.L.     adpcm_ima_wav
-#&gt; 280       D.A.L.      adpcm_ima_ws
-#&gt; 281       DEA.L.          adpcm_ms
-#&gt; 282       D.A.L.        adpcm_mtaf
-#&gt; 283       D.A.L.         adpcm_psx
-#&gt; 284       D.A.L.     adpcm_sbpro_2
-#&gt; 285       D.A.L.     adpcm_sbpro_3
-#&gt; 286       D.A.L.     adpcm_sbpro_4
-#&gt; 287       DEA.L.         adpcm_swf
-#&gt; 288       D.A.L.         adpcm_thp
-#&gt; 289       D.A.L.      adpcm_thp_le
-#&gt; 290       D.A.L.        adpcm_vima
-#&gt; 291       D.A.L.          adpcm_xa
-#&gt; 292       DEA.L.      adpcm_yamaha
-#&gt; 293       DEAI.S              alac
-#&gt; 294       DEA.L.            amr_nb
-#&gt; 295       D.A.L.            amr_wb
-#&gt; 296       D.A..S               ape
-#&gt; 297       DEA.L.              aptx
-#&gt; 298       DEA.L.           aptx_hd
-#&gt; 299       D.A.L.            atrac1
-#&gt; 300       D.A.L.            atrac3
-#&gt; 301       D.A..S          atrac3al
-#&gt; 302       D.A.L.           atrac3p
-#&gt; 303       D.A..S         atrac3pal
-#&gt; 304       D.A.L.            atrac9
-#&gt; 305       D.A.L.               avc
-#&gt; 306       D.A.L.     binkaudio_dct
-#&gt; 307       D.A.L.    binkaudio_rdft
-#&gt; 308       D.A.L.         bmv_audio
-#&gt; 309       ..A.L.              celt
-#&gt; 310       ..A.L.            codec2
-#&gt; 311       DEA.L.      comfortnoise
-#&gt; 312       D.A.L.              cook
-#&gt; 313       D.A.L.           dolby_e
-#&gt; 314       D.A.L.          dsd_lsbf
-#&gt; 315       D.A.L.   dsd_lsbf_planar
-#&gt; 316       D.A.L.          dsd_msbf
-#&gt; 317       D.A.L.   dsd_msbf_planar
-#&gt; 318       D.A.L.       dsicinaudio
-#&gt; 319       D.A.L.            dss_sp
-#&gt; 320       D.A..S               dst
-#&gt; 321       DEA.LS               dts
-#&gt; 322       D.A.L.           dvaudio
-#&gt; 323       DEA.L.              eac3
-#&gt; 324       D.A.L.              evrc
-#&gt; 325       DEAI.S              flac
-#&gt; 326       DEA.L.            g723_1
-#&gt; 327       D.A.L.              g729
-#&gt; 328       D.A.L.      gremlin_dpcm
-#&gt; 329       DEA.L.               gsm
-#&gt; 330       DEA.L.            gsm_ms
-#&gt; 331       D.A.L.               iac
-#&gt; 332       DEA.L.              ilbc
-#&gt; 333       D.A.L.               imc
-#&gt; 334       D.A.L.    interplay_dpcm
-#&gt; 335       D.A.L.      interplayacm
-#&gt; 336       D.A.L.             mace3
-#&gt; 337       D.A.L.             mace6
-#&gt; 338       D.A.L.         metasound
-#&gt; 339       DEA..S               mlp
-#&gt; 340       D.A.L.               mp1
-#&gt; 341       DEA.L.               mp2
-#&gt; 342       DEA.L.               mp3
-#&gt; 343       D.A.L.            mp3adu
-#&gt; 344       D.A.L.            mp3on4
-#&gt; 345       D.A..S            mp4als
-#&gt; 346       D.A.L.         musepack7
-#&gt; 347       D.A.L.         musepack8
-#&gt; 348       DEA.L.        nellymoser
-#&gt; 349       DEA.L.              opus
-#&gt; 350       D.A.L.         paf_audio
-#&gt; 351       DEA.L.          pcm_alaw
-#&gt; 352       D.A..S        pcm_bluray
-#&gt; 353       D.A..S           pcm_dvd
-#&gt; 354       D.A..S         pcm_f16le
-#&gt; 355       D.A..S         pcm_f24le
-#&gt; 356       DEA..S         pcm_f32be
-#&gt; 357       DEA..S         pcm_f32le
-#&gt; 358       DEA..S         pcm_f64be
-#&gt; 359       DEA..S         pcm_f64le
-#&gt; 360       D.A..S           pcm_lxf
-#&gt; 361       DEA.L.         pcm_mulaw
-#&gt; 362       DEA..S         pcm_s16be
-#&gt; 363       DEA..S  pcm_s16be_planar
-#&gt; 364       DEA..S         pcm_s16le
-#&gt; 365       DEA..S  pcm_s16le_planar
-#&gt; 366       DEA..S         pcm_s24be
-#&gt; 367       DEA..S       pcm_s24daud
-#&gt; 368       DEA..S         pcm_s24le
-#&gt; 369       DEA..S  pcm_s24le_planar
-#&gt; 370       DEA..S         pcm_s32be
-#&gt; 371       DEA..S         pcm_s32le
-#&gt; 372       DEA..S  pcm_s32le_planar
-#&gt; 373       DEA..S         pcm_s64be
-#&gt; 374       DEA..S         pcm_s64le
-#&gt; 375       DEA..S            pcm_s8
-#&gt; 376       DEA..S     pcm_s8_planar
-#&gt; 377       DEA..S         pcm_u16be
-#&gt; 378       DEA..S         pcm_u16le
-#&gt; 379       DEA..S         pcm_u24be
-#&gt; 380       DEA..S         pcm_u24le
-#&gt; 381       DEA..S         pcm_u32be
-#&gt; 382       DEA..S         pcm_u32le
-#&gt; 383       DEA..S            pcm_u8
-#&gt; 384       DEA.L.          pcm_vidc
-#&gt; 385       D.A.L.          pcm_zork
-#&gt; 386       D.A.L.             qcelp
-#&gt; 387       D.A.L.              qdm2
-#&gt; 388       D.A.L.              qdmc
-#&gt; 389       DEA.L.            ra_144
-#&gt; 390       D.A.L.            ra_288
-#&gt; 391       D.A..S              ralf
-#&gt; 392       DEA.L.          roq_dpcm
-#&gt; 393       DEA..S             s302m
-#&gt; 394       DEA.L.               sbc
-#&gt; 395       D.A.L.         sdx2_dpcm
-#&gt; 396       D.A..S           shorten
-#&gt; 397       D.A.L.              sipr
-#&gt; 398       D.A.L.        smackaudio
-#&gt; 399       ..A.L.               smv
-#&gt; 400       D.A.L.          sol_dpcm
-#&gt; 401       DEA...             sonic
-#&gt; 402       .EA...           sonicls
-#&gt; 403       DEA.L.             speex
-#&gt; 404       D.AI.S               tak
-#&gt; 405       DEA..S            truehd
-#&gt; 406       D.A.L.        truespeech
-#&gt; 407       DEAI.S               tta
-#&gt; 408       D.A.L.            twinvq
-#&gt; 409       D.A.L.          vmdaudio
-#&gt; 410       DEA.L.            vorbis
-#&gt; 411       D.A...         wavesynth
-#&gt; 412       DEAILS           wavpack
-#&gt; 413       D.A.L.     westwood_snd1
-#&gt; 414       D.A..S       wmalossless
-#&gt; 415       D.A.L.            wmapro
-#&gt; 416       DEA.L.             wmav1
-#&gt; 417       DEA.L.             wmav2
-#&gt; 418       D.A.L.          wmavoice
-#&gt; 419       D.A.L.          xan_dpcm
-#&gt; 420       D.A.L.              xma1
-#&gt; 421       D.A.L.              xma2
-#&gt;                                                                                                                codec_name
-#&gt; 246                                                                                       4GV (Fourth Generation Vocoder)
-#&gt; 247                                                                                                      8SVX exponential
-#&gt; 248                                                                                                        8SVX fibonacci
-#&gt; 249           AAC (Advanced Audio Coding) (decoders: aac aac_fixed aac_at libfdk_aac ) (encoders: aac aac_at libfdk_aac )
-#&gt; 250                                                                          AAC LATM (Advanced Audio Coding LATM syntax)
-#&gt; 251                                        ATSC A/52A (AC-3) (decoders: ac3 ac3_fixed ac3_at ) (encoders: ac3 ac3_fixed )
-#&gt; 252                                                                                                        ADPCM 4X Movie
-#&gt; 253                                                                                                    SEGA CRI ADX ADPCM
-#&gt; 254                                                                                           ADPCM Nintendo Gamecube AFC
-#&gt; 255                                                                                                     ADPCM Yamaha AICA
-#&gt; 256                                                                                             ADPCM Creative Technology
-#&gt; 257                                                                                           ADPCM Nintendo Gamecube DTK
-#&gt; 258                                                                                                 ADPCM Electronic Arts
-#&gt; 259                                                                                  ADPCM Electronic Arts Maxis CDROM XA
-#&gt; 260                                                                                              ADPCM Electronic Arts R1
-#&gt; 261                                                                                              ADPCM Electronic Arts R2
-#&gt; 262                                                                                              ADPCM Electronic Arts R3
-#&gt; 263                                                                                             ADPCM Electronic Arts XAS
-#&gt; 264                                                                       G.722 ADPCM (decoders: g722 ) (encoders: g722 )
-#&gt; 265                                                                       G.726 ADPCM (decoders: g726 ) (encoders: g726 )
-#&gt; 266                                                     G.726 ADPCM little-endian (decoders: g726le ) (encoders: g726le )
-#&gt; 267                                                                                                         ADPCM IMA AMV
-#&gt; 268                                                                                                    ADPCM IMA CRYO APC
-#&gt; 269                                                                                                ADPCM IMA Eurocom DAT4
-#&gt; 270                                                                                                    ADPCM IMA Duck DK3
-#&gt; 271                                                                                                    ADPCM IMA Duck DK4
-#&gt; 272                                                                                        ADPCM IMA Electronic Arts EACS
-#&gt; 273                                                                                        ADPCM IMA Electronic Arts SEAD
-#&gt; 274                                                                                                  ADPCM IMA Funcom ISS
-#&gt; 275                                                                                                ADPCM IMA Dialogic OKI
-#&gt; 276                                                         ADPCM IMA QuickTime (decoders: adpcm_ima_qt adpcm_ima_qt_at )
-#&gt; 277                                                                                                     ADPCM IMA Radical
-#&gt; 278                                                                                              ADPCM IMA Loki SDL MJPEG
-#&gt; 279                                                                                                         ADPCM IMA WAV
-#&gt; 280                                                                                                    ADPCM IMA Westwood
-#&gt; 281                                                                                                       ADPCM Microsoft
-#&gt; 282                                                                                                            ADPCM MTAF
-#&gt; 283                                                                                                     ADPCM Playstation
-#&gt; 284                                                                                         ADPCM Sound Blaster Pro 2-bit
-#&gt; 285                                                                                       ADPCM Sound Blaster Pro 2.6-bit
-#&gt; 286                                                                                         ADPCM Sound Blaster Pro 4-bit
-#&gt; 287                                                                                                 ADPCM Shockwave Flash
-#&gt; 288                                                                                                    ADPCM Nintendo THP
-#&gt; 289                                                                                    ADPCM Nintendo THP (Little-Endian)
-#&gt; 290                                                                                                  LucasArts VIMA audio
-#&gt; 291                                                                                                        ADPCM CDROM XA
-#&gt; 292                                                                                                          ADPCM Yamaha
-#&gt; 293                                 ALAC (Apple Lossless Audio Codec) (decoders: alac alac_at ) (encoders: alac alac_at )
-#&gt; 294 AMR-NB (Adaptive Multi-Rate NarrowBand) (decoders: amrnb amr_nb_at libopencore_amrnb ) (encoders: libopencore_amrnb )
-#&gt; 295                                            AMR-WB (Adaptive Multi-Rate WideBand) (decoders: amrwb libopencore_amrwb )
-#&gt; 296                                                                                                        Monkey's Audio
-#&gt; 297                                                                      aptX (Audio Processing Technology for Bluetooth)
-#&gt; 298                                                                   aptX HD (Audio Processing Technology for Bluetooth)
-#&gt; 299                                                                           ATRAC1 (Adaptive TRansform Acoustic Coding)
-#&gt; 300                                                                         ATRAC3 (Adaptive TRansform Acoustic Coding 3)
-#&gt; 301                                                    ATRAC3 AL (Adaptive TRansform Acoustic Coding 3 Advanced Lossless)
-#&gt; 302                                               ATRAC3+ (Adaptive TRansform Acoustic Coding 3+) (decoders: atrac3plus )
-#&gt; 303                        ATRAC3+ AL (Adaptive TRansform Acoustic Coding 3+ Advanced Lossless) (decoders: atrac3plusal )
-#&gt; 304                                                                         ATRAC9 (Adaptive TRansform Acoustic Coding 9)
-#&gt; 305                                                                         On2 Audio for Video Codec (decoders: on2avc )
-#&gt; 306                                                                                                      Bink Audio (DCT)
-#&gt; 307                                                                                                     Bink Audio (RDFT)
-#&gt; 308                                                                                                Discworld II BMV audio
-#&gt; 309                                                                            Constrained Energy Lapped Transform (CELT)
-#&gt; 310                                                                                codec2 (very low bitrate speech codec)
-#&gt; 311                                                                                                RFC 3389 Comfort Noise
-#&gt; 312                                                                                  Cook / Cooker / Gecko (RealAudio G2)
-#&gt; 313                                                                                                               Dolby E
-#&gt; 314                                                              DSD (Direct Stream Digital), least significant bit first
-#&gt; 315                                                      DSD (Direct Stream Digital), least significant bit first, planar
-#&gt; 316                                                               DSD (Direct Stream Digital), most significant bit first
-#&gt; 317                                                       DSD (Direct Stream Digital), most significant bit first, planar
-#&gt; 318                                                                             Delphine Software International CIN audio
-#&gt; 319                                                                 Digital Speech Standard - Standard Play mode (DSS SP)
-#&gt; 320                                                                                          DST (Direct Stream Transfer)
-#&gt; 321                                                        DCA (DTS Coherent Acoustics) (decoders: dca ) (encoders: dca )
-#&gt; 322                                                                                                              DV audio
-#&gt; 323                                                                   ATSC A/52B (AC-3, E-AC-3) (decoders: eac3 eac3_at )
-#&gt; 324                                                                                   EVRC (Enhanced Variable Rate Codec)
-#&gt; 325                                                                                      FLAC (Free Lossless Audio Codec)
-#&gt; 326                                                                                                               G.723.1
-#&gt; 327                                                                                                                 G.729
-#&gt; 328                                                                                                          DPCM Gremlin
-#&gt; 329                                                                       GSM (decoders: gsm libgsm ) (encoders: libgsm )
-#&gt; 330                                  GSM Microsoft variant (decoders: gsm_ms gsm_ms_at libgsm_ms ) (encoders: libgsm_ms )
-#&gt; 331                                                                                               IAC (Indeo Audio Coder)
-#&gt; 332                                      iLBC (Internet Low Bitrate Codec) (decoders: ilbc ilbc_at ) (encoders: ilbc_at )
-#&gt; 333                                                                                               IMC (Intel Music Coder)
-#&gt; 334                                                                                                        DPCM Interplay
-#&gt; 335                                                                                                         Interplay ACM
-#&gt; 336                                                                      MACE (Macintosh Audio Compression/Expansion) 3:1
-#&gt; 337                                                                      MACE (Macintosh Audio Compression/Expansion) 6:1
-#&gt; 338                                                                                                     Voxware MetaSound
-#&gt; 339                                                                                       MLP (Meridian Lossless Packing)
-#&gt; 340                                                             MP1 (MPEG audio layer 1) (decoders: mp1 mp1float mp1_at )
-#&gt; 341                        MP2 (MPEG audio layer 2) (decoders: mp2 mp2float mp2_at ) (encoders: mp2 mp2fixed libtwolame )
-#&gt; 342                                     MP3 (MPEG audio layer 3) (decoders: mp3float mp3 mp3_at ) (encoders: libmp3lame )
-#&gt; 343                                  ADU (Application Data Unit) MP3 (MPEG audio layer 3) (decoders: mp3adufloat mp3adu )
-#&gt; 344                                                                              MP3onMP4 (decoders: mp3on4float mp3on4 )
-#&gt; 345                                                                   MPEG-4 Audio Lossless Coding (ALS) (decoders: als )
-#&gt; 346                                                                                        Musepack SV7 (decoders: mpc7 )
-#&gt; 347                                                                                        Musepack SV8 (decoders: mpc8 )
-#&gt; 348                                                                                                       Nellymoser Asao
-#&gt; 349                               Opus (Opus Interactive Audio Codec) (decoders: opus libopus ) (encoders: opus libopus )
-#&gt; 350                                                                            Amazing Studio Packed Animation File Audio
-#&gt; 351                           PCM A-law / G.711 A-law (decoders: pcm_alaw pcm_alaw_at ) (encoders: pcm_alaw pcm_alaw_at )
-#&gt; 352                                                                  PCM signed 16|20|24-bit big-endian for Blu-ray media
-#&gt; 353                                                                                       PCM signed 20|24-bit big-endian
-#&gt; 354                                                                                 PCM 16.8 floating point little-endian
-#&gt; 355                                                                                 PCM 24.0 floating point little-endian
-#&gt; 356                                                                                  PCM 32-bit floating point big-endian
-#&gt; 357                                                                               PCM 32-bit floating point little-endian
-#&gt; 358                                                                                  PCM 64-bit floating point big-endian
-#&gt; 359                                                                               PCM 64-bit floating point little-endian
-#&gt; 360                                                                                PCM signed 20-bit little-endian planar
-#&gt; 361                     PCM mu-law / G.711 mu-law (decoders: pcm_mulaw pcm_mulaw_at ) (encoders: pcm_mulaw pcm_mulaw_at )
-#&gt; 362                                                                                          PCM signed 16-bit big-endian
-#&gt; 363                                                                                   PCM signed 16-bit big-endian planar
-#&gt; 364                                                                                       PCM signed 16-bit little-endian
-#&gt; 365                                                                                PCM signed 16-bit little-endian planar
-#&gt; 366                                                                                          PCM signed 24-bit big-endian
-#&gt; 367                                                                                      PCM D-Cinema audio signed 24-bit
-#&gt; 368                                                                                       PCM signed 24-bit little-endian
-#&gt; 369                                                                                PCM signed 24-bit little-endian planar
-#&gt; 370                                                                                          PCM signed 32-bit big-endian
-#&gt; 371                                                                                       PCM signed 32-bit little-endian
-#&gt; 372                                                                                PCM signed 32-bit little-endian planar
-#&gt; 373                                                                                          PCM signed 64-bit big-endian
-#&gt; 374                                                                                       PCM signed 64-bit little-endian
-#&gt; 375                                                                                                      PCM signed 8-bit
-#&gt; 376                                                                                               PCM signed 8-bit planar
-#&gt; 377                                                                                        PCM unsigned 16-bit big-endian
-#&gt; 378                                                                                     PCM unsigned 16-bit little-endian
-#&gt; 379                                                                                        PCM unsigned 24-bit big-endian
-#&gt; 380                                                                                     PCM unsigned 24-bit little-endian
-#&gt; 381                                                                                        PCM unsigned 32-bit big-endian
-#&gt; 382                                                                                     PCM unsigned 32-bit little-endian
-#&gt; 383                                                                                                    PCM unsigned 8-bit
-#&gt; 384                                                                                                   PCM Archimedes VIDC
-#&gt; 385                                                                                                              PCM Zork
-#&gt; 386                                                                                                     QCELP / PureVoice
-#&gt; 387                                                                       QDesign Music Codec 2 (decoders: qdm2 qdm2_at )
-#&gt; 388                                                                               QDesign Music (decoders: qdmc qdmc_at )
-#&gt; 389                                                     RealAudio 1.0 (14.4K) (decoders: real_144 ) (encoders: real_144 )
-#&gt; 390                                                                           RealAudio 2.0 (28.8K) (decoders: real_288 )
-#&gt; 391                                                                                                    RealAudio Lossless
-#&gt; 392                                                                                                           DPCM id RoQ
-#&gt; 393                                                                                                            SMPTE 302M
-#&gt; 394                                                                                    SBC (low-complexity subband codec)
-#&gt; 395                                                                                           DPCM Squareroot-Delta-Exact
-#&gt; 396                                                                                                               Shorten
-#&gt; 397                                                                                            RealAudio SIPR / ACELP.NET
-#&gt; 398                                                                                   Smacker audio (decoders: smackaud )
-#&gt; 399                                                                                         SMV (Selectable Mode Vocoder)
-#&gt; 400                                                                                                              DPCM Sol
-#&gt; 401                                                                                                                 Sonic
-#&gt; 402                                                                                                        Sonic lossless
-#&gt; 403                                                                     Speex (decoders: libspeex ) (encoders: libspeex )
-#&gt; 404                                                                                 TAK (Tom's lossless Audio Kompressor)
-#&gt; 405                                                                                                                TrueHD
-#&gt; 406                                                                                                  DSP Group TrueSpeech
-#&gt; 407                                                                                                      TTA (True Audio)
-#&gt; 408                                                                                                            VQF TwinVQ
-#&gt; 409                                                                                                      Sierra VMD audio
-#&gt; 410                                                    Vorbis (decoders: vorbis libvorbis ) (encoders: vorbis libvorbis )
-#&gt; 411                                                                                           Wave synthesis pseudo-codec
-#&gt; 412                                                                               WavPack (encoders: wavpack libwavpack )
-#&gt; 413                                                                            Westwood Audio (SND1) (decoders: ws_snd1 )
-#&gt; 414                                                                                          Windows Media Audio Lossless
-#&gt; 415                                                                                    Windows Media Audio 9 Professional
-#&gt; 416                                                                                                 Windows Media Audio 1
-#&gt; 417                                                                                                 Windows Media Audio 2
-#&gt; 418                                                                                             Windows Media Audio Voice
-#&gt; 419                                                                                                              DPCM Xan
-#&gt; 420                                                                                                    Xbox Media Audio 1
-#&gt; 421                                                                                                    Xbox Media Audio 2
-#&gt;     decoding_supported encoding_supported intra_frame_only_codec
-#&gt; 246              FALSE              FALSE                  FALSE
-#&gt; 247               TRUE              FALSE                  FALSE
-#&gt; 248               TRUE              FALSE                  FALSE
-#&gt; 249               TRUE               TRUE                  FALSE
-#&gt; 250               TRUE              FALSE                  FALSE
-#&gt; 251               TRUE               TRUE                  FALSE
-#&gt; 252               TRUE              FALSE                  FALSE
-#&gt; 253               TRUE               TRUE                  FALSE
-#&gt; 254               TRUE              FALSE                  FALSE
-#&gt; 255               TRUE              FALSE                  FALSE
-#&gt; 256               TRUE              FALSE                  FALSE
-#&gt; 257               TRUE              FALSE                  FALSE
-#&gt; 258               TRUE              FALSE                  FALSE
-#&gt; 259               TRUE              FALSE                  FALSE
-#&gt; 260               TRUE              FALSE                  FALSE
-#&gt; 261               TRUE              FALSE                  FALSE
-#&gt; 262               TRUE              FALSE                  FALSE
-#&gt; 263               TRUE              FALSE                  FALSE
-#&gt; 264               TRUE               TRUE                  FALSE
-#&gt; 265               TRUE               TRUE                  FALSE
-#&gt; 266               TRUE               TRUE                  FALSE
-#&gt; 267               TRUE              FALSE                  FALSE
-#&gt; 268               TRUE              FALSE                  FALSE
-#&gt; 269               TRUE              FALSE                  FALSE
-#&gt; 270               TRUE              FALSE                  FALSE
-#&gt; 271               TRUE              FALSE                  FALSE
-#&gt; 272               TRUE              FALSE                  FALSE
-#&gt; 273               TRUE              FALSE                  FALSE
-#&gt; 274               TRUE              FALSE                  FALSE
-#&gt; 275               TRUE              FALSE                  FALSE
-#&gt; 276               TRUE               TRUE                  FALSE
-#&gt; 277               TRUE              FALSE                  FALSE
-#&gt; 278               TRUE              FALSE                  FALSE
-#&gt; 279               TRUE               TRUE                  FALSE
-#&gt; 280               TRUE              FALSE                  FALSE
-#&gt; 281               TRUE               TRUE                  FALSE
-#&gt; 282               TRUE              FALSE                  FALSE
-#&gt; 283               TRUE              FALSE                  FALSE
-#&gt; 284               TRUE              FALSE                  FALSE
-#&gt; 285               TRUE              FALSE                  FALSE
-#&gt; 286               TRUE              FALSE                  FALSE
-#&gt; 287               TRUE               TRUE                  FALSE
-#&gt; 288               TRUE              FALSE                  FALSE
-#&gt; 289               TRUE              FALSE                  FALSE
-#&gt; 290               TRUE              FALSE                  FALSE
-#&gt; 291               TRUE              FALSE                  FALSE
-#&gt; 292               TRUE               TRUE                  FALSE
-#&gt; 293               TRUE               TRUE                   TRUE
-#&gt; 294               TRUE               TRUE                  FALSE
-#&gt; 295               TRUE              FALSE                  FALSE
-#&gt; 296               TRUE              FALSE                  FALSE
-#&gt; 297               TRUE               TRUE                  FALSE
-#&gt; 298               TRUE               TRUE                  FALSE
-#&gt; 299               TRUE              FALSE                  FALSE
-#&gt; 300               TRUE              FALSE                  FALSE
-#&gt; 301               TRUE              FALSE                  FALSE
-#&gt; 302               TRUE              FALSE                  FALSE
-#&gt; 303               TRUE              FALSE                  FALSE
-#&gt; 304               TRUE              FALSE                  FALSE
-#&gt; 305               TRUE              FALSE                  FALSE
-#&gt; 306               TRUE              FALSE                  FALSE
-#&gt; 307               TRUE              FALSE                  FALSE
-#&gt; 308               TRUE              FALSE                  FALSE
-#&gt; 309              FALSE              FALSE                  FALSE
-#&gt; 310              FALSE              FALSE                  FALSE
-#&gt; 311               TRUE               TRUE                  FALSE
-#&gt; 312               TRUE              FALSE                  FALSE
-#&gt; 313               TRUE              FALSE                  FALSE
-#&gt; 314               TRUE              FALSE                  FALSE
-#&gt; 315               TRUE              FALSE                  FALSE
-#&gt; 316               TRUE              FALSE                  FALSE
-#&gt; 317               TRUE              FALSE                  FALSE
-#&gt; 318               TRUE              FALSE                  FALSE
-#&gt; 319               TRUE              FALSE                  FALSE
-#&gt; 320               TRUE              FALSE                  FALSE
-#&gt; 321               TRUE               TRUE                  FALSE
-#&gt; 322               TRUE              FALSE                  FALSE
-#&gt; 323               TRUE               TRUE                  FALSE
-#&gt; 324               TRUE              FALSE                  FALSE
-#&gt; 325               TRUE               TRUE                   TRUE
-#&gt; 326               TRUE               TRUE                  FALSE
-#&gt; 327               TRUE              FALSE                  FALSE
-#&gt; 328               TRUE              FALSE                  FALSE
-#&gt; 329               TRUE               TRUE                  FALSE
-#&gt; 330               TRUE               TRUE                  FALSE
-#&gt; 331               TRUE              FALSE                  FALSE
-#&gt; 332               TRUE               TRUE                  FALSE
-#&gt; 333               TRUE              FALSE                  FALSE
-#&gt; 334               TRUE              FALSE                  FALSE
-#&gt; 335               TRUE              FALSE                  FALSE
-#&gt; 336               TRUE              FALSE                  FALSE
-#&gt; 337               TRUE              FALSE                  FALSE
-#&gt; 338               TRUE              FALSE                  FALSE
-#&gt; 339               TRUE               TRUE                  FALSE
-#&gt; 340               TRUE              FALSE                  FALSE
-#&gt; 341               TRUE               TRUE                  FALSE
-#&gt; 342               TRUE               TRUE                  FALSE
-#&gt; 343               TRUE              FALSE                  FALSE
-#&gt; 344               TRUE              FALSE                  FALSE
-#&gt; 345               TRUE              FALSE                  FALSE
-#&gt; 346               TRUE              FALSE                  FALSE
-#&gt; 347               TRUE              FALSE                  FALSE
-#&gt; 348               TRUE               TRUE                  FALSE
-#&gt; 349               TRUE               TRUE                  FALSE
-#&gt; 350               TRUE              FALSE                  FALSE
-#&gt; 351               TRUE               TRUE                  FALSE
-#&gt; 352               TRUE              FALSE                  FALSE
-#&gt; 353               TRUE              FALSE                  FALSE
-#&gt; 354               TRUE              FALSE                  FALSE
-#&gt; 355               TRUE              FALSE                  FALSE
-#&gt; 356               TRUE               TRUE                  FALSE
-#&gt; 357               TRUE               TRUE                  FALSE
-#&gt; 358               TRUE               TRUE                  FALSE
-#&gt; 359               TRUE               TRUE                  FALSE
-#&gt; 360               TRUE              FALSE                  FALSE
-#&gt; 361               TRUE               TRUE                  FALSE
-#&gt; 362               TRUE               TRUE                  FALSE
-#&gt; 363               TRUE               TRUE                  FALSE
-#&gt; 364               TRUE               TRUE                  FALSE
-#&gt; 365               TRUE               TRUE                  FALSE
-#&gt; 366               TRUE               TRUE                  FALSE
-#&gt; 367               TRUE               TRUE                  FALSE
-#&gt; 368               TRUE               TRUE                  FALSE
-#&gt; 369               TRUE               TRUE                  FALSE
-#&gt; 370               TRUE               TRUE                  FALSE
-#&gt; 371               TRUE               TRUE                  FALSE
-#&gt; 372               TRUE               TRUE                  FALSE
-#&gt; 373               TRUE               TRUE                  FALSE
-#&gt; 374               TRUE               TRUE                  FALSE
-#&gt; 375               TRUE               TRUE                  FALSE
-#&gt; 376               TRUE               TRUE                  FALSE
-#&gt; 377               TRUE               TRUE                  FALSE
-#&gt; 378               TRUE               TRUE                  FALSE
-#&gt; 379               TRUE               TRUE                  FALSE
-#&gt; 380               TRUE               TRUE                  FALSE
-#&gt; 381               TRUE               TRUE                  FALSE
-#&gt; 382               TRUE               TRUE                  FALSE
-#&gt; 383               TRUE               TRUE                  FALSE
-#&gt; 384               TRUE               TRUE                  FALSE
-#&gt; 385               TRUE              FALSE                  FALSE
-#&gt; 386               TRUE              FALSE                  FALSE
-#&gt; 387               TRUE              FALSE                  FALSE
-#&gt; 388               TRUE              FALSE                  FALSE
-#&gt; 389               TRUE               TRUE                  FALSE
-#&gt; 390               TRUE              FALSE                  FALSE
-#&gt; 391               TRUE              FALSE                  FALSE
-#&gt; 392               TRUE               TRUE                  FALSE
-#&gt; 393               TRUE               TRUE                  FALSE
-#&gt; 394               TRUE               TRUE                  FALSE
-#&gt; 395               TRUE              FALSE                  FALSE
-#&gt; 396               TRUE              FALSE                  FALSE
-#&gt; 397               TRUE              FALSE                  FALSE
-#&gt; 398               TRUE              FALSE                  FALSE
-#&gt; 399              FALSE              FALSE                  FALSE
-#&gt; 400               TRUE              FALSE                  FALSE
-#&gt; 401               TRUE               TRUE                  FALSE
-#&gt; 402              FALSE               TRUE                  FALSE
-#&gt; 403               TRUE               TRUE                  FALSE
-#&gt; 404               TRUE              FALSE                   TRUE
-#&gt; 405               TRUE               TRUE                  FALSE
-#&gt; 406               TRUE              FALSE                  FALSE
-#&gt; 407               TRUE               TRUE                   TRUE
-#&gt; 408               TRUE              FALSE                  FALSE
-#&gt; 409               TRUE              FALSE                  FALSE
-#&gt; 410               TRUE               TRUE                  FALSE
-#&gt; 411               TRUE              FALSE                  FALSE
-#&gt; 412               TRUE               TRUE                   TRUE
-#&gt; 413               TRUE              FALSE                  FALSE
-#&gt; 414               TRUE              FALSE                  FALSE
-#&gt; 415               TRUE              FALSE                  FALSE
-#&gt; 416               TRUE               TRUE                  FALSE
-#&gt; 417               TRUE               TRUE                  FALSE
-#&gt; 418               TRUE              FALSE                  FALSE
-#&gt; 419               TRUE              FALSE                  FALSE
-#&gt; 420               TRUE              FALSE                  FALSE
-#&gt; 421               TRUE              FALSE                  FALSE
-#&gt;     lossy_compression lossless_compression
-#&gt; 246              TRUE                FALSE
-#&gt; 247              TRUE                FALSE
-#&gt; 248              TRUE                FALSE
-#&gt; 249              TRUE                FALSE
-#&gt; 250              TRUE                FALSE
-#&gt; 251              TRUE                FALSE
-#&gt; 252              TRUE                FALSE
-#&gt; 253              TRUE                FALSE
-#&gt; 254              TRUE                FALSE
-#&gt; 255              TRUE                FALSE
-#&gt; 256              TRUE                FALSE
-#&gt; 257              TRUE                FALSE
-#&gt; 258              TRUE                FALSE
-#&gt; 259              TRUE                FALSE
-#&gt; 260              TRUE                FALSE
-#&gt; 261              TRUE                FALSE
-#&gt; 262              TRUE                FALSE
-#&gt; 263              TRUE                FALSE
-#&gt; 264              TRUE                FALSE
-#&gt; 265              TRUE                FALSE
-#&gt; 266              TRUE                FALSE
-#&gt; 267              TRUE                FALSE
-#&gt; 268              TRUE                FALSE
-#&gt; 269              TRUE                FALSE
-#&gt; 270              TRUE                FALSE
-#&gt; 271              TRUE                FALSE
-#&gt; 272              TRUE                FALSE
-#&gt; 273              TRUE                FALSE
-#&gt; 274              TRUE                FALSE
-#&gt; 275              TRUE                FALSE
-#&gt; 276              TRUE                FALSE
-#&gt; 277              TRUE                FALSE
-#&gt; 278              TRUE                FALSE
-#&gt; 279              TRUE                FALSE
-#&gt; 280              TRUE                FALSE
-#&gt; 281              TRUE                FALSE
-#&gt; 282              TRUE                FALSE
-#&gt; 283              TRUE                FALSE
-#&gt; 284              TRUE                FALSE
-#&gt; 285              TRUE                FALSE
-#&gt; 286              TRUE                FALSE
-#&gt; 287              TRUE                FALSE
-#&gt; 288              TRUE                FALSE
-#&gt; 289              TRUE                FALSE
-#&gt; 290              TRUE                FALSE
-#&gt; 291              TRUE                FALSE
-#&gt; 292              TRUE                FALSE
-#&gt; 293             FALSE                 TRUE
-#&gt; 294              TRUE                FALSE
-#&gt; 295              TRUE                FALSE
-#&gt; 296             FALSE                 TRUE
-#&gt; 297              TRUE                FALSE
-#&gt; 298              TRUE                FALSE
-#&gt; 299              TRUE                FALSE
-#&gt; 300              TRUE                FALSE
-#&gt; 301             FALSE                 TRUE
-#&gt; 302              TRUE                FALSE
-#&gt; 303             FALSE                 TRUE
-#&gt; 304              TRUE                FALSE
-#&gt; 305              TRUE                FALSE
-#&gt; 306              TRUE                FALSE
-#&gt; 307              TRUE                FALSE
-#&gt; 308              TRUE                FALSE
-#&gt; 309              TRUE                FALSE
-#&gt; 310              TRUE                FALSE
-#&gt; 311              TRUE                FALSE
-#&gt; 312              TRUE                FALSE
-#&gt; 313              TRUE                FALSE
-#&gt; 314              TRUE                FALSE
-#&gt; 315              TRUE                FALSE
-#&gt; 316              TRUE                FALSE
-#&gt; 317              TRUE                FALSE
-#&gt; 318              TRUE                FALSE
-#&gt; 319              TRUE                FALSE
-#&gt; 320             FALSE                 TRUE
-#&gt; 321              TRUE                 TRUE
-#&gt; 322              TRUE                FALSE
-#&gt; 323              TRUE                FALSE
-#&gt; 324              TRUE                FALSE
-#&gt; 325             FALSE                 TRUE
-#&gt; 326              TRUE                FALSE
-#&gt; 327              TRUE                FALSE
-#&gt; 328              TRUE                FALSE
-#&gt; 329              TRUE                FALSE
-#&gt; 330              TRUE                FALSE
-#&gt; 331              TRUE                FALSE
-#&gt; 332              TRUE                FALSE
-#&gt; 333              TRUE                FALSE
-#&gt; 334              TRUE                FALSE
-#&gt; 335              TRUE                FALSE
-#&gt; 336              TRUE                FALSE
-#&gt; 337              TRUE                FALSE
-#&gt; 338              TRUE                FALSE
-#&gt; 339             FALSE                 TRUE
-#&gt; 340              TRUE                FALSE
-#&gt; 341              TRUE                FALSE
-#&gt; 342              TRUE                FALSE
-#&gt; 343              TRUE                FALSE
-#&gt; 344              TRUE                FALSE
-#&gt; 345             FALSE                 TRUE
-#&gt; 346              TRUE                FALSE
-#&gt; 347              TRUE                FALSE
-#&gt; 348              TRUE                FALSE
-#&gt; 349              TRUE                FALSE
-#&gt; 350              TRUE                FALSE
-#&gt; 351              TRUE                FALSE
-#&gt; 352             FALSE                 TRUE
-#&gt; 353             FALSE                 TRUE
-#&gt; 354             FALSE                 TRUE
-#&gt; 355             FALSE                 TRUE
-#&gt; 356             FALSE                 TRUE
-#&gt; 357             FALSE                 TRUE
-#&gt; 358             FALSE                 TRUE
-#&gt; 359             FALSE                 TRUE
-#&gt; 360             FALSE                 TRUE
-#&gt; 361              TRUE                FALSE
-#&gt; 362             FALSE                 TRUE
-#&gt; 363             FALSE                 TRUE
-#&gt; 364             FALSE                 TRUE
-#&gt; 365             FALSE                 TRUE
-#&gt; 366             FALSE                 TRUE
-#&gt; 367             FALSE                 TRUE
-#&gt; 368             FALSE                 TRUE
-#&gt; 369             FALSE                 TRUE
-#&gt; 370             FALSE                 TRUE
-#&gt; 371             FALSE                 TRUE
-#&gt; 372             FALSE                 TRUE
-#&gt; 373             FALSE                 TRUE
-#&gt; 374             FALSE                 TRUE
-#&gt; 375             FALSE                 TRUE
-#&gt; 376             FALSE                 TRUE
-#&gt; 377             FALSE                 TRUE
-#&gt; 378             FALSE                 TRUE
-#&gt; 379             FALSE                 TRUE
-#&gt; 380             FALSE                 TRUE
-#&gt; 381             FALSE                 TRUE
-#&gt; 382             FALSE                 TRUE
-#&gt; 383             FALSE                 TRUE
-#&gt; 384              TRUE                FALSE
-#&gt; 385              TRUE                FALSE
-#&gt; 386              TRUE                FALSE
-#&gt; 387              TRUE                FALSE
-#&gt; 388              TRUE                FALSE
-#&gt; 389              TRUE                FALSE
-#&gt; 390              TRUE                FALSE
-#&gt; 391             FALSE                 TRUE
-#&gt; 392              TRUE                FALSE
-#&gt; 393             FALSE                 TRUE
-#&gt; 394              TRUE                FALSE
-#&gt; 395              TRUE                FALSE
-#&gt; 396             FALSE                 TRUE
-#&gt; 397              TRUE                FALSE
-#&gt; 398              TRUE                FALSE
-#&gt; 399              TRUE                FALSE
-#&gt; 400              TRUE                FALSE
-#&gt; 401             FALSE                FALSE
-#&gt; 402             FALSE                FALSE
-#&gt; 403              TRUE                FALSE
-#&gt; 404             FALSE                 TRUE
-#&gt; 405             FALSE                 TRUE
-#&gt; 406              TRUE                FALSE
-#&gt; 407             FALSE                 TRUE
-#&gt; 408              TRUE                FALSE
-#&gt; 409              TRUE                FALSE
-#&gt; 410              TRUE                FALSE
-#&gt; 411             FALSE                FALSE
-#&gt; 412              TRUE                 TRUE
-#&gt; 413              TRUE                FALSE
-#&gt; 414             FALSE                 TRUE
-#&gt; 415              TRUE                FALSE
-#&gt; 416              TRUE                FALSE
-#&gt; 417              TRUE                FALSE
-#&gt; 418              TRUE                FALSE
-#&gt; 419              TRUE                FALSE
-#&gt; 420              TRUE                FALSE
-#&gt; 421              TRUE                FALSE</div></pre>
+}
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -864,13 +174,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
