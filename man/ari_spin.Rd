@@ -2,10 +2,20 @@
 % Please edit documentation in R/ari_spin.R
 \name{ari_spin}
 \alias{ari_spin}
+\alias{have_polly}
 \title{Create a video from images and text}
 \usage{
-ari_spin(images, paragraphs, output = tempfile(fileext = ".mp4"),
-  voice = "Joanna", service = "amazon", subtitles = FALSE, ...)
+ari_spin(
+  images,
+  paragraphs,
+  output = tempfile(fileext = ".mp4"),
+  voice = text2speech::tts_default_voice(service = service),
+  service = ifelse(have_polly(), "amazon", "google"),
+  subtitles = FALSE,
+  ...
+)
+
+have_polly()
 }
 \arguments{
 \item{images}{A vector of paths to images.}

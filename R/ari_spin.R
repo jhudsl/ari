@@ -34,7 +34,7 @@
 #' 
 #' @return The output from \code{\link{ari_stitch}}
 #' 
-#' @importFrom text2speech tts_auth tts
+#' @importFrom text2speech tts_auth tts tts_default_voice
 #' @importFrom tuneR bind Wave
 #' @importFrom purrr map reduce
 #' @importFrom progress progress_bar
@@ -54,8 +54,8 @@
 ari_spin <- function(
   images, paragraphs, 
   output = tempfile(fileext = ".mp4"),
-  voice = "Joanna",
-  service = "amazon",
+  voice = text2speech::tts_default_voice(service = service),
+  service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
   ...){
   # check for ffmpeg before any synthesizing
@@ -135,4 +135,10 @@ ari_spin <- function(
   attr(res, "voice") = voice
   attr(res, "service") = service
   return(res)
+}
+
+#' @rdname ari_spin 
+#' @export
+have_polly = function() {
+  requireNamespace("aws.polly", quietly = TRUE)
 }

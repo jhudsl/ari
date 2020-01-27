@@ -17,8 +17,8 @@
 #' @export
 ari_talk <- function(paragraphs, 
                      output = tempfile(fileext = ".wav"),
-                     voice = "Joanna",
-                     service = "amazon") {
+                     voice = text2speech::tts_default_voice(service = service),
+                     service = ifelse(have_polly(), "amazon", "google")) {
   auth = text2speech::tts_auth(service = service)
   if (!auth) {
     stop(paste0("It appears you're not authenticated with ", 
