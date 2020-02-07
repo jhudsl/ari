@@ -1,6 +1,6 @@
 # ari 0.3.5
 
-- Ari no longer depends on archived package 'aws.polly'.
+- Removed `have_polly()`.
 
 # ari 0.3.4
 

@@ -8,7 +8,7 @@
 #' about what voices are available.
 #' @param service speech synthesis service to use,
 #' passed to \code{\link[text2speech]{tts}}
-#' 
+#' Either \code{"amazon"} or \code{"google"}.
 #' @return A \code{Wave} output object, with the attribute \code{outfile}
 #' of the output file name.
 #' @importFrom text2speech tts_auth tts
@@ -18,7 +18,7 @@
 ari_talk <- function(paragraphs, 
                      output = tempfile(fileext = ".wav"),
                      voice = text2speech::tts_default_voice(service = service),
-                     service = ifelse(have_polly(), "amazon", "google")) {
+                     service = "amazon") {
   auth = text2speech::tts_auth(service = service)
   if (!auth) {
     stop(paste0("It appears you're not authenticated with ", 

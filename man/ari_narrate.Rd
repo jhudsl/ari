@@ -9,7 +9,7 @@ ari_narrate(
   slides,
   output = tempfile(fileext = ".mp4"),
   voice = text2speech::tts_default_voice(service = service),
-  service = ifelse(have_polly(), "amazon", "google"),
+  service = "amazon",
   capture_method = c("vectorized", "iterative"),
   subtitles = FALSE,
   ...,
@@ -35,7 +35,8 @@ similar package.}
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}.}
+passed to \code{\link[text2speech]{tts}}. 
+Either \code{"amazon"} or \code{"google"}.}
 
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
 The vectorized mode is faster though it can cause screens to repeat. If
