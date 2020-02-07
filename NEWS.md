@@ -1,3 +1,7 @@
+# ari 0.3.5
+
+- Ari no longer depends on archived package 'aws.polly'.
+
 # ari 0.3.4
 
 - Removed strict dependency on aws.polly and associated Cloudyr projects because

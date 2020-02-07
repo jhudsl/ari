@@ -3,19 +3,16 @@ library(testthat)
 library(ari)
 library(tuneR)
 library(purrr)
-library(aws.polly)
 
-if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
-  if (!identical(Sys.getenv("TRAVIS"), "true")) {
-    aws.signature::use_credentials(profile = "polly")
-  }
-}
 skip_amazon_not_authorized = function() {
-  if (requireNamespace("aws.polly", quietly = TRUE)) {
-    if (text2speech::tts_amazon_authenticated()) {
-      return(invisible(TRUE))
-    }
+  if(!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    skip("Amazon not authenticated()")
   }
+  
+  if (text2speech::tts_amazon_authenticated()) {
+    return(invisible(TRUE))
+  }
+  
   skip("Amazon not authenticated()")
 }
 
