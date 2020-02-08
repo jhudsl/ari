@@ -4,8 +4,12 @@
 \alias{ari_talk}
 \title{Create spoken audio files}
 \usage{
-ari_talk(paragraphs, output = tempfile(fileext = ".wav"),
-  voice = "Joanna", service = "amazon")
+ari_talk(
+  paragraphs,
+  output = tempfile(fileext = ".wav"),
+  voice = text2speech::tts_default_voice(service = service),
+  service = "amazon"
+)
 }
 \arguments{
 \item{paragraphs}{A vector strings that will be spoken by Amazon Polly.}
@@ -17,7 +21,8 @@ ari_talk(paragraphs, output = tempfile(fileext = ".wav"),
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}}
+passed to \code{\link[text2speech]{tts}}
+Either \code{"amazon"} or \code{"google"}.}
 }
 \value{
 A \code{Wave} output object, with the attribute \code{outfile}

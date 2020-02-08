@@ -4,8 +4,15 @@
 \alias{ari_spin}
 \title{Create a video from images and text}
 \usage{
-ari_spin(images, paragraphs, output = tempfile(fileext = ".mp4"),
-  voice = "Joanna", service = "amazon", subtitles = FALSE, ...)
+ari_spin(
+  images,
+  paragraphs,
+  output = tempfile(fileext = ".mp4"),
+  voice = text2speech::tts_default_voice(service = service),
+  service = "amazon",
+  subtitles = FALSE,
+  ...
+)
 }
 \arguments{
 \item{images}{A vector of paths to images.}
@@ -19,7 +26,8 @@ ari_spin(images, paragraphs, output = tempfile(fileext = ".mp4"),
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}}
+passed to \code{\link[text2speech]{tts}}.
+Either \code{"amazon"} or \code{"google"}.}
 
 \item{subtitles}{Should a \code{.srt} file be created with subtitles? The
 default value is \code{FALSE}. If \code{TRUE} then a file with the same name
@@ -33,8 +41,7 @@ The output from \code{\link{ari_stitch}}
 }
 \description{
 Given equal length vectors of paths to images (preferably \code{.jpg}s
-or \code{.png}s) and strings which will be
-\code{\link[aws.polly]{synthesize}}d by
+or \code{.png}s) and strings which will be synthesized by
 \href{https://aws.amazon.com/polly/}{Amazon Polly} or 
 any other synthesizer available in
 \code{\link[text2speech]{tts}}, this function creates an
@@ -48,7 +55,7 @@ This function needs to connect to
 narration. You can find a guide for accessing AWS from R
 \href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
 For more information about how R connects
-to Amazon Polly see the \code{\link[aws.polly]{aws.polly}} documentation 
+to Amazon Polly see the \code{aws.polly]} documentation 
 \href{https://github.com/cloudyr/aws.polly}{here}.
 }
 \examples{

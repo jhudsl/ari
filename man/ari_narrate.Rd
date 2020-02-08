@@ -4,11 +4,20 @@
 \alias{ari_narrate}
 \title{Create a video from slides and a script}
 \usage{
-ari_narrate(script, slides, output = tempfile(fileext = ".mp4"),
-  voice = "Joanna", service = "amazon",
-  capture_method = c("vectorized", "iterative"), subtitles = FALSE,
-  ..., verbose = FALSE, audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(), cleanup = TRUE)
+ari_narrate(
+  script,
+  slides,
+  output = tempfile(fileext = ".mp4"),
+  voice = text2speech::tts_default_voice(service = service),
+  service = "amazon",
+  capture_method = c("vectorized", "iterative"),
+  subtitles = FALSE,
+  ...,
+  verbose = FALSE,
+  audio_codec = get_audio_codec(),
+  video_codec = get_video_codec(),
+  cleanup = TRUE
+)
 }
 \arguments{
 \item{script}{Either a markdown file where every paragraph will be read over
@@ -26,7 +35,8 @@ similar package.}
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}.}
+passed to \code{\link[text2speech]{tts}}. 
+Either \code{"amazon"} or \code{"google"}.}
 
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
 The vectorized mode is faster though it can cause screens to repeat. If

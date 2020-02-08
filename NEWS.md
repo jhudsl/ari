@@ -1,3 +1,12 @@
+# ari 0.3.5
+
+- Removed `have_polly()`.
+
+# ari 0.3.4
+
+- Removed strict dependency on aws.polly and associated Cloudyr projects because
+they have been orphaned.
+
 # ari 0.3.3
 
 - Added vignette for using via a Docker image.

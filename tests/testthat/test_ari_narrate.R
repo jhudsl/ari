@@ -25,11 +25,8 @@ skip_narrate <- function(){
 
 video <- file.path(tempdir(), "output.mp4")
 #video <- file.path(getwd(), "output.mp4")
-if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
-  run_voice = aws.polly::list_voices()$Id[1]
-} else {
-  run_voice = "Joanna"
-}
+
+run_voice = "Joanna"
 
 test_that("Ari can make a video from local HTML slides.", {
   skip_on_cran()

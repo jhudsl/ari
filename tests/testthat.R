@@ -3,17 +3,22 @@ library(testthat)
 library(ari)
 library(tuneR)
 library(purrr)
-library(aws.polly)
 
-if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
-  if (!identical(Sys.getenv("TRAVIS"), "true")) {
-      aws.signature::use_credentials(profile = "polly")
-  }
-}
 skip_amazon_not_authorized = function() {
-  if (text2speech::tts_amazon_authenticated()) {
-    return(invisible(TRUE))
+  # Skip if on CRAN
+  if(!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    skip("Amazon not authenticated()")
   }
+
+  # Skip if Amazon is not authorized 
+  # if (text2speech::tts_amazon_authenticated()) {
+  #   return(invisible(TRUE))
+  # }
+
+  # Eventually test2speech will be updated so that it no longer needs
+  # the aws.polly package. Until then we need to skip these tests during
+  # automated tests.
+  
   skip("Amazon not authenticated()")
 }
 
