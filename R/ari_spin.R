@@ -30,6 +30,8 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
+#' @param duration a vector of numeric durations for each audio
+#' track.  See \code{\link{pad_wav}}
 #' @param ... additional arguments to \code{\link{ari_stitch}}
 #' 
 #' @return The output from \code{\link{ari_stitch}}
@@ -53,6 +55,7 @@
 #' 
 ari_spin <- function(
   images, paragraphs, 
+  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   voice = text2speech::tts_default_voice(service = service),
   service = ifelse(have_polly(), "amazon", "google"),
@@ -109,11 +112,9 @@ ari_spin <- function(
       service = service,
       bind_audio = TRUE)
     wav = reduce(wav$wav, bind)
-    ideal_duration[i] <- ceiling(length(wav@left) / wav@samp.rate)
-    end_wav <- Wave(
-      rep(0, wav@samp.rate * ideal_duration[i] - length(wav@left)),
-      bit = wav@bit, samp.rate = wav@samp.rate)
-    wavs[[i]] <- bind(wav, end_wav)
+    wav = pad_wav(wav, duration = duration)
+    ideal_duration[i] =  length(wav@left) / wav@samp.rate
+    wavs[[i]] <- wav
     pb$tick()
   }
   

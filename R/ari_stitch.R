@@ -17,6 +17,8 @@
 #' 
 #' @param images A vector of paths to images.
 #' @param audio A list of \code{Wave}s from tuneR.
+#' @param duration a vector of numeric durations for each audio
+#' track.  See \code{\link{pad_wav}}
 #' @param output A path to the video file which will be created.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
 #' @param cleanup If \code{TRUE}, interim files are deleted
@@ -56,6 +58,7 @@
 #' }
 ari_stitch <- function(
   images, audio, 
+  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   verbose = FALSE,
   cleanup = TRUE,
@@ -90,21 +93,23 @@ ari_stitch <- function(
                     tuneR::readMP3)
       func(x)
     })
-    audio = lapply(audio, function(wav) {
-      ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
-      left = rep(0, 
-                 wav@samp.rate * ideal_duration - length(wav@left))
-      right = numeric(0)
-      if (wav@stereo) {
-        right = left
-      }
-      end_wav = tuneR::Wave(
-        left = left,
-        right = right,
-        bit = wav@bit, samp.rate = wav@samp.rate)         
-      wav <- bind(wav, end_wav)
-      wav      
-    })
+    audio = pad_wav(audio, duration = duration)
+    # 
+    # audio = lapply(audio, function(wav) {
+    #   ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
+    #   left = rep(0, 
+    #              wav@samp.rate * ideal_duration - length(wav@left))
+    #   right = numeric(0)
+    #   if (wav@stereo) {
+    #     right = left
+    #   }
+    #   end_wav = tuneR::Wave(
+    #     left = left,
+    #     right = right,
+    #     bit = wav@bit, samp.rate = wav@samp.rate)         
+    #   wav <- bind(wav, end_wav)
+    #   wav      
+    # })
   }
   # Make a hard path
   output = file.path(output_dir, basename(output))
@@ -117,6 +122,24 @@ ari_stitch <- function(
   writeWave(wav, filename = wav_path)
   if (cleanup) {
     on.exit(unlink(wav_path, force = TRUE), add = TRUE)
+  }
+  
+  
+  # converting all to gif
+  img_ext = tolower(tools::file_ext(images))
+  any_gif = any(img_ext %in% "gif")
+  if (any_gif & !all(img_ext %in% "gif")) {
+    if (verbose > 0) {
+      message("Converting All files to gif!")
+    }
+    for (i in seq_along(images)) {
+      iext = img_ext[i]
+      if (iext != "gif") {
+        tfile = tempfile(fileext = ".gif")
+        ffmpeg_convert(images[i], outfile = tfile)
+        images[i] = tfile
+      }
+    }
   }
   
   input_txt_path <-  paste0("ari_input_", 

@@ -7,6 +7,7 @@
 ari_stitch(
   images,
   audio,
+  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   verbose = FALSE,
   cleanup = TRUE,
@@ -27,6 +28,9 @@ ari_stitch(
 \item{images}{A vector of paths to images.}
 
 \item{audio}{A list of \code{Wave}s from tuneR.}
+
+\item{duration}{a vector of numeric durations for each audio
+track.  See \code{\link{pad_wav}}}
 
 \item{output}{A path to the video file which will be created.}
 
