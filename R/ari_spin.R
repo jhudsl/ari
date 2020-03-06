@@ -55,11 +55,11 @@
 #' 
 ari_spin <- function(
   images, paragraphs, 
-  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   voice = text2speech::tts_default_voice(service = service),
   service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
+  duration = NULL,
   ...){
   # check for ffmpeg before any synthesizing
   ffmpeg_exec()

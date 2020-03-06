@@ -8,11 +8,11 @@
 ari_spin(
   images,
   paragraphs,
-  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   voice = text2speech::tts_default_voice(service = service),
   service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
+  duration = NULL,
   ...
 )
 
@@ -22,9 +22,6 @@ have_polly()
 \item{images}{A vector of paths to images.}
 
 \item{paragraphs}{A vector strings that will be spoken by Amazon Polly.}
-
-\item{duration}{a vector of numeric durations for each audio
-track.  See \code{\link{pad_wav}}}
 
 \item{output}{A path to the video file which will be created.}
 
@@ -39,6 +36,9 @@ passed to \code{\link[text2speech]{tts}}}
 default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 as the \code{output} argument will be created, but with the file extension
 \code{.srt}.}
+
+\item{duration}{a vector of numeric durations for each audio
+track.  See \code{\link{pad_wav}}}
 
 \item{...}{additional arguments to \code{\link{ari_stitch}}}
 }

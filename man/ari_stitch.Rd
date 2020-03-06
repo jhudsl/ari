@@ -7,7 +7,6 @@
 ari_stitch(
   images,
   audio,
-  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   verbose = FALSE,
   cleanup = TRUE,
@@ -21,16 +20,14 @@ ari_stitch(
   pixel_format = "yuv420p",
   fast_start = TRUE,
   deinterlace = TRUE,
-  stereo_audio = TRUE
+  stereo_audio = TRUE,
+  duration = NULL
 )
 }
 \arguments{
 \item{images}{A vector of paths to images.}
 
 \item{audio}{A list of \code{Wave}s from tuneR.}
-
-\item{duration}{a vector of numeric durations for each audio
-track.  See \code{\link{pad_wav}}}
 
 \item{output}{A path to the video file which will be created.}
 
@@ -68,6 +65,9 @@ YouTube}
 
 \item{stereo_audio}{should the audio be forced to stereo,
 corresponds to `-ac 2`}
+
+\item{duration}{a vector of numeric durations for each audio
+track.  See \code{\link{pad_wav}}}
 }
 \value{
 A logical value, with the attribute \code{outfile} for the

@@ -58,7 +58,6 @@
 #' }
 ari_stitch <- function(
   images, audio, 
-  duration = NULL,
   output = tempfile(fileext = ".mp4"),
   verbose = FALSE,
   cleanup = TRUE,
@@ -72,7 +71,8 @@ ari_stitch <- function(
   pixel_format = "yuv420p",
   fast_start = TRUE,
   deinterlace = TRUE,
-  stereo_audio = TRUE
+  stereo_audio = TRUE,
+  duration = NULL
 ){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
