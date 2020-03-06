@@ -25,7 +25,8 @@
 #' dur = sapply(out, function(x)length(x@left)/ x@samp.rate)
 #' stopifnot(isTRUE(all.equal(dur, duration)))
 pad_wav = function(wav, duration = NULL) {
-  if (inherits(wav, "Wave")) {
+  is_Wave = inherits(wav, "Wave")
+  if (is_Wave) {
     wav = list(wav) 
   }
   if (is.null(duration)) {
@@ -55,5 +56,8 @@ pad_wav = function(wav, duration = NULL) {
     wav <-  tuneR::bind(wav, end_wav)
     wav
   }, wav, duration, SIMPLIFY = FALSE)
+  if (is_Wave) {
+    out_wav = out_wav[[1]]
+  }
   return(out_wav)
 }
