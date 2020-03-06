@@ -112,7 +112,7 @@ ari_spin <- function(
       service = service,
       bind_audio = TRUE)
     wav = reduce(wav$wav, bind)
-    wav = pad_wav(wav, duration = duration)
+    wav = pad_wav(wav, duration = duration[i])
     ideal_duration[i] =  length(wav@left) / wav@samp.rate
     wavs[[i]] <- wav
     pb$tick()
