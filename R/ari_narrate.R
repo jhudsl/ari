@@ -16,7 +16,8 @@
 #' \code{\link[text2speech]{tts_voices}} for more information 
 #' about what voices are available.
 #' @param service speech synthesis service to use,
-#' passed to \code{\link[text2speech]{tts}}.
+#' passed to \code{\link[text2speech]{tts}}. 
+#' Either \code{"amazon"} or \code{"google"}.
 #' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
 #' The vectorized mode is faster though it can cause screens to repeat. If
 #' making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
@@ -53,7 +54,7 @@
 ari_narrate <- function(script, slides, 
                         output = tempfile(fileext = ".mp4"),
                         voice =  text2speech::tts_default_voice(service = service),
-                        service = ifelse(have_polly(), "amazon", "google"),
+                        service = "amazon",
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE, ...,
                         verbose = FALSE,

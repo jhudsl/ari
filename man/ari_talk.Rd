@@ -8,7 +8,7 @@ ari_talk(
   paragraphs,
   output = tempfile(fileext = ".wav"),
   voice = text2speech::tts_default_voice(service = service),
-  service = ifelse(have_polly(), "amazon", "google")
+  service = "amazon"
 )
 }
 \arguments{
@@ -21,7 +21,8 @@ ari_talk(
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}}
+passed to \code{\link[text2speech]{tts}}
+Either \code{"amazon"} or \code{"google"}.}
 }
 \value{
 A \code{Wave} output object, with the attribute \code{outfile}
