@@ -33,6 +33,9 @@ Suggests:
     aws.signature,
     aws.polly,    
     knitr
+Remotes:
+    cloudyr/aws.signature,
+    cloudyr/aws.polly
 License: MIT + file LICENSE
 URL: http://github.com/seankross/ari
 BugReports: http://github.com/seankross/ari/issues

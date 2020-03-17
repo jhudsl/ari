@@ -48,7 +48,7 @@ to put narration right in your `.Rmd` file (see
 `file.show(ari_example("ari_comments.Rmd"))`). Make sure to knit your `.Rmd`
 file into the HTML slides you want to be turned into a video.
 
-Once you've finished your script and slides install the
+Once you have finished your script and slides install the
 [`aws.polly`](https://github.com/cloudyr/aws.polly) package. You can find a
 guide for quickly setting up R to use Amazon Web Services
 [here](http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html).
