@@ -42,6 +42,8 @@
 #' YouTube
 #' @param stereo_audio should the audio be forced to stereo,
 #' corresponds to `-ac 2`
+#' @param video_filters any options that are passed to \code{-vf} arguments
+#' for \code{ffmpeg}
 #' @return A logical value, with the attribute \code{outfile} for the
 #' output file.
 
@@ -72,7 +74,8 @@ ari_stitch <- function(
   fast_start = TRUE,
   deinterlace = TRUE,
   stereo_audio = TRUE,
-  duration = NULL
+  duration = NULL,
+  video_filters = NULL
 ){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
@@ -166,11 +169,9 @@ ari_stitch <- function(
   ffmpeg = ffmpeg_exec(quote = TRUE)
   
   if (divisible_height) {
-    ffmpeg_opts = c(ffmpeg_opts, 
-                    '-vf "scale=trunc(iw/2)*2:trunc(ih/2)*2"')
+    video_filters = c(video_filters, '"scale=trunc(iw/2)*2:trunc(ih/2)*2"')
   }
   
-  ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
   
   # workaround for older ffmpeg 
   # https://stackoverflow.com/questions/32931685/
@@ -181,6 +182,19 @@ ari_stitch <- function(
       experimental = TRUE
     }
   }
+  if (deinterlace) {
+    video_filters = c(video_filters, "yadif")
+  }
+  video_filters = paste(video_filters, collapse = ",")
+  video_filters = paste0("-vf ", video_filters)
+  
+  if (any(grepl("-vf", ffmpeg_opts))) {
+    warning("Found video filters in ffmpeg_opts, may not be used correctly!")
+  }
+  ffmpeg_opts = c(video_filters, ffmpeg_opts)
+  ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
+  
+                  
   # shQuote should seankross/ari#5
   command <- paste(
     ffmpeg, "-y", 
@@ -196,7 +210,7 @@ ari_stitch <- function(
     ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
            ""), 
     " -shortest", 
-    ifelse(deinterlace, "-vf yadif", ""),
+    # ifelse(deinterlace, "-vf yadif", ""),
     ifelse(!is.null(video_sync_method), paste("-vsync", video_sync_method),
            ""), 
     ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),

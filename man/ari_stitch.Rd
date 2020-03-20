@@ -21,7 +21,8 @@ ari_stitch(
   fast_start = TRUE,
   deinterlace = TRUE,
   stereo_audio = TRUE,
-  duration = NULL
+  duration = NULL,
+  video_filters = NULL
 )
 }
 \arguments{
@@ -68,6 +69,9 @@ corresponds to `-ac 2`}
 
 \item{duration}{a vector of numeric durations for each audio
 track.  See \code{\link{pad_wav}}}
+
+\item{video_filters}{any options that are passed to \code{-vf} arguments
+for \code{ffmpeg}}
 }
 \value{
 A logical value, with the attribute \code{outfile} for the
