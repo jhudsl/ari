@@ -13,6 +13,7 @@ ari_spin(
   service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
   duration = NULL,
+  tts_args = NULL,
   ...
 )
 
@@ -40,6 +41,8 @@ as the \code{output} argument will be created, but with the file extension
 
 \item{duration}{a vector of numeric durations for each audio
 track.  See \code{\link{pad_wav}}}
+
+\item{tts_args}{list of arguments to pass to \code{\link{tts}}}
 
 \item{...}{additional arguments to \code{\link{ari_stitch}}}
 }

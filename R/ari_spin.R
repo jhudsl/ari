@@ -34,6 +34,7 @@
 #' @param duration a vector of numeric durations for each audio
 #' track.  See \code{\link{pad_wav}}
 #' @param ... additional arguments to \code{\link{ari_stitch}}
+#' @param tts_args list of arguments to pass to \code{\link{tts}}
 #' 
 #' @return The output from \code{\link{ari_stitch}}
 #' 
@@ -61,6 +62,7 @@ ari_spin <- function(
   service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
   duration = NULL,
+  tts_args = NULL,
   ...){
   # check for ffmpeg before any synthesizing
   ffmpeg_exec()
@@ -107,11 +109,12 @@ ari_spin <- function(
     total = length(par_along))
   
   for (i in par_along) {
-    wav <- text2speech::tts(
-      text = paragraphs[i], 
-      voice = voice,
-      service = service,
-      bind_audio = TRUE)
+    args = tts_args
+    args$text = paragraphs[i]
+    args$voice = voice
+    args$service = service
+    args$bind_audio = TRUE
+    wav <- do.call(text2speech::tts, args = args)
     wav = reduce(wav$wav, bind)
     wav = pad_wav(wav, duration = duration[i])
     ideal_duration[i] =  length(wav@left) / wav@samp.rate
