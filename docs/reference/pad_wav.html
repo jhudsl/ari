@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the path to an ari example file — ari_example • ari</title>
+<title>Pad Wave Objects — pad_wav • ari</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Get the path to an ari example file — ari_example" />
-<meta property="og:description" content="This function allows you to quickly access files that are used in
-the ari documentation." />
+<meta property="og:title" content="Pad Wave Objects — pad_wav" />
+<meta property="og:description" content="Pad Wave Objects" />
 
 
 
@@ -124,34 +123,52 @@ the ari documentation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the path to an ari example file</h1>
-    <small class="dont-index">Source: <a href='http://github.com/seankross/ari/blob/master/R/ari_example.R'><code>R/ari_example.R</code></a></small>
-    <div class="hidden name"><code>ari_example.Rd</code></div>
+    <h1>Pad Wave Objects</h1>
+    <small class="dont-index">Source: <a href='http://github.com/seankross/ari/blob/master/R/pad_wav.R'><code>R/pad_wav.R</code></a></small>
+    <div class="hidden name"><code>pad_wav.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function allows you to quickly access files that are used in
-the ari documentation.</p>
+    <p>Pad Wave Objects</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ari_example</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>pad_wav</span>(<span class='no'>wav</span>, <span class='kw'>duration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>path</th>
-      <td><p>The name of the file. If no argument is provided then
-all of the example files will be listed.</p></td>
+      <th>wav</th>
+      <td><p>list of Wave objects</p></td>
+    </tr>
+    <tr>
+      <th>duration</th>
+      <td><p>If <code>NULL</code>, the duration will simply round
+the Wave up to the next whole integer.  If not, these are the 
+duration to pad the Wave *to*. For example 12 means the output 
+Wave will have a length of 12 seconds.  Pass <code>NA</code> to those
+Waves that you want simple rounding.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character string</p>
+    <p>A list of Wave objects, same length as input <code>wav</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>ari_example</span>(<span class='st'>"ari_intro.Rmd"</span>)</div><div class='output co'>#&gt; [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmpbPjVof/temp_libpath5676f1af7f5/ari/test/ari_intro.Rmd"</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>wavs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='kw pkg'>tuneR</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/tuneR/man/Waveforms.html'>noise</a></span>(<span class='kw'>duration</span> <span class='kw'>=</span> <span class='fl'>1.85</span>*<span class='fl'>44100</span>),
+<span class='kw pkg'>tuneR</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/tuneR/man/Waveforms.html'>noise</a></span>())
+<span class='no'>out</span> <span class='kw'>=</span> <span class='fu'>pad_wav</span>(<span class='no'>wavs</span>)
+<span class='no'>dur</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>out</span>, <span class='kw'>function</span>(<span class='no'>x</span>)<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>x</span>@<span class='kw'>left</span>)/ <span class='no'>x</span>@<span class='kw'>samp.rate</span>)
+<span class='no'>duration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>)
+<span class='no'>out</span> <span class='kw'>=</span> <span class='fu'>pad_wav</span>(<span class='no'>wavs</span>, <span class='kw'>duration</span> <span class='kw'>=</span> <span class='no'>duration</span>)
+<span class='no'>dur</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>out</span>, <span class='kw'>function</span>(<span class='no'>x</span>)<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>x</span>@<span class='kw'>left</span>)/ <span class='no'>x</span>@<span class='kw'>samp.rate</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span>(<span class='no'>dur</span> <span class='kw'>==</span> <span class='no'>duration</span>))
+<span class='no'>duration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2.5</span>)
+<span class='no'>out</span> <span class='kw'>=</span> <span class='fu'>pad_wav</span>(<span class='no'>wavs</span>, <span class='kw'>duration</span> <span class='kw'>=</span> <span class='no'>duration</span>)
+<span class='no'>dur</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>out</span>, <span class='kw'>function</span>(<span class='no'>x</span>)<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>x</span>@<span class='kw'>left</span>)/ <span class='no'>x</span>@<span class='kw'>samp.rate</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Logic.html'>isTRUE</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>dur</span>, <span class='no'>duration</span>)))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
