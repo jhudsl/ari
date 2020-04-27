@@ -1,6 +1,6 @@
 # ari 0.3.5
 
-- Removed `have_polly()`.
+- Added `have_polly()`.
 
 # ari 0.3.4
 

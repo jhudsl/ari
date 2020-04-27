@@ -1,7 +1,8 @@
 #' Create a video from images and text
 #' 
 #' Given equal length vectors of paths to images (preferably \code{.jpg}s
-#' or \code{.png}s) and strings which will be synthesized by
+#' or \code{.png}s) and strings which will be
+#' synthesized by 
 #' \href{https://aws.amazon.com/polly/}{Amazon Polly} or 
 #' any other synthesizer available in
 #' \code{\link[text2speech]{tts}}, this function creates an
@@ -14,7 +15,7 @@
 #' narration. You can find a guide for accessing AWS from R
 #' \href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
 #' For more information about how R connects
-#' to Amazon Polly see the \code{aws.polly]} documentation 
+#' to Amazon Polly see the \code{aws.polly} documentation 
 #' \href{https://github.com/cloudyr/aws.polly}{here}.
 #' 
 #' @param images A vector of paths to images.
@@ -24,13 +25,16 @@
 #' \code{\link[text2speech]{tts_voices}} for more information 
 #' about what voices are available.
 #' @param service speech synthesis service to use,
-#' passed to \code{\link[text2speech]{tts}}.
-#' Either \code{"amazon"} or \code{"google"}.
+#' passed to \code{\link[text2speech]{tts}},
+#' Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.
 #' @param subtitles Should a \code{.srt} file be created with subtitles? The
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
+#' @param duration a vector of numeric durations for each audio
+#' track.  See \code{\link{pad_wav}}
 #' @param ... additional arguments to \code{\link{ari_stitch}}
+#' @param tts_args list of arguments to pass to \code{\link{tts}}
 #' 
 #' @return The output from \code{\link{ari_stitch}}
 #' 
@@ -55,8 +59,10 @@ ari_spin <- function(
   images, paragraphs, 
   output = tempfile(fileext = ".mp4"),
   voice = text2speech::tts_default_voice(service = service),
-  service = "amazon",
+  service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
+  duration = NULL,
+  tts_args = NULL,
   ...){
   # check for ffmpeg before any synthesizing
   ffmpeg_exec()
@@ -103,17 +109,16 @@ ari_spin <- function(
     total = length(par_along))
   
   for (i in par_along) {
-    wav <- text2speech::tts(
-      text = paragraphs[i], 
-      voice = voice,
-      service = service,
-      bind_audio = TRUE)
+    args = tts_args
+    args$text = paragraphs[i]
+    args$voice = voice
+    args$service = service
+    args$bind_audio = TRUE
+    wav <- do.call(text2speech::tts, args = args)
     wav = reduce(wav$wav, bind)
-    ideal_duration[i] <- ceiling(length(wav@left) / wav@samp.rate)
-    end_wav <- Wave(
-      rep(0, wav@samp.rate * ideal_duration[i] - length(wav@left)),
-      bit = wav@bit, samp.rate = wav@samp.rate)
-    wavs[[i]] <- bind(wav, end_wav)
+    wav = pad_wav(wav, duration = duration[i])
+    ideal_duration[i] =  length(wav@left) / wav@samp.rate
+    wavs[[i]] <- wav
     pb$tick()
   }
   
@@ -135,4 +140,10 @@ ari_spin <- function(
   attr(res, "voice") = voice
   attr(res, "service") = service
   return(res)
+}
+
+#' @rdname ari_spin 
+#' @export
+have_polly = function() {
+  requireNamespace("aws.polly", quietly = TRUE)
 }
