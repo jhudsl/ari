@@ -71,8 +71,8 @@ ari_stitch <- function(
   audio_bitrate = NULL,
   video_bitrate = NULL,
   pixel_format = "yuv420p",
-  fast_start = TRUE,
-  deinterlace = TRUE,
+  fast_start = FALSE,
+  deinterlace = FALSE,
   stereo_audio = TRUE,
   duration = NULL,
   video_filters = NULL
