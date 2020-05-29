@@ -44,6 +44,8 @@
 #' corresponds to `-ac 2`
 #' @param video_filters any options that are passed to \code{-vf} arguments
 #' for \code{ffmpeg}
+#' @param check_inputs Should the inputs be checked?  Almost always should
+#' be \code{TRUE}, but may be useful if trying to do customized stuff.
 #' @return A logical value, with the attribute \code{outfile} for the
 #' output file.
 
@@ -56,6 +58,11 @@
 #' result = ari_stitch(
 #' ari_example(c("mab1.png", "mab2.png")),
 #' list(tuneR::noise(), tuneR::noise()))
+#' result = ari_stitch(
+#' ari_example(c("mab1.png", "mab2.png")),
+#' list(tuneR::noise(), tuneR::noise()), ffmpeg_opts = "-qscale 0",
+#' verbose = 2)
+#' # system2("open", attributes(result)$outfile)
 #' } 
 #' }
 ari_stitch <- function(
@@ -75,17 +82,22 @@ ari_stitch <- function(
   deinterlace = FALSE,
   stereo_audio = TRUE,
   duration = NULL,
-  video_filters = NULL
+  video_filters = NULL,
+  check_inputs = TRUE
 ){
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
   stopifnot(
     length(audio) > 0,
-    identical(length(images), length(audio)),
-    all(file.exists(images)),
     dir.exists(output_dir)
   )
+  if (check_inputs) {
+    stopifnot(    
+      identical(length(images), length(audio)),
+      all(file.exists(images))
+    )
+  }
   if (is.character(audio)) {
     
     audio = lapply(audio, function(x) {
@@ -194,7 +206,7 @@ ari_stitch <- function(
   ffmpeg_opts = c(video_filters, ffmpeg_opts)
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
   
-                  
+  
   # shQuote should seankross/ari#5
   command <- paste(
     ffmpeg, "-y", 

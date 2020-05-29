@@ -35,6 +35,8 @@
 #' track.  See \code{\link{pad_wav}}
 #' @param ... additional arguments to \code{\link{ari_stitch}}
 #' @param tts_args list of arguments to pass to \code{\link{tts}}
+#' @param key_or_json_file access key or JSON file to pass to
+#' \code{\link{tts_auth}} for authorization
 #' 
 #' @return The output from \code{\link{ari_stitch}}
 #' 
@@ -63,11 +65,14 @@ ari_spin <- function(
   subtitles = FALSE,
   duration = NULL,
   tts_args = NULL,
+  key_or_json_file = NULL,
   ...){
   # check for ffmpeg before any synthesizing
   ffmpeg_exec()
   
-  auth = text2speech::tts_auth(service = service)
+  auth = text2speech::tts_auth(
+    service = service,
+    key_or_json_file = key_or_json_file)
   if (!auth) {
     stop(paste0("It appears you're not authenticated with ", 
                 service, ". Make sure you've ", 
@@ -138,6 +143,9 @@ ari_spin <- function(
     attr(res, "wavs") = wavs
   }
   attr(res, "voice") = voice
+  if (subtitles) {
+    attr(res, "subtitles") = sub_file
+  }
   attr(res, "service") = service
   return(res)
 }

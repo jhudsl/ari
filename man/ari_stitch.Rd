@@ -22,7 +22,8 @@ ari_stitch(
   deinterlace = FALSE,
   stereo_audio = TRUE,
   duration = NULL,
-  video_filters = NULL
+  video_filters = NULL,
+  check_inputs = TRUE
 )
 }
 \arguments{
@@ -72,6 +73,9 @@ track.  See \code{\link{pad_wav}}}
 
 \item{video_filters}{any options that are passed to \code{-vf} arguments
 for \code{ffmpeg}}
+
+\item{check_inputs}{Should the inputs be checked?  Almost always should
+be \code{TRUE}, but may be useful if trying to do customized stuff.}
 }
 \value{
 A logical value, with the attribute \code{outfile} for the
@@ -100,6 +104,11 @@ if (ffmpeg_version_sufficient()) {
 result = ari_stitch(
 ari_example(c("mab1.png", "mab2.png")),
 list(tuneR::noise(), tuneR::noise()))
+result = ari_stitch(
+ari_example(c("mab1.png", "mab2.png")),
+list(tuneR::noise(), tuneR::noise()), ffmpeg_opts = "-qscale 0",
+verbose = 2)
+# system2("open", attributes(result)$outfile)
 } 
 }
 }

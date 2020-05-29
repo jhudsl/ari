@@ -14,6 +14,7 @@ ari_spin(
   subtitles = FALSE,
   duration = NULL,
   tts_args = NULL,
+  key_or_json_file = NULL,
   ...
 )
 
@@ -43,6 +44,9 @@ as the \code{output} argument will be created, but with the file extension
 track.  See \code{\link{pad_wav}}}
 
 \item{tts_args}{list of arguments to pass to \code{\link{tts}}}
+
+\item{key_or_json_file}{access key or JSON file to pass to
+\code{\link{tts_auth}} for authorization}
 
 \item{...}{additional arguments to \code{\link{ari_stitch}}}
 }
