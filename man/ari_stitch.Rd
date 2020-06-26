@@ -40,7 +40,7 @@ ari_stitch(
 \item{ffmpeg_opts}{additional options to send to \code{ffmpeg}.
 This is an advanced option, use at your own risk}
 
-\item{divisible_height}{Make height divisible by 2, which may 
+\item{divisible_height}{Make height divisible by 2, which may
 be required if getting "height not divisible by 2" error.}
 
 \item{audio_codec}{The audio encoder for the splicing.  If this
@@ -49,7 +49,7 @@ fails, try \code{copy}.}
 \item{video_codec}{The video encoder for the splicing.  If this
 fails, see \code{ffmpeg -codecs}}
 
-\item{video_sync_method}{Video sync method.  Should be 
+\item{video_sync_method}{Video sync method.  Should be
 "auto" or `"vfr"` or a numeric.  See \url{https://ffmpeg.org/ffmpeg.html}.}
 
 \item{audio_bitrate}{Bit rate for audio. Passed to \code{-b:a}.}
@@ -61,8 +61,8 @@ fails, see \code{ffmpeg -codecs}}
 \item{fast_start}{Adding `faststart` flags for YouTube and other sites,
 see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}}
 
-\item{deinterlace}{should the video be de-interlaced, 
-see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for 
+\item{deinterlace}{should the video be de-interlaced,
+see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for
 YouTube}
 
 \item{stereo_audio}{should the audio be forced to stereo,
@@ -84,9 +84,9 @@ output file.
 \description{
 Given a vector of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
-length this function will create an \code{.mp4} video file where each image 
+length this function will create an \code{.mp4} video file where each image
 is shown with its corresponding audio. Take a look at the
-\code{\link[tuneR]{readWave}} function if you want to import your audio 
+\code{\link[tuneR]{readWave}} function if you want to import your audio
 files into R. Please be sure that all images have the same dimensions.
 }
 \details{
@@ -109,6 +109,6 @@ ari_example(c("mab1.png", "mab2.png")),
 list(tuneR::noise(), tuneR::noise()), ffmpeg_opts = "-qscale 0",
 verbose = 2)
 # system2("open", attributes(result)$outfile)
-} 
+}
 }
 }
