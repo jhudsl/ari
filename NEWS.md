@@ -1,3 +1,7 @@
+# ari 0.3.7
+
+- Ensured that `ari_stitch` to use temporary directory.
+
 # ari 0.3.5
 
 - Added `have_polly()`.
