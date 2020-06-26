@@ -161,6 +161,7 @@ ari_stitch <- function(
                               paste0("ari_input_",
                                      grs(),
                                      ".txt"))
+  input_txt_path = normalizePath(input_txt_path, winslash = "/")
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   # if (.Platform$OS.type == "windows") {
