@@ -164,9 +164,15 @@ ari_stitch <- function(
   input_txt_path = normalizePath(input_txt_path, winslash = "/")
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
-  # if (.Platform$OS.type == "windows") {
-  #   images <- basename(images)
-  # }
+  if (.Platform$OS.type == "windows") {
+    new_image_names = file.path(output_dir, basename(images))
+    if (!any(file.exists(new_image_names))) {
+      file.copy(images, to = new_image_names)
+    } else {
+      warning("On windows must make basename(images) for ffmpeg to work")
+    }
+    images <- basename(images)
+  }
   for (i in seq_along(images)) {
     cat(paste0("file ", "'", images[i], "'", "\n"),
         file = input_txt_path, append = TRUE)
