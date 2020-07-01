@@ -25,6 +25,7 @@ environment:
 # Adapt as necessary starting from here
 
 build_script:
+  #   - choco install --version 4.2.3 ffmpeg
   - choco install ffmpeg
   - travis-tool.sh install_deps
 

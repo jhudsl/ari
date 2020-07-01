@@ -161,7 +161,6 @@ ari_stitch <- function(
                               paste0("ari_input_",
                                      grs(),
                                      ".txt"))
-  input_txt_path = normalizePath(input_txt_path, winslash = "/")
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   if (.Platform$OS.type == "windows") {
@@ -181,6 +180,8 @@ ari_stitch <- function(
   }
   cat(paste0("file ", "'", images[i], "'", "\n"),
       file = input_txt_path, append = TRUE)
+  input_txt_path = normalizePath(input_txt_path, winslash = "/")
+
   # needed for users as per
   # https://superuser.com/questions/718027/
   # ffmpeg-concat-doesnt-work-with-absolute-path
