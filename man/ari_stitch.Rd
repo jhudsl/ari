@@ -23,6 +23,7 @@ ari_stitch(
   stereo_audio = TRUE,
   duration = NULL,
   video_filters = NULL,
+  frames_per_second = NULL,
   check_inputs = TRUE
 )
 }
@@ -73,6 +74,9 @@ track.  See \code{\link{pad_wav}}}
 
 \item{video_filters}{any options that are passed to \code{-vf} arguments
 for \code{ffmpeg}}
+
+\item{frames_per_second}{frames per second of the video, should
+be an integer}
 
 \item{check_inputs}{Should the inputs be checked?  Almost always should
 be \code{TRUE}, but may be useful if trying to do customized stuff.}

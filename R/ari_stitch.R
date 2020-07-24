@@ -40,6 +40,8 @@
 #' @param deinterlace should the video be de-interlaced,
 #' see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for
 #' YouTube
+#' @param frames_per_second frames per second of the video, should
+#' be an integer
 #' @param stereo_audio should the audio be forced to stereo,
 #' corresponds to `-ac 2`
 #' @param video_filters any options that are passed to \code{-vf} arguments
@@ -83,6 +85,7 @@ ari_stitch <- function(
   stereo_audio = TRUE,
   duration = NULL,
   video_filters = NULL,
+  frames_per_second = NULL,
   check_inputs = TRUE
 ){
   stopifnot(length(images) > 0)
@@ -189,6 +192,9 @@ ari_stitch <- function(
 
   ffmpeg = ffmpeg_exec(quote = TRUE)
 
+  if (!is.null(frames_per_second)) {
+    video_filters = c(video_filters, paste0("fps=", frames_per_second))
+  }
   if (divisible_height) {
     video_filters = c(video_filters, '"scale=trunc(iw/2)*2:trunc(ih/2)*2"')
   }
@@ -213,7 +219,6 @@ ari_stitch <- function(
     warning("Found video filters in ffmpeg_opts, may not be used correctly!")
   }
   ffmpeg_opts = c(video_filters, ffmpeg_opts)
-  ffmpeg_opts = c("-max_muxing_queue_size 99999", ffmpeg_opts)
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
 
 
@@ -239,7 +244,10 @@ ari_stitch <- function(
            ""),
     ifelse(fast_start, "-movflags +faststart", ""),
     ffmpeg_opts,
+    ifelse(!is.null(frames_per_second), paste0("-r ", frames_per_second), ""),
     ifelse(experimental, "-strict experimental", ""),
+    "-max_muxing_queue_size 99999",
+    "-threads 2",
     shQuote(output))
   if (verbose > 0) {
     message(command)
