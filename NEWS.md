@@ -1,3 +1,7 @@
+# ari 0.4.0
+
+- Fixed packet issue and added `ffmpeg_error_log`.
+
 # ari 0.3.7
 
 - Ensured that `ari_stitch` to use temporary directory.

@@ -213,6 +213,7 @@ ari_stitch <- function(
     warning("Found video filters in ffmpeg_opts, may not be used correctly!")
   }
   ffmpeg_opts = c(video_filters, ffmpeg_opts)
+  ffmpeg_opts = c("-max_muxing_queue_size 99999", ffmpeg_opts)
   ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
 
 
