@@ -248,7 +248,7 @@ ari_stitch <- function(
     ffmpeg_opts,
     ifelse(!is.null(frames_per_second), paste0("-r ", frames_per_second), ""),
     ifelse(experimental, "-strict experimental", ""),
-    "-max_muxing_queue_size 99999",
+    "-max_muxing_queue_size 9999",
     "-threads 2",
     shQuote(output))
   if (verbose > 0) {
