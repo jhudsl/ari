@@ -195,7 +195,7 @@ ari_stitch <- function(
   if (!is.null(frames_per_second)) {
     video_filters = c(video_filters, paste0("fps=", frames_per_second))
   } else {
-    video_filters = c(video_filters, "fps=10")
+    video_filters = c(video_filters, "fps=5")
   }
   if (divisible_height) {
     video_filters = c(video_filters, '"scale=trunc(iw/2)*2:trunc(ih/2)*2"')
