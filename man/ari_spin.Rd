@@ -27,8 +27,8 @@ have_polly()
 
 \item{output}{A path to the video file which will be created.}
 
-\item{voice}{The voice you want to use. See 
-\code{\link[text2speech]{tts_voices}} for more information 
+\item{voice}{The voice you want to use. See
+\code{\link[text2speech]{tts_voices}} for more information
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
@@ -56,8 +56,8 @@ The output from \code{\link{ari_stitch}}
 \description{
 Given equal length vectors of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and strings which will be
-synthesized by 
-\href{https://aws.amazon.com/polly/}{Amazon Polly} or 
+synthesized by
+\href{https://aws.amazon.com/polly/}{Amazon Polly} or
 any other synthesizer available in
 \code{\link[text2speech]{tts}}, this function creates an
 \code{.mp4} video file where each image is shown with
@@ -70,7 +70,7 @@ This function needs to connect to
 narration. You can find a guide for accessing AWS from R
 \href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
 For more information about how R connects
-to Amazon Polly see the \code{aws.polly} documentation 
+to Amazon Polly see the \code{aws.polly} documentation
 \href{https://github.com/cloudyr/aws.polly}{here}.
 }
 \examples{
@@ -78,7 +78,7 @@ to Amazon Polly see the \code{aws.polly} documentation
 
 slides <- system.file("test", c("mab2.png", "mab1.png"),
 package = "ari")
-sentences <- c("Welome to my very interesting lecture.",
+sentences <- c("Welcome to my very interesting lecture.",
                "Here are some fantastic equations I came up with.")
 ari_spin(slides, sentences, voice = "Joey")
 
