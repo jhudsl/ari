@@ -135,6 +135,7 @@ ari_stitch <- function(
   if (verbose > 0) {
     message("Writing out Wav for audio")
   }
+  audio <- make_same_sample_rate(audio, verbose = verbose)
   wav <- purrr::reduce(audio, bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", grs(), ".wav"))
   writeWave(wav, filename = wav_path)

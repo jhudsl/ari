@@ -1,3 +1,7 @@
+# ari 0.4.1
+
+- Ensuring the same sample rate when binding audio.
+
 # ari 0.4.0
 
 - Fixed packet issue and added `ffmpeg_error_log`.
