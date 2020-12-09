@@ -13,6 +13,8 @@ make_same_sample_rate = function(audio, verbose = TRUE) {
     if (x@samp.rate == sample_rate) return(x)
     tuneR::downsample(x, samp.rate = sample_rate)
   })
+  sample_rate = sapply(audio, function(r) r@samp.rate)
+  stopifnot(all(sample_rate == sample_rate[[1]]))
   return(audio)
 }
 
