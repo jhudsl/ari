@@ -50,35 +50,38 @@
 #' \dontrun{
 #'
 #' slides <- system.file("test", c("mab2.png", "mab1.png"),
-#' package = "ari")
-#' sentences <- c("Welcome to my very interesting lecture.",
-#'                "Here are some fantastic equations I came up with.")
+#'   package = "ari"
+#' )
+#' sentences <- c(
+#'   "Welcome to my very interesting lecture.",
+#'   "Here are some fantastic equations I came up with."
+#' )
 #' ari_spin(slides, sentences, voice = "Joey")
-#'
 #' }
 #'
-ari_spin <- function(
-  images, paragraphs,
-  output = tempfile(fileext = ".mp4"),
-  voice = text2speech::tts_default_voice(service = service),
-  service = ifelse(have_polly(), "amazon", "google"),
-  subtitles = FALSE,
-  duration = NULL,
-  tts_args = NULL,
-  key_or_json_file = NULL,
-  ...){
+ari_spin <- function(images, paragraphs,
+                     output = tempfile(fileext = ".mp4"),
+                     voice = text2speech::tts_default_voice(service = service),
+                     service = ifelse(have_polly(), "amazon", "google"),
+                     subtitles = FALSE,
+                     duration = NULL,
+                     tts_args = NULL,
+                     key_or_json_file = NULL,
+                     ...) {
   # check for ffmpeg before any synthesizing
   ffmpeg_exec()
 
-  auth = text2speech::tts_auth(
+  auth <- text2speech::tts_auth(
     service = service,
-    key_or_json_file = key_or_json_file)
+    key_or_json_file = key_or_json_file
+  )
   if (!auth) {
-    stop(paste0("It appears you're not authenticated with ",
-                service, ". Make sure you've ",
-                "set the appropriate environmental variables ",
-                "before you proceed.")
-    )
+    stop(paste0(
+      "It appears you're not authenticated with ",
+      service, ". Make sure you've ",
+      "set the appropriate environmental variables ",
+      "before you proceed."
+    ))
   }
 
   stopifnot(length(images) > 0)
@@ -87,15 +90,17 @@ ari_spin <- function(
 
   if (length(paragraphs) == 1) {
     if (file.exists(paragraphs)) {
-      paragraphs = readLines(paragraphs, warn = FALSE)
-      paragraphs = paragraphs[ !paragraphs %in% "" ]
+      paragraphs <- readLines(paragraphs, warn = FALSE)
+      paragraphs <- paragraphs[!paragraphs %in% ""]
     }
   }
 
-  semi_colon = trimws(paragraphs) == ";"
+  semi_colon <- trimws(paragraphs) == ";"
   if (any(semi_colon)) {
-    warning(paste0("Some paragraphs are simply a semicolon - ",
-                   "likely needs to be replaced or slide removed!"))
+    warning(paste0(
+      "Some paragraphs are simply a semicolon - ",
+      "likely needs to be replaced or slide removed!"
+    ))
   }
 
   stopifnot(
@@ -111,47 +116,48 @@ ari_spin <- function(
 
   pb <- progress_bar$new(
     format = "Fetching Narration [:bar] :percent",
-    total = length(par_along))
+    total = length(par_along)
+  )
 
   for (i in par_along) {
-    args = tts_args
-    args$text = paragraphs[i]
-    args$voice = voice
-    args$service = service
-    args$bind_audio = TRUE
+    args <- tts_args
+    args$text <- paragraphs[i]
+    args$voice <- voice
+    args$service <- service
+    args$bind_audio <- TRUE
     wav <- do.call(text2speech::tts, args = args)
-    wav = reduce(wav$wav, bind)
-    wav = pad_wav(wav, duration = duration[i])
-    ideal_duration[i] =  length(wav@left) / wav@samp.rate
+    wav <- reduce(wav$wav, bind)
+    wav <- pad_wav(wav, duration = duration[i])
+    ideal_duration[i] <- length(wav@left) / wav@samp.rate
     wavs[[i]] <- wav
     pb$tick()
   }
 
   if (subtitles) {
-    sub_file = paste0(file_path_sans_ext(output), ".srt")
+    sub_file <- paste0(file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wavs, sub_file)
   }
 
 
-  res = ari_stitch(images, wavs, output, ...)
-  args = list(...)
-  cleanup = args$cleanup
+  res <- ari_stitch(images, wavs, output, ...)
+  args <- list(...)
+  cleanup <- args$cleanup
   if (is.null(cleanup)) {
-    cleanup = TRUE
+    cleanup <- TRUE
   }
   if (!cleanup) {
-    attr(res, "wavs") = wavs
+    attr(res, "wavs") <- wavs
   }
-  attr(res, "voice") = voice
+  attr(res, "voice") <- voice
   if (subtitles) {
-    attr(res, "subtitles") = sub_file
+    attr(res, "subtitles") <- sub_file
   }
-  attr(res, "service") = service
+  attr(res, "service") <- service
   return(res)
 }
 
 #' @rdname ari_spin
 #' @export
-have_polly = function() {
+have_polly <- function() {
   requireNamespace("aws.polly", quietly = TRUE)
 }
