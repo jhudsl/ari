@@ -57,37 +57,38 @@
 #' @examples
 #' \dontrun{
 #' if (ffmpeg_version_sufficient()) {
-#' result = ari_stitch(
-#' ari_example(c("mab1.png", "mab2.png")),
-#' list(tuneR::noise(), tuneR::noise()))
-#' result = ari_stitch(
-#' ari_example(c("mab1.png", "mab2.png")),
-#' list(tuneR::noise(), tuneR::noise()), ffmpeg_opts = "-qscale 0",
-#' verbose = 2)
-#' # system2("open", attributes(result)$outfile)
+#'   result <- ari_stitch(
+#'     ari_example(c("mab1.png", "mab2.png")),
+#'     list(tuneR::noise(), tuneR::noise())
+#'   )
+#'   result <- ari_stitch(
+#'     ari_example(c("mab1.png", "mab2.png")),
+#'     list(tuneR::noise(), tuneR::noise()),
+#'     ffmpeg_opts = "-qscale 0",
+#'     verbose = 2
+#'   )
+#'   # system2("open", attributes(result)$outfile)
 #' }
 #' }
-ari_stitch <- function(
-  images, audio,
-  output = tempfile(fileext = ".mp4"),
-  verbose = FALSE,
-  cleanup = TRUE,
-  ffmpeg_opts = "",
-  divisible_height = TRUE,
-  audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(),
-  video_sync_method = "2",
-  audio_bitrate = NULL,
-  video_bitrate = NULL,
-  pixel_format = "yuv420p",
-  fast_start = FALSE,
-  deinterlace = FALSE,
-  stereo_audio = TRUE,
-  duration = NULL,
-  video_filters = NULL,
-  frames_per_second = NULL,
-  check_inputs = TRUE
-){
+ari_stitch <- function(images, audio,
+                       output = tempfile(fileext = ".mp4"),
+                       verbose = FALSE,
+                       cleanup = TRUE,
+                       ffmpeg_opts = "",
+                       divisible_height = TRUE,
+                       audio_codec = get_audio_codec(),
+                       video_codec = get_video_codec(),
+                       video_sync_method = "2",
+                       audio_bitrate = NULL,
+                       video_bitrate = NULL,
+                       pixel_format = "yuv420p",
+                       fast_start = FALSE,
+                       deinterlace = FALSE,
+                       stereo_audio = TRUE,
+                       duration = NULL,
+                       video_filters = NULL,
+                       frames_per_second = NULL,
+                       check_inputs = TRUE) {
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
@@ -102,16 +103,16 @@ ari_stitch <- function(
     )
   }
   if (is.character(audio)) {
-
-    audio = lapply(audio, function(x) {
-      ext = tolower(tools::file_ext(x))
-      func = switch(ext,
-                    wav = tuneR::readWave,
-                    mp3 = tuneR::readMP3,
-                    tuneR::readMP3)
+    audio <- lapply(audio, function(x) {
+      ext <- tolower(tools::file_ext(x))
+      func <- switch(ext,
+        wav = tuneR::readWave,
+        mp3 = tuneR::readMP3,
+        tuneR::readMP3
+      )
       func(x)
     })
-    audio = pad_wav(audio, duration = duration)
+    audio <- pad_wav(audio, duration = duration)
     #
     # audio = lapply(audio, function(wav) {
     #   ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
@@ -130,7 +131,7 @@ ari_stitch <- function(
     # })
   }
   # Make a hard path
-  output = file.path(output_dir, basename(output))
+  output <- file.path(output_dir, basename(output))
 
   if (verbose > 0) {
     message("Writing out Wav for audio")
@@ -148,30 +149,34 @@ ari_stitch <- function(
 
 
   # converting all to gif
-  img_ext = tolower(tools::file_ext(images))
-  any_gif = any(img_ext %in% "gif")
+  img_ext <- tolower(tools::file_ext(images))
+  any_gif <- any(img_ext %in% "gif")
   if (any_gif & !all(img_ext %in% "gif")) {
     if (verbose > 0) {
       message("Converting All files to gif!")
     }
     for (i in seq_along(images)) {
-      iext = img_ext[i]
+      iext <- img_ext[i]
       if (iext != "gif") {
-        tfile = tempfile(fileext = ".gif")
+        tfile <- tempfile(fileext = ".gif")
         ffmpeg_convert(images[i], outfile = tfile)
-        images[i] = tfile
+        images[i] <- tfile
       }
     }
   }
 
-  input_txt_path <- file.path(output_dir,
-                              paste0("ari_input_",
-                                     grs(),
-                                     ".txt"))
+  input_txt_path <- file.path(
+    output_dir,
+    paste0(
+      "ari_input_",
+      grs(),
+      ".txt"
+    )
+  )
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   if (.Platform$OS.type == "windows") {
-    new_image_names = file.path(output_dir, basename(images))
+    new_image_names <- file.path(output_dir, basename(images))
     if (!any(file.exists(new_image_names))) {
       file.copy(images, to = new_image_names)
     } else {
@@ -181,51 +186,54 @@ ari_stitch <- function(
   }
   for (i in seq_along(images)) {
     cat(paste0("file ", "'", images[i], "'", "\n"),
-        file = input_txt_path, append = TRUE)
+      file = input_txt_path, append = TRUE
+    )
     cat(paste0("duration ", duration(audio[[i]]), "\n"),
-        file = input_txt_path, append = TRUE)
+      file = input_txt_path, append = TRUE
+    )
   }
   cat(paste0("file ", "'", images[i], "'", "\n"),
-      file = input_txt_path, append = TRUE)
-  input_txt_path = normalizePath(input_txt_path, winslash = "/")
+    file = input_txt_path, append = TRUE
+  )
+  input_txt_path <- normalizePath(input_txt_path, winslash = "/")
 
   # needed for users as per
   # https://superuser.com/questions/718027/
   # ffmpeg-concat-doesnt-work-with-absolute-path
   # input_txt_path = normalizePath(input_txt_path, winslash = "\\")
 
-  ffmpeg = ffmpeg_exec(quote = TRUE)
+  ffmpeg <- ffmpeg_exec(quote = TRUE)
 
   if (!is.null(frames_per_second)) {
-    video_filters = c(video_filters, paste0("fps=", frames_per_second))
+    video_filters <- c(video_filters, paste0("fps=", frames_per_second))
   } else {
-    video_filters = c(video_filters, "fps=5")
+    video_filters <- c(video_filters, "fps=5")
   }
   if (divisible_height) {
-    video_filters = c(video_filters, '"scale=trunc(iw/2)*2:trunc(ih/2)*2"')
+    video_filters <- c(video_filters, '"scale=trunc(iw/2)*2:trunc(ih/2)*2"')
   }
 
 
   # workaround for older ffmpeg
   # https://stackoverflow.com/questions/32931685/
   # the-encoder-aac-is-experimental-but-experimental-codecs-are-not-enabled
-  experimental = FALSE
+  experimental <- FALSE
   if (!is.null(audio_codec)) {
     if (audio_codec == "aac") {
-      experimental = TRUE
+      experimental <- TRUE
     }
   }
   if (deinterlace) {
-    video_filters = c(video_filters, "yadif")
+    video_filters <- c(video_filters, "yadif")
   }
-  video_filters = paste(video_filters, collapse = ",")
-  video_filters = paste0("-vf ", video_filters)
+  video_filters <- paste(video_filters, collapse = ",")
+  video_filters <- paste0("-vf ", video_filters)
 
   if (any(grepl("-vf", ffmpeg_opts))) {
     warning("Found video filters in ffmpeg_opts, may not be used correctly!")
   }
-  ffmpeg_opts = c(video_filters, ffmpeg_opts)
-  ffmpeg_opts = paste(ffmpeg_opts, collapse = " ")
+  ffmpeg_opts <- c(video_filters, ffmpeg_opts)
+  ffmpeg_opts <- paste(ffmpeg_opts, collapse = " ")
 
 
   # shQuote should seankross/ari#5
@@ -234,27 +242,34 @@ ari_stitch <- function(
     "-f concat -safe 0 -i", shQuote(input_txt_path),
     "-i", shQuote(wav_path),
     ifelse(!is.null(video_codec), paste("-c:v", video_codec),
-           ""),
+      ""
+    ),
     ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
-           ""),
+      ""
+    ),
     ifelse(stereo_audio, "-ac 2", ""),
     ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
-           ""),
+      ""
+    ),
     ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
-           ""),
+      ""
+    ),
     " -shortest",
     # ifelse(deinterlace, "-vf yadif", ""),
     ifelse(!is.null(video_sync_method), paste("-vsync", video_sync_method),
-           ""),
+      ""
+    ),
     ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),
-           ""),
+      ""
+    ),
     ifelse(fast_start, "-movflags +faststart", ""),
     ffmpeg_opts,
     ifelse(!is.null(frames_per_second), paste0("-r ", frames_per_second), ""),
     ifelse(experimental, "-strict experimental", ""),
     "-max_muxing_queue_size 9999",
     "-threads 2",
-    shQuote(output))
+    shQuote(output)
+  )
   if (verbose > 0) {
     message(command)
   }
@@ -262,7 +277,7 @@ ari_stitch <- function(
     message("Input text path is:")
     cat(readLines(input_txt_path), sep = "\n")
   }
-  res = system(command)
+  res <- system(command)
   if (res != 0) {
     warning("Result was non-zero for ffmpeg")
   }
@@ -270,13 +285,13 @@ ari_stitch <- function(
   if (cleanup) {
     on.exit(unlink(input_txt_path, force = TRUE), add = TRUE)
   }
-  res = file.exists(output) && file.size(output) > 0
+  res <- file.exists(output) && file.size(output) > 0
   if (!cleanup) {
-    attr(res, "txt_path") = input_txt_path
-    attr(res, "wav_path") = wav_path
-    attr(res, "cmd") = command
+    attr(res, "txt_path") <- input_txt_path
+    attr(res, "wav_path") <- wav_path
+    attr(res, "cmd") <- command
   }
-  attr(res, "outfile") = output
-  attr(res, "images") = images
+  attr(res, "outfile") <- output
+  attr(res, "images") <- images
   invisible(res)
 }

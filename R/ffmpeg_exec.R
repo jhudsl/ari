@@ -10,33 +10,40 @@
 #' @examples
 #' \dontrun{
 #' if (have_ffmpeg_exec()) {
-#' ffmpeg_exec()
+#'   ffmpeg_exec()
 #' }
 #' }
-ffmpeg_exec = function(quote = FALSE) {
-  ffmpeg <- discard(c(Sys.getenv("ffmpeg"),
-                      Sys.which("ffmpeg")), ~ nchar(.x) == 0)[1]
+ffmpeg_exec <- function(quote = FALSE) {
+  ffmpeg <- discard(c(
+    Sys.getenv("ffmpeg"),
+    Sys.which("ffmpeg")
+  ), ~ nchar(.x) == 0)[1]
 
   if (is.na(ffmpeg)) {
-    stop(paste("Could not find ffmpeg. See the documentation ",
-               "for ari_stitch() ",
-               "for more details."))
+    stop(paste(
+      "Could not find ffmpeg. See the documentation ",
+      "for ari_stitch() ",
+      "for more details."
+    ))
   }
   if (!ffmpeg %in% c("ffmpeg", "ffmpeg.exe")) {
-    ffmpeg = normalizePath(ffmpeg, winslash = "/")
+    ffmpeg <- normalizePath(ffmpeg, winslash = "/")
   }
   if (quote) {
-    ffmpeg = shQuote(ffmpeg)
+    ffmpeg <- shQuote(ffmpeg)
   }
   return(ffmpeg)
 }
 
 #' @export
 #' @rdname ffmpeg_exec
-have_ffmpeg_exec = function() {
-  exec = try({
-    ari::ffmpeg_exec()
-  }, silent = TRUE)
+have_ffmpeg_exec <- function() {
+  exec <- try(
+    {
+      ari::ffmpeg_exec()
+    },
+    silent = TRUE
+  )
   !inherits(exec, "try-error")
 }
 
@@ -47,11 +54,11 @@ have_ffmpeg_exec = function() {
 #' @param verbose print diagnostic messages
 #' @export
 #'
-ffmpeg_error_log = function(file, verbose = TRUE) {
-  ffmpeg = ffmpeg_exec(quote = TRUE)
+ffmpeg_error_log <- function(file, verbose = TRUE) {
+  ffmpeg <- ffmpeg_exec(quote = TRUE)
 
-  file = normalizePath(file, winslash = "/", mustWork = TRUE)
-  error_file = tempfile(fileext = ".txt")
+  file <- normalizePath(file, winslash = "/", mustWork = TRUE)
+  error_file <- tempfile(fileext = ".txt")
   command <- paste(
     ffmpeg, "-v error",
     "-i", shQuote(file),
@@ -61,7 +68,7 @@ ffmpeg_error_log = function(file, verbose = TRUE) {
   if (verbose > 0) {
     message(command)
   }
-  res = system(command)
+  res <- system(command)
   if (!file.exists(error_file)) {
     stop("Error file not generated")
   }
