@@ -86,7 +86,9 @@ ffmpeg_video_codecs <- function() {
     return(NULL)
   }
   res <- res[res$video_codec, ]
-  res$video_codec <- res$audio_codec <- res$subtitle_codec <- NULL
+  res$video_codec <- NULL
+  res$audio_codec <- NULL
+  res$subtitle_codec <- NULL
   res
 }
 
