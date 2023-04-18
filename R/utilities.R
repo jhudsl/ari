@@ -1,4 +1,4 @@
-make_same_sample_rate <- function(audio, verbose = TRUE) {
+match_sample_rate <- function(audio, verbose = TRUE) {
   if (inherits(audio, "Wave")) {
     return(audio)
   }
@@ -27,14 +27,14 @@ is_Wave <- function(x) {
 }
 
 # get random string
-grs <- function() {
+get_random_string <- function() {
   paste(sample(c(seq(10), letters, LETTERS),
     size = 12, replace = TRUE
   ), collapse = "")
 }
 
 # how long is a wav?
-duration <- function(wav) {
+wav_length <- function(wav) {
   stopifnot(is_Wave(wav))
   length(wav@left) / wav@samp.rate
 }
