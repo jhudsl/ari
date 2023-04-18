@@ -92,6 +92,8 @@ ari_stitch <- function(images, audio,
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
+  # Make a hard path
+  output <- file.path(output_dir, basename(output))
   stopifnot(
     length(audio) > 0,
     dir.exists(output_dir)
@@ -130,8 +132,6 @@ ari_stitch <- function(images, audio,
     #   wav
     # })
   }
-  # Make a hard path
-  output <- file.path(output_dir, basename(output))
 
   if (verbose > 0) {
     message("Writing out Wav for audio")
