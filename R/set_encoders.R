@@ -44,9 +44,9 @@ set_audio_codec <- function(codec) {
   if (missing(codec)) {
     os <- get_os()
     codec <- switch(os,
-      darwin = "libfdk_aac",
-      windows = "ac3",
-      linux = "aac"
+                    darwin = "libfdk_aac",
+                    windows = "ac3",
+                    linux = "aac"
     )
   }
   options(ffmpeg_audio_codec = codec)
@@ -76,9 +76,9 @@ get_audio_codec <- function() {
       os_audio_codec <- "aac"
     }
     codec <- switch(os,
-      darwin = os_audio_codec,
-      windows = "ac3",
-      linux = "aac"
+                    darwin = os_audio_codec,
+                    windows = "ac3",
+                    linux = "aac"
     )
     set_audio_codec(codec = codec)
   }
@@ -107,7 +107,7 @@ audio_codec_encode <- function(codec) {
   }
   stopifnot(length(codec) == 1)
   res <- res[res$codec %in% codec |
-    grepl(codec, res$codec_name), ]
+               grepl(codec, res$codec_name), ]
   res$encoding_supported
 }
 
@@ -121,6 +121,6 @@ video_codec_encode <- function(codec) {
   }
   stopifnot(length(codec) == 1)
   res <- res[res$codec %in% codec |
-    grepl(codec, res$codec_name), ]
+               grepl(codec, res$codec_name), ]
   res$encoding_supported
 }
