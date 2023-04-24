@@ -1,47 +1,61 @@
-make_same_sample_rate <- function(audio, verbose = TRUE) {
+# Checks if it has a uniform sample rate across all channels.
+# If the sample rates are not uniform, the function downsamples
+# the audio to the minimum sample rate.
+match_sample_rate <- function(audio, verbose = TRUE) {
   if (inherits(audio, "Wave")) {
     return(audio)
   }
-
+  # Extract sample rates of all channels of audio w aveform
   sample_rate <- sapply(audio, function(r) r@samp.rate)
+
+  # if sample rates across all channels are not uniform, and
+  # verbose is TRUE, print message
   if (!all(sample_rate == sample_rate[[1]]) && verbose) {
     message("enforcing same sample rate, using minimum")
   }
+  # Compute minimum sample rate across all channels
   sample_rate <- min(sample_rate, na.rm = TRUE)
   if (verbose) {
     message(paste0("Sample rate downsampled to ", sample_rate))
   }
+  # Downsample audio waveform to min sample rate if sample rate
+  # is not equal to minimum sample rate
   audio <- lapply(audio, function(x) {
     if (x@samp.rate == sample_rate) {
       return(x)
     }
     tuneR::downsample(x, samp.rate = sample_rate)
   })
+  # Extract new sample rates
   sample_rate <- sapply(audio, function(r) r@samp.rate)
+  # Check if all channels  of downsampled audio waveform have same sample rate
   stopifnot(all(sample_rate == sample_rate[[1]]))
+
+  # Return downsampled audio waveform
   return(audio)
 }
 
+# Check if x is class "Wave"
 is_Wave <- function(x) {
   identical(suppressWarnings(as.character(class(x))), "Wave")
 }
 
-# get random string
-grs <- function() {
+# Get random string
+get_random_string <- function() {
   paste(sample(c(seq(10), letters, LETTERS),
     size = 12, replace = TRUE
   ), collapse = "")
 }
 
-# how long is a wav?
-duration <- function(wav) {
+# Find length of WAV file
+wav_length <- function(wav) {
   stopifnot(is_Wave(wav))
   length(wav@left) / wav@samp.rate
 }
 
-# get from list
-# list, name of element, default
-gfl <- function(l, n, d) {
+# Extract from list
+# Parameters: list, name of element, default
+extract_list <- function(l, n, d) {
   if (is.null(l[[n]])) {
     d
   } else {
@@ -49,29 +63,35 @@ gfl <- function(l, n, d) {
   }
 }
 
+# Trim whitespace from the beginning and end of each string in a character vector
 #' @importFrom purrr map_chr compose
-string_tirm <- function(s) {
+string_trim <- function(s) {
+  # Reverse a string
   str_rev <- function(t) {
     paste(rev(strsplit(t, NULL)[[1]]), collapse = "")
   }
 
+  # Remove any whitespace from end of string
   str_trim_right <- function(x) {
     sub("\\s+$", "", x)
   }
-
+  # Remove any whitespace from beginning of string
   str_trim_left <- function(x) {
     x <- str_rev(x)
     x <- str_trim_right(x)
     str_rev(x)
   }
-
-  lr <- compose(str_trim_left, str_trim_right)
-  map_chr(s, lr)
+  # Create new function `lr` that applies
+  # str_trim_left and str_trim_right sequentially to a given string
+  lr <- purrr::compose(str_trim_left, str_trim_right)
+  # Apply the lr function to each element of the input vectors
+  purrr::map_chr(s, lr)
 }
 
-# get text from html comments in an Rmd
+# Get text from html comments in an Rmd
 parse_html_comments <- function(path) {
   lines_ <- readLines(path, warn = FALSE)
+  # Identify where the HTML comment starts and ends
   starts <- grep("<!--", lines_)
   ends <- grep("-->", lines_)
 
@@ -86,22 +106,28 @@ parse_html_comments <- function(path) {
       result[i] <- lines_[starts[i]]
     } else {
       # Multiple lines
-      result[i] <- paste(string_tirm(lines_[starts[i]:ends[i]]),
+      result[i] <- paste(string_trim(lines_[starts[i]:ends[i]]),
         collapse = " "
       )
     }
+    # Remove opening "<!--" and closing "-->" markers from comment
     result[i] <- sub("<!--", "", result[i])
     result[i] <- sub("-->", "", result[i])
   }
 
-  string_tirm(result)
+  string_trim(result)
 }
 
-# split a big string into equal-ish sized pieces
+# Split a big string into equal-ish sized pieces
 #' @importFrom purrr map
 split_up_text <- function(text) {
+  # Calculate number of piceces to split up text
   pieces <- ceiling(nchar(text) / 1500)
+  # Split up vector into individual words
   words <- strsplit(text, " ")[[1]]
+  # Split words into pieces number of chunks
   chunks <- split(words, ceiling(seq_along(words) / (length(words) / pieces)))
+
+  # Final output
   map(chunks, paste, collapse = " ")
 }

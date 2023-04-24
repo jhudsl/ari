@@ -24,17 +24,25 @@ ffmpeg_codecs <- function() {
     warning("No codecs output from ffmpeg for codecs")
     return(NULL)
   }
+  # extract elements of res that start with either a period or "D"
   res <- res[grepl("^([.]|D)", res)]
+  # split by " "
   res <- strsplit(res, " ")
   res <- t(vapply(res, function(x) {
+    # trims any leading or trailing white space
     x <- trimws(x)
+    # removes any empty strings in each element
     x <- x[x != ""]
+    # concatenate the elements that come after the second
     if (length(x) >= 3) {
       x[3:length(x)] <- paste(x[3:length(x)], collapse = " ")
     }
+    # return the first 3 elements
     return(x[seq(3)])
   }, FUN.VALUE = character(3)))
+  # name the 3 columns
   colnames(res) <- c("capabilities", "codec", "codec_name")
+  # convert matrix to dataframe
   res <- as.data.frame(res, stringsAsFactors = FALSE)
 
   if (nrow(res) == 0) {
@@ -45,7 +53,7 @@ ffmpeg_codecs <- function() {
 
   cap_defns <- res[res$codec == "=", ]
   res <- res[res$codec != "=", ]
-
+  # split each character and rbind
   cap <- do.call("rbind", strsplit(res$capabilities, split = ""))
 
   cap_defns$codec_name <- tolower(cap_defns$codec_name)
@@ -53,11 +61,13 @@ ffmpeg_codecs <- function() {
   cap_defns$codec_name <- gsub("-", "_", cap_defns$codec_name)
   cap_def <- do.call("rbind", strsplit(cap_defns$capabilities, split = ""))
 
+  # create NA matrix
   mat <- matrix(NA, ncol = nrow(cap_defns), nrow = nrow(cap))
   colnames(mat) <- cap_defns$codec_name
 
   icol <- 4
   indices <- apply(cap_def, 1, function(x) which(x != "."))
+  # output: vector of indices corresponding to non-"." values in each row of cap_def.
   for (icol in seq(nrow(cap_def))) {
     x <- cap[, indices[icol]]
     mat[, icol] <- x %in% cap_def[icol, indices[icol]]
@@ -86,7 +96,9 @@ ffmpeg_video_codecs <- function() {
     return(NULL)
   }
   res <- res[res$video_codec, ]
-  res$video_codec <- res$audio_codec <- res$subtitle_codec <- NULL
+  res$video_codec <- NULL
+  res$audio_codec <- NULL
+  res$subtitle_codec <- NULL
   res
 }
 
@@ -98,7 +110,9 @@ ffmpeg_audio_codecs <- function() {
     return(NULL)
   }
   res <- res[res$audio_codec, ]
-  res$video_codec <- res$audio_codec <- res$subtitle_codec <- NULL
+  res$video_codec <- NULL
+  res$audio_codec <- NULL
+  res$subtitle_codec <- NULL
   res
 }
 

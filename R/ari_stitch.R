@@ -92,6 +92,8 @@ ari_stitch <- function(images, audio,
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
+  # Make a hard path
+  output <- file.path(output_dir, basename(output))
   stopifnot(
     length(audio) > 0,
     dir.exists(output_dir)
@@ -106,9 +108,9 @@ ari_stitch <- function(images, audio,
     audio <- lapply(audio, function(x) {
       ext <- tolower(tools::file_ext(x))
       func <- switch(ext,
-        wav = tuneR::readWave,
-        mp3 = tuneR::readMP3,
-        tuneR::readMP3
+                     wav = tuneR::readWave,
+                     mp3 = tuneR::readMP3,
+                     tuneR::readMP3
       )
       func(x)
     })
@@ -130,8 +132,6 @@ ari_stitch <- function(images, audio,
     #   wav
     # })
   }
-  # Make a hard path
-  output <- file.path(output_dir, basename(output))
 
   if (verbose > 0) {
     message("Writing out Wav for audio")
@@ -139,16 +139,16 @@ ari_stitch <- function(images, audio,
   if (verbose > 1) {
     print(audio)
   }
-  audio <- make_same_sample_rate(audio, verbose = verbose)
-  wav <- purrr::reduce(audio, bind)
-  wav_path <- file.path(output_dir, paste0("ari_audio_", grs(), ".wav"))
-  writeWave(wav, filename = wav_path)
+  audio <- match_sample_rate(audio, verbose = verbose)
+  wav <- purrr::reduce(audio, tuneR::bind)
+  wav_path <- file.path(output_dir, paste0("ari_audio_", get_random_string(), ".wav"))
+  tuneR::writeWave(wav, filename = wav_path)
+
   if (cleanup) {
     on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   }
 
-
-  # converting all to gif
+  # if there are any gif images, convert all images to gif
   img_ext <- tolower(tools::file_ext(images))
   any_gif <- any(img_ext %in% "gif")
   if (any_gif & !all(img_ext %in% "gif")) {
@@ -169,7 +169,7 @@ ari_stitch <- function(images, audio,
     output_dir,
     paste0(
       "ari_input_",
-      grs(),
+      get_random_string(),
       ".txt"
     )
   )
@@ -184,17 +184,22 @@ ari_stitch <- function(images, audio,
     }
     images <- basename(images)
   }
+
+  # add "file 'IMAGE_PATH'" and duration in txt file located at input_txt_path
   for (i in seq_along(images)) {
     cat(paste0("file ", "'", images[i], "'", "\n"),
-      file = input_txt_path, append = TRUE
-    )
-    cat(paste0("duration ", duration(audio[[i]]), "\n"),
-      file = input_txt_path, append = TRUE
-    )
+        file = input_txt_path,
+        append = TRUE)
+    cat(paste0("duration ", wav_length(audio[[i]]), "\n"),
+        file = input_txt_path,
+        append = TRUE)
   }
-  cat(paste0("file ", "'", images[i], "'", "\n"),
-    file = input_txt_path, append = TRUE
-  )
+  # duplicate last entry
+  cat(paste0("file ", "'", images[length(images)], "'", "\n"),
+      file = input_txt_path,
+      append = TRUE)
+
+  # define separator to be used on Windows
   input_txt_path <- normalizePath(input_txt_path, winslash = "/")
 
   # needed for users as per
@@ -204,6 +209,7 @@ ari_stitch <- function(images, audio,
 
   ffmpeg <- ffmpeg_exec(quote = TRUE)
 
+  # set video filters
   if (!is.null(frames_per_second)) {
     video_filters <- c(video_filters, paste0("fps=", frames_per_second))
   } else {
@@ -235,32 +241,30 @@ ari_stitch <- function(images, audio,
   ffmpeg_opts <- c(video_filters, ffmpeg_opts)
   ffmpeg_opts <- paste(ffmpeg_opts, collapse = " ")
 
-
-  # shQuote should seankross/ari#5
+  # create ffmpeg command
   command <- paste(
     ffmpeg, "-y",
     "-f concat -safe 0 -i", shQuote(input_txt_path),
     "-i", shQuote(wav_path),
     ifelse(!is.null(video_codec), paste("-c:v", video_codec),
-      ""
+           ""
     ),
     ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
-      ""
+           ""
     ),
     ifelse(stereo_audio, "-ac 2", ""),
     ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
-      ""
+           ""
     ),
     ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
-      ""
+           ""
     ),
-    " -shortest",
     # ifelse(deinterlace, "-vf yadif", ""),
-    ifelse(!is.null(video_sync_method), paste("-vsync", video_sync_method),
-      ""
+    ifelse(!is.null(video_sync_method), paste("-fps_mode", "auto"),
+           ""
     ),
     ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),
-      ""
+           ""
     ),
     ifelse(fast_start, "-movflags +faststart", ""),
     ffmpeg_opts,
@@ -277,7 +281,10 @@ ari_stitch <- function(images, audio,
     message("Input text path is:")
     cat(readLines(input_txt_path), sep = "\n")
   }
+
+  # run command in system
   res <- system(command)
+  # check if result was non-zero for ffmpeg
   if (res != 0) {
     warning("Result was non-zero for ffmpeg")
   }
