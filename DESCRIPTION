@@ -36,7 +36,7 @@ Suggests:
 Remotes:
     cloudyr/aws.signature,
     cloudyr/aws.polly,
-    muschellij2/text2speech
+    jhudsl/text2speech
 License: MIT + file LICENSE
 URL: http://github.com/seankross/ari
 BugReports: http://github.com/seankross/ari/issues
