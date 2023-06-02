@@ -68,7 +68,7 @@ ari_spin <- function(images, paragraphs,
                      tts_args = NULL,
                      key_or_json_file = NULL,
                      ...) {
-  # check for ffmpeg before any synthesizing
+  # Check for ffmpeg
   ffmpeg_exec()
 
   # Argument checks
@@ -127,6 +127,11 @@ ari_spin <- function(images, paragraphs,
     args$voice <- voice
     args$service <- service
     args$bind_audio <- TRUE
+    # coqui+ari doesn't work with mp3
+    if (service == "coqui") {
+      args$output_format <- "wav"
+    }
+
     wav <- do.call(text2speech::tts, args = args)
     wav <- reduce(wav$wav, bind)
     wav <- pad_wav(wav, duration = duration[i])
