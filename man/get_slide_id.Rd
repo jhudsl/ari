@@ -2,9 +2,15 @@
 % Please edit documentation in R/download_gs_file.R
 \name{get_slide_id}
 \alias{get_slide_id}
+\alias{get_folder_id}
+\alias{make_slide_url}
 \title{Get Slide ID from URL}
 \usage{
 get_slide_id(x)
+
+get_folder_id(x)
+
+make_slide_url(x)
 }
 \arguments{
 \item{x}{URL of slide}
@@ -20,4 +26,8 @@ x = paste0("https://docs.google.com/presentation/d/",
 "1Tg-GTGnUPduOtZKYuMoelqUNZnUp3vvg_7TtpUPL7e8",
 "/edit#slide=id.g154aa4fae2_0_58")
 get_slide_id(x)
+x = "https://drive.google.com/drive/folders/1pXBQQdd1peI56GtQT-jEZ59xSmhqQlFC?usp=sharing"
+get_folder_id(x)
+x = "1pXBQQdd1peI56GtQT-jEZ59xSmhqQlFC"
+get_folder_id(x)
 }
