@@ -90,7 +90,13 @@ pdf_url = function(id) {
   export_url(id, page_id = NULL, type = "pdf")
 }
 
-
+#' @export
+#' @rdname get_slide_id
+make_slide_url <- function(x) {
+  x = get_slide_id(x)
+  x = paste0("https://docs.google.com/presentation/d/",x)
+  x
+}
 
 # Extract page IDs of slides in a Google Slides presentation
 #' @importFrom jsonlite fromJSON
@@ -183,11 +189,25 @@ get_folder_id = function(x) {
 }
 
 #' @export
-#' @rdname get_slide_id
-make_slide_url <- function(x) {
-  x = get_slide_id(x)
-  x = paste0("https://docs.google.com/presentation/d/",x)
-  x
+pdf_to_pngs = function(
+    path, verbose = TRUE,
+    dpi = 600) {
+  fmts = pdftools::poppler_config()$supported_image_formats
+  if ("png" %in% fmts) {
+    format = "png"
+  } else {
+    format = fmts[1]
+  }
+  info = pdftools::pdf_info(pdf = path)
+  filenames = vapply(seq.int(info$pages), function(x) {
+    tempfile(fileext = paste0(".", format))
+  }, FUN.VALUE = character(1))
+  if (verbose) {
+    message("Converting PDF to PNGs")
+  }
+  pngs = pdftools::pdf_convert(
+    pdf = path, dpi = dpi,
+    format = format, filenames = filenames,
+    verbose = as.logical(verbose))
+  pngs
 }
-
-
