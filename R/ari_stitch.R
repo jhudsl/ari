@@ -89,10 +89,10 @@ ari_stitch <- function(images, audio,
                        video_filters = NULL,
                        frames_per_second = NULL,
                        check_inputs = TRUE) {
+  # Argument check and file path processing
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
-  # Make a hard path
   output <- file.path(output_dir, basename(output))
   stopifnot(
     length(audio) > 0,
@@ -115,22 +115,6 @@ ari_stitch <- function(images, audio,
       func(x)
     })
     audio <- pad_wav(audio, duration = duration)
-    #
-    # audio = lapply(audio, function(wav) {
-    #   ideal_duration <- ceiling(length(wav@left) / wav@samp.rate)
-    #   left = rep(0,
-    #              wav@samp.rate * ideal_duration - length(wav@left))
-    #   right = numeric(0)
-    #   if (wav@stereo) {
-    #     right = left
-    #   }
-    #   end_wav = tuneR::Wave(
-    #     left = left,
-    #     right = right,
-    #     bit = wav@bit, samp.rate = wav@samp.rate)
-    #   wav <- bind(wav, end_wav)
-    #   wav
-    # })
   }
 
   if (verbose > 0) {
@@ -139,6 +123,9 @@ ari_stitch <- function(images, audio,
   if (verbose > 1) {
     print(audio)
   }
+  # End of Argument check and file path processing
+
+  # Audio preprocessing
   audio <- match_sample_rate(audio, verbose = verbose)
   wav <- purrr::reduce(audio, tuneR::bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", get_random_string(), ".wav"))
