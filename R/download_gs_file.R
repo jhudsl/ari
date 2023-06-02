@@ -189,9 +189,9 @@ get_folder_id = function(x) {
 }
 
 #' @export
-pdf_to_pngs = function(
-    path, verbose = TRUE,
-    dpi = 600) {
+pdf_to_pngs = function(path,
+                       verbose = TRUE,
+                       dpi = 600) {
   fmts = pdftools::poppler_config()$supported_image_formats
   if ("png" %in% fmts) {
     format = "png"
