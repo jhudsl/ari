@@ -45,6 +45,7 @@
 #' @importFrom purrr map reduce
 #' @importFrom progress progress_bar
 #' @importFrom tools file_path_sans_ext
+#' @importFrom cli cli_alert_info
 #' @export
 #' @examples
 #' \dontrun{
@@ -130,8 +131,8 @@ ari_spin <- function(images, paragraphs,
     # coqui+ari doesn't work with mp3
     if (service == "coqui") {
       args$output_format <- "wav"
+      cli::cli_alert_info("Coqui TTS does not support MP3 format and will produce a WAV audio output.")
     }
-
     wav <- do.call(text2speech::tts, args = args)
     wav <- reduce(wav$wav, bind)
     wav <- pad_wav(wav, duration = duration[i])

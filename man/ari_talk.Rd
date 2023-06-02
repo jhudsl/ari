@@ -16,8 +16,8 @@ ari_talk(
 
 \item{output}{A path to the audio file which will be created.}
 
-\item{voice}{The  voice you want to use. See 
-\code{\link[text2speech]{tts_voices}} for more information 
+\item{voice}{The  voice you want to use. See
+\code{\link[text2speech]{tts_voices}} for more information
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,

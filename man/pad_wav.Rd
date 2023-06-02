@@ -10,8 +10,8 @@ pad_wav(wav, duration = NULL)
 \item{wav}{list of Wave objects}
 
 \item{duration}{If \code{NULL}, the duration will simply round
-the Wave up to the next whole integer.  If not, these are the 
-duration to pad the Wave *to*. For example 12 means the output 
+the Wave up to the next whole integer.  If not, these are the
+duration to pad the Wave *to*. For example 12 means the output
 Wave will have a length of 12 seconds.  Pass \code{NA} to those
 Waves that you want simple rounding.}
 }
@@ -22,17 +22,18 @@ A list of Wave objects, same length as input \code{wav}
 Pad Wave Objects
 }
 \examples{
-wavs = list(
-tuneR::noise(duration = 1.85*44100), 
-tuneR::noise())
-out = pad_wav(wavs)
-dur = sapply(out, function(x)length(x@left)/ x@samp.rate)
-duration = c(2, 2)
-out = pad_wav(wavs, duration = duration)
-dur = sapply(out, function(x)length(x@left)/ x@samp.rate)
+wavs <- list(
+  tuneR::noise(duration = 1.85 * 44100),
+  tuneR::noise()
+)
+out <- pad_wav(wavs)
+dur <- sapply(out, function(x) length(x@left) / x@samp.rate)
+duration <- c(2, 2)
+out <- pad_wav(wavs, duration = duration)
+dur <- sapply(out, function(x) length(x@left) / x@samp.rate)
 stopifnot(all(dur == duration))
-duration = c(2, 2.5)
-out = pad_wav(wavs, duration = duration)
-dur = sapply(out, function(x)length(x@left)/ x@samp.rate)
+duration <- c(2, 2.5)
+out <- pad_wav(wavs, duration = duration)
+dur <- sapply(out, function(x) length(x@left) / x@samp.rate)
 stopifnot(isTRUE(all.equal(dur, duration)))
 }

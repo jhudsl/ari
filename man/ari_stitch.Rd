@@ -105,14 +105,17 @@ The environmental variable will always override the result of
 \examples{
 \dontrun{
 if (ffmpeg_version_sufficient()) {
-result = ari_stitch(
-ari_example(c("mab1.png", "mab2.png")),
-list(tuneR::noise(), tuneR::noise()))
-result = ari_stitch(
-ari_example(c("mab1.png", "mab2.png")),
-list(tuneR::noise(), tuneR::noise()), ffmpeg_opts = "-qscale 0",
-verbose = 2)
-# system2("open", attributes(result)$outfile)
+  result <- ari_stitch(
+    ari_example(c("mab1.png", "mab2.png")),
+    list(tuneR::noise(), tuneR::noise())
+  )
+  result <- ari_stitch(
+    ari_example(c("mab1.png", "mab2.png")),
+    list(tuneR::noise(), tuneR::noise()),
+    ffmpeg_opts = "-qscale 0",
+    verbose = 2
+  )
+  # system2("open", attributes(result)$outfile)
 }
 }
 }

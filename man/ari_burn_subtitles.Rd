@@ -11,7 +11,7 @@ ari_burn_subtitles(video, srt, verbose = FALSE)
 
 \item{srt}{Subtitle file in \code{srt} format}
 
-\item{verbose}{print diagnostic messages.  If > 1, 
+\item{verbose}{print diagnostic messages.  If > 1,
 then more are printed}
 }
 \value{
@@ -21,7 +21,7 @@ Name of output video
 Burn Subtitles into a video
 }
 \note{
-This needs \code{ffmpeg} that was compiled with 
-\code{--enable-libass} as per 
+This needs \code{ffmpeg} that was compiled with
+\code{--enable-libass} as per
 \url{https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo}
 }

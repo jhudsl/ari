@@ -33,9 +33,9 @@ Get Codecs for ffmpeg
 \examples{
 \dontrun{
 if (ffmpeg_version_sufficient()) {
-ffmpeg_codecs()
-ffmpeg_video_codecs()
-ffmpeg_audio_codecs()
+  ffmpeg_codecs()
+  ffmpeg_video_codecs()
+  ffmpeg_audio_codecs()
 }
 }
 }

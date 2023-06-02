@@ -77,11 +77,13 @@ to Amazon Polly see the \code{aws.polly} documentation
 \dontrun{
 
 slides <- system.file("test", c("mab2.png", "mab1.png"),
-package = "ari")
-sentences <- c("Welcome to my very interesting lecture.",
-               "Here are some fantastic equations I came up with.")
+  package = "ari"
+)
+sentences <- c(
+  "Welcome to my very interesting lecture.",
+  "Here are some fantastic equations I came up with."
+)
 ari_spin(slides, sentences, voice = "Joey")
-
 }
 
 }
