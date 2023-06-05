@@ -131,7 +131,6 @@ ari_spin <- function(images, paragraphs,
     # coqui+ari doesn't work with mp3
     if (service == "coqui") {
       args$output_format <- "wav"
-      cli::cli_alert_info("Coqui TTS does not support MP3 format and will produce a WAV audio output.")
     }
     wav <- do.call(text2speech::tts, args = args)
     wav <- reduce(wav$wav, bind)
@@ -140,6 +139,10 @@ ari_spin <- function(images, paragraphs,
     wave_objects[[i]] <- wav
     pb$tick()
   }
+  if (service == "coqui") {
+    cli::cli_alert_info("Coqui TTS does not support MP3 format; will produce a WAV audio output.")
+  }
+
   # Burn subtitles
   if (subtitles) {
     sub_file <- paste0(file_path_sans_ext(output), ".srt")
