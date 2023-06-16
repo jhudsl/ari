@@ -39,12 +39,12 @@ download_gs_file = function(gs_url, out_type = "pptx") {
   }
 
   if (warn_user) {
-    warning(
-      paste0(
-        "This presentation may not be available, ",
-        "did you turn link sharing on?")
+    cli::cli_alert_warning(
+      paste("Is link sharing enabled?",
+            "It's possible that this presentation isn't accessible.")
     )
   }
+
   tmp
 }
 
