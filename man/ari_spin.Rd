@@ -10,6 +10,8 @@ ari_spin(
   paragraphs,
   output = tempfile(fileext = ".mp4"),
   voice = text2speech::tts_default_voice(service = service),
+  model_name = "tacotron2-DDC_ph",
+  vocoder_name = "ljspeech/univnet",
   service = ifelse(have_polly(), "amazon", "google"),
   subtitles = FALSE,
   duration = NULL,
