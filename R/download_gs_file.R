@@ -204,7 +204,7 @@ pdf_to_pngs = function(path,
     tempfile(fileext = paste0(".", format))
   }, FUN.VALUE = character(1))
   if (verbose) {
-    message("Converting PDF to PNGs")
+    message("Converting PDFs to PNGs")
   }
   pngs = pdftools::pdf_convert(
     pdf = path, dpi = dpi,

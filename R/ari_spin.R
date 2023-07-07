@@ -63,6 +63,8 @@
 ari_spin <- function(images, paragraphs,
                      output = tempfile(fileext = ".mp4"),
                      voice = text2speech::tts_default_voice(service = service),
+                     model_name,
+                     vocoder_name,
                      service = ifelse(have_polly(), "amazon", "google"),
                      subtitles = FALSE,
                      duration = NULL,
