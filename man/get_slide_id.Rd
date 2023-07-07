@@ -2,15 +2,15 @@
 % Please edit documentation in R/download_gs_file.R
 \name{get_slide_id}
 \alias{get_slide_id}
-\alias{get_folder_id}
 \alias{make_slide_url}
+\alias{get_folder_id}
 \title{Get Slide ID from URL}
 \usage{
 get_slide_id(x)
 
-get_folder_id(x)
-
 make_slide_url(x)
+
+get_folder_id(x)
 }
 \arguments{
 \item{x}{URL of slide}

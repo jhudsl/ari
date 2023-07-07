@@ -189,6 +189,7 @@ get_folder_id = function(x) {
 }
 
 #' @export
+#' @importFrom pdftools poppler_config pdf_info pdf_convert
 pdf_to_pngs = function(path,
                        verbose = TRUE,
                        dpi = 600) {
