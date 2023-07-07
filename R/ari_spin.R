@@ -45,6 +45,7 @@
 #' @importFrom purrr map reduce
 #' @importFrom progress progress_bar
 #' @importFrom tools file_path_sans_ext
+#' @importFrom cli cli_alert_info
 #' @export
 #' @examples
 #' \dontrun{
@@ -68,9 +69,10 @@ ari_spin <- function(images, paragraphs,
                      tts_args = NULL,
                      key_or_json_file = NULL,
                      ...) {
-  # check for ffmpeg before any synthesizing
+  # Check for ffmpeg
   ffmpeg_exec()
 
+  # Argument checks
   auth <- text2speech::tts_auth(
     service = service,
     key_or_json_file = key_or_json_file
@@ -102,15 +104,16 @@ ari_spin <- function(images, paragraphs,
       "likely needs to be replaced or slide removed!"
     ))
   }
-
   stopifnot(
     length(paragraphs) > 0,
     identical(length(images), length(paragraphs)),
     all(file.exists(images)),
     dir.exists(output_dir)
   )
+  # End of Argument checks
 
-  wavs <- vector(mode = "list", length = length(paragraphs))
+  # Setup objects to populate in for-loop with tts()
+  wave_objects <- vector(mode = "list", length = length(paragraphs))
   par_along <- seq_along(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
 
@@ -118,35 +121,45 @@ ari_spin <- function(images, paragraphs,
     format = "Fetching Narration [:bar] :percent",
     total = length(par_along)
   )
-
+  # Iterate through arguments used in tts()
   for (i in par_along) {
     args <- tts_args
     args$text <- paragraphs[i]
     args$voice <- voice
     args$service <- service
     args$bind_audio <- TRUE
+    # coqui+ari doesn't work with mp3
+    if (service == "coqui") {
+      args$output_format <- "wav"
+    }
     wav <- do.call(text2speech::tts, args = args)
     wav <- reduce(wav$wav, bind)
     wav <- pad_wav(wav, duration = duration[i])
     ideal_duration[i] <- length(wav@left) / wav@samp.rate
-    wavs[[i]] <- wav
+    wave_objects[[i]] <- wav
     pb$tick()
   }
-
-  if (subtitles) {
-    sub_file <- paste0(file_path_sans_ext(output), ".srt")
-    ari_subtitles(paragraphs, wavs, sub_file)
+  if (service == "coqui") {
+    cli::cli_alert_info("Coqui TTS does not support MP3 format; will produce a WAV audio output.")
   }
 
+  # Burn subtitles
+  if (subtitles) {
+    sub_file <- paste0(file_path_sans_ext(output), ".srt")
+    ari_subtitles(paragraphs, wave_objects, sub_file)
+  }
 
-  res <- ari_stitch(images, wavs, output, ...)
+  # Create a video from images and audio
+  res <- ari_stitch(images, wave_objects, output, ...)
+
+  # Collect output
   args <- list(...)
   cleanup <- args$cleanup
   if (is.null(cleanup)) {
     cleanup <- TRUE
   }
   if (!cleanup) {
-    attr(res, "wavs") <- wavs
+    attr(res, "wavs") <- wave_objects
   }
   attr(res, "voice") <- voice
   if (subtitles) {

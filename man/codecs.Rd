@@ -35,25 +35,25 @@ Set Default Audio and Video Codecs
 \examples{
 \dontrun{
 if (have_ffmpeg_exec()) {
-print(ffmpeg_version())
-get_audio_codec()
-set_audio_codec(codec = "libfdk_aac")
-get_audio_codec()
-set_audio_codec(codec = "aac")
-get_audio_codec()
+  print(ffmpeg_version())
+  get_audio_codec()
+  set_audio_codec(codec = "libfdk_aac")
+  get_audio_codec()
+  set_audio_codec(codec = "aac")
+  get_audio_codec()
 }
 if (have_ffmpeg_exec()) {
-get_video_codec()
-set_video_codec(codec = "libx265") 
-get_video_codec()
-set_video_codec(codec = "libx264")
-get_video_codec()
+  get_video_codec()
+  set_video_codec(codec = "libx265")
+  get_video_codec()
+  set_video_codec(codec = "libx264")
+  get_video_codec()
 }
 ## empty thing
 if (have_ffmpeg_exec()) {
-video_codec_encode("libx264")
+  video_codec_encode("libx264")
 
-audio_codec_encode("aac")
+  audio_codec_encode("aac")
 }
 }
 }

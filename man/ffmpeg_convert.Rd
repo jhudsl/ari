@@ -18,7 +18,7 @@ ffmpeg_convert(
 
 \item{overwrite}{should output file be overwritten?}
 
-\item{args}{arguments to pass to \code{\link{system2}} to pass to 
+\item{args}{arguments to pass to \code{\link{system2}} to pass to
 \code{ffmpeg}}
 }
 \value{
@@ -28,11 +28,11 @@ A character string of the output file with different attributes
 Convert Files using FFMPEG
 }
 \examples{
-pngfile = tempfile(fileext = ".png")
+pngfile <- tempfile(fileext = ".png")
 png(pngfile)
 plot(0, 0)
 dev.off()
 if (have_ffmpeg_exec()) {
-res = ffmpeg_convert(pngfile)
+  res <- ffmpeg_convert(pngfile)
 }
 }

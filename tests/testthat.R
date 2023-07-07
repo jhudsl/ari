@@ -11,7 +11,7 @@ skip_amazon_not_authorized = function() {
   }
 
   if (requireNamespace("aws.polly", quietly = TRUE)) {
-    if (text2speech::tts_amazon_authenticated()) {
+    if (text2speech::tts_auth(service = "amazon")) {
       return(invisible(TRUE))
     }
   }
@@ -19,7 +19,7 @@ skip_amazon_not_authorized = function() {
   # Eventually test2speech will be updated so that it no longer needs
   # the aws.polly package. Until then we need to skip these tests during
   # automated tests.
-  
+
   skip("Amazon not authenticated()")
 }
 

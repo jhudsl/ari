@@ -24,18 +24,18 @@ ari_narrate(
 a corresponding slide, or an \code{.Rmd} file where each HTML comment will
 be used for narration.}
 
-\item{slides}{A path or URL for an HTML slideshow created with 
-\code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a 
+\item{slides}{A path or URL for an HTML slideshow created with
+\code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a
 similar package.}
 
 \item{output}{The path to the video file which will be created.}
 
-\item{voice}{The voice you want to use. See 
-\code{\link[text2speech]{tts_voices}} for more information 
+\item{voice}{The voice you want to use. See
+\code{\link[text2speech]{tts_voices}} for more information
 about what voices are available.}
 
 \item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}. 
+passed to \code{\link[text2speech]{tts}}.
 Either \code{"amazon"} or \code{"google"}.}
 
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
@@ -66,16 +66,16 @@ The output from \code{\link{ari_spin}}
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML
 slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
-This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly} 
+This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly}
 via \code{\link{ari_spin}}.
 }
 \examples{
 \dontrun{
 
-# 
+#
 ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-            system.file("test", "ari_intro.html", package = "ari"),
-            voice = "Joey")
-
+  system.file("test", "ari_intro.html", package = "ari"),
+  voice = "Joey"
+)
 }
 }

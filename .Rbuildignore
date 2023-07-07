@@ -9,3 +9,4 @@
 ^CRAN-RELEASE$
 ^appveyor\.yml$
 ^ari\.Rproj$
+^\.github$
