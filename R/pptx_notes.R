@@ -32,6 +32,7 @@ pptx_notes = function(file, ...) {
     warning("Slides with no notes exists")
   }
   res[ res == ""] = ";"
+  names(res) <- NULL
   return(res)
 }
 

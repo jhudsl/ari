@@ -121,6 +121,10 @@ ari_spin <- function(images, paragraphs,
     format = "Fetching Narration [:bar] :percent",
     total = length(par_along)
   )
+  if (service == "coqui") {
+    cli::cli_alert_info("Coqui TTS does not support MP3 format; will produce a WAV audio output.")
+  }
+
   # Iterate through arguments used in tts()
   for (i in par_along) {
     args <- tts_args
@@ -131,6 +135,9 @@ ari_spin <- function(images, paragraphs,
     # coqui+ari doesn't work with mp3
     if (service == "coqui") {
       args$output_format <- "wav"
+      args$voice <- NULL
+      args$model_name <- model_name
+      args$vocoder_name <- vocoder_name
     }
     wav <- do.call(text2speech::tts, args = args)
     wav <- reduce(wav$wav, bind)
@@ -139,9 +146,7 @@ ari_spin <- function(images, paragraphs,
     wave_objects[[i]] <- wav
     pb$tick()
   }
-  if (service == "coqui") {
-    cli::cli_alert_info("Coqui TTS does not support MP3 format; will produce a WAV audio output.")
-  }
+
 
   # Burn subtitles
   if (subtitles) {
