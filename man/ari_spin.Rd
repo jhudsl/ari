@@ -33,6 +33,10 @@ have_polly()
 \code{\link[text2speech]{tts_voices}} for more information
 about what voices are available.}
 
+\item{model_name}{(Coqui only) Text-to-speech model}
+
+\item{vocoder_name}{(Coqui only) Vocoder (Voice Coder) model}
+
 \item{service}{speech synthesis service to use,
 passed to \code{\link[text2speech]{tts}},
 Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.}
