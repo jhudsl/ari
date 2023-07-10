@@ -87,7 +87,7 @@ ari_spin <- function(images, paragraphs,
       "before you proceed."
     ))
   }
-
+  # Create file path to output
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
