@@ -7,12 +7,12 @@
 pad_wav(wav, duration = NULL)
 }
 \arguments{
-\item{wav}{list of Wave objects}
+\item{wav}{List of Wave objects}
 
 \item{duration}{If \code{NULL}, the duration will simply round
-the Wave up to the next whole integer.  If not, these are the
-duration to pad the Wave *to*. For example 12 means the output
-Wave will have a length of 12 seconds.  Pass \code{NA} to those
+the Wave up to the next whole integer. If not, these are the
+duration to pad the Wave *to*. For example, 12 means the output
+Wave will have a length of 12 seconds. Pass \code{NA} to those
 Waves that you want simple rounding.}
 }
 \value{
@@ -22,9 +22,10 @@ A list of Wave objects, same length as input \code{wav}
 Pad Wave Objects
 }
 \examples{
-wav_list <- list(
-  tuneR::noise(duration = 2000),
-  tuneR::noise(duration = 1000)
+library(tuneR)
+x <- list(
+  noise(duration = 2000),
+  noise(duration = 1000)
 )
-out <- pad_wav(wav_list)
+out <- pad_wav(x)
 }

@@ -1,10 +1,10 @@
 #' Pad Wave Objects
 #'
-#' @param wav list of Wave objects
+#' @param wav List of Wave objects
 #' @param duration If \code{NULL}, the duration will simply round
-#' the Wave up to the next whole integer.  If not, these are the
-#' duration to pad the Wave *to*. For example 12 means the output
-#' Wave will have a length of 12 seconds.  Pass \code{NA} to those
+#' the Wave up to the next whole integer. If not, these are the
+#' duration to pad the Wave *to*. For example, 12 means the output
+#' Wave will have a length of 12 seconds. Pass \code{NA} to those
 #' Waves that you want simple rounding.
 #'
 #' @return A list of Wave objects, same length as input \code{wav}
@@ -12,11 +12,12 @@
 #'
 #' @importFrom purrr map2 map2_int
 #' @examples
-#' wav_list <- list(
-#'   tuneR::noise(duration = 2000),
-#'   tuneR::noise(duration = 1000)
+#' library(tuneR)
+#' x <- list(
+#'   noise(duration = 2000),
+#'   noise(duration = 1000)
 #' )
-#' out <- pad_wav(wav_list)
+#' out <- pad_wav(x)
 pad_wav <- function(wav, duration = NULL) {
   # See if wav inherits from "Wave" class
   is_Wave <- inherits(wav, "Wave")
