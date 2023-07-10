@@ -21,6 +21,9 @@ Depends:
 Imports:
     cli,
     hms,
+    httr,
+    jsonlite,
+    pdftools,
     progress,
     purrr,
     rmarkdown,

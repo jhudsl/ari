@@ -24,6 +24,8 @@
 #' @param voice The voice you want to use. See
 #' \code{\link[text2speech]{tts_voices}} for more information
 #' about what voices are available.
+#' @param model_name (Coqui only)
+#' @param vocoder_name (Coqui only)
 #' @param service speech synthesis service to use,
 #' passed to \code{\link[text2speech]{tts}},
 #' Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.

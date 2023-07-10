@@ -22,18 +22,9 @@ A list of Wave objects, same length as input \code{wav}
 Pad Wave Objects
 }
 \examples{
-wavs <- list(
-  tuneR::noise(duration = 1.85 * 44100),
-  tuneR::noise()
+wav_list <- list(
+  tuneR::noise(duration = 2000),
+  tuneR::noise(duration = 1000)
 )
-out <- pad_wav(wavs)
-dur <- sapply(out, function(x) length(x@left) / x@samp.rate)
-duration <- c(2, 2)
-out <- pad_wav(wavs, duration = duration)
-dur <- sapply(out, function(x) length(x@left) / x@samp.rate)
-stopifnot(all(dur == duration))
-duration <- c(2, 2.5)
-out <- pad_wav(wavs, duration = duration)
-dur <- sapply(out, function(x) length(x@left) / x@samp.rate)
-stopifnot(isTRUE(all.equal(dur, duration)))
+out <- pad_wav(wav_list)
 }

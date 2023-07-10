@@ -100,6 +100,7 @@ make_slide_url <- function(x) {
 
 # Extract page IDs of slides in a Google Slides presentation
 #' @importFrom jsonlite fromJSON
+#' @import httr
 get_page_ids = function(id) {
   id = get_slide_id(id)
   url = paste0("https://docs.google.com/presentation/d/", id)
@@ -188,7 +189,16 @@ get_folder_id = function(x) {
   x
 }
 
-#' @export
+#' Convert a PDF file to a series of PNG image files
+#'
+#' Uses `pdftools::pdf_convert()` for conversion.
+#'
+#' @param path Path to the PDF file that needs to be converted to PNGs.
+#' @param verbose A logical value indicating whether to display progress
+#'   messages during the conversion process. The default value is TRUE
+#' @param dpi The resolution in dots per inch (dpi) to be used for the PNG
+#'   images. The default value is 600.
+#'
 #' @importFrom pdftools poppler_config pdf_info pdf_convert
 pdf_to_pngs = function(path,
                        verbose = TRUE,

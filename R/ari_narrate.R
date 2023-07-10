@@ -100,7 +100,7 @@ ari_narrate <- function(script, slides,
   if (file_ext(script) %in% c("Rmd", "rmd")) {
     paragraphs <- parse_html_comments(script)
   } else {
-    html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
+    html_path <- file.path(output_dir, paste0("ari_script_", get_random_string(), ".html"))
     if (cleanup) {
       on.exit(unlink(html_path, force = TRUE), add = TRUE)
     }
@@ -119,7 +119,7 @@ ari_narrate <- function(script, slides,
     paste0(
       "ari_img_",
       slide_nums, "_",
-      grs(), ".jpeg"
+      get_random_string(), ".jpeg"
     )
   )
 
