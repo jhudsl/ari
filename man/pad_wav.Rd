@@ -22,10 +22,13 @@ A list of Wave objects, same length as input \code{wav}
 Pad Wave Objects
 }
 \examples{
-library(tuneR)
+\dontrun{
 x <- list(
-  noise(duration = 2000),
-  noise(duration = 1000)
+tuneR::noise(duration = 2000),
+tuneR::noise(duration = 1000)
 )
-out <- pad_wav(x)
+
+pad_wav(x)
+}
+
 }

@@ -9,15 +9,17 @@
 #'
 #' @return A list of Wave objects, same length as input \code{wav}
 #' @export
+#' @examples
+#' \dontrun{
+#' x <- list(
+#' tuneR::noise(duration = 2000),
+#' tuneR::noise(duration = 1000)
+#' )
+#'
+#' pad_wav(x)
+#' }
 #'
 #' @importFrom purrr map2 map2_int
-#' @examples
-#' library(tuneR)
-#' x <- list(
-#'   noise(duration = 2000),
-#'   noise(duration = 1000)
-#' )
-#' out <- pad_wav(x)
 pad_wav <- function(wav, duration = NULL) {
   # See if wav inherits from "Wave" class
   is_Wave <- inherits(wav, "Wave")
