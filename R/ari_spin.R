@@ -24,9 +24,11 @@
 #' @param voice The voice you want to use. See
 #' \code{\link[text2speech]{tts_voices}} for more information
 #' about what voices are available.
-#' @param model_name (Coqui only) Text-to-speech model
-#' @param vocoder_name (Coqui only) Vocoder (Voice Coder) model
-#' @param service speech synthesis service to use,
+#' @param model_name (Coqui TTS only) Deep Learning model for Text-to-Speech
+#'   Conversion
+#' @param vocoder_name (Coqui TTS only) Voice coder used for speech coding and
+#'   transmission
+#' @param service Speech synthesis service to use,
 #' passed to \code{\link[text2speech]{tts}},
 #' Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.
 #' @param subtitles Should a \code{.srt} file be created with subtitles? The
