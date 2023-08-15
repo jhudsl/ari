@@ -199,6 +199,34 @@ get_folder_id = function(x) {
   x
 }
 
+#' Convert a PPTX file to a PDF file
+#'
+#' Uses `docxtractr::convert_to_pdf()` for conversion.
+#'
+#' @param path Path to the PPTX file that needs to be converted to PDF.
+#' @param verbose A logical value indicating whether to display progress
+#'   messages during the conversion process. The default value is TRUE
+#'
+#' @importFrom docxtractr convert_to_pdf
+#' @export
+pptx_to_pdf = function(path, verbose = TRUE) {
+  pdf_file = tempfile(fileext = ".pdf")
+  if (verbose) {
+    message("Converting PPTX to PDF")
+  }
+  out = try({
+    docxtractr::convert_to_pdf(path, pdf_file = pdf_file)
+  })
+  if (inherits(out, "try-error")) {
+    fix_soffice_library_path()
+    docxtractr::convert_to_pdf(path, pdf_file = pdf_file)
+  }
+  if (verbose > 1) {
+    message(paste0("PDF is at: ", pdf_file))
+  }
+  return(pdf_file)
+}
+
 #' Convert a PDF file to a series of PNG image files
 #'
 #' Uses `pdftools::pdf_convert()` for conversion.
@@ -210,6 +238,7 @@ get_folder_id = function(x) {
 #'   images. The default value is 600.
 #'
 #' @importFrom pdftools poppler_config pdf_info pdf_convert
+#' @export
 pdf_to_pngs = function(path,
                        verbose = TRUE,
                        dpi = 600) {

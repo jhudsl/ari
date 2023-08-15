@@ -131,3 +131,25 @@ split_up_text <- function(text) {
   # Final output
   map(chunks, paste, collapse = " ")
 }
+
+
+# Sets LD_LIBRARY_PATH environment variable to path of
+# LibreOffice program on Linux or macOS systems if the variable is not already set
+fix_soffice_library_path = function() {
+  LD_LIBRARY_PATH = Sys.getenv("LD_LIBRARY_PATH")
+  if (sys_type() %in% c("linux", "macos")) {
+    warning(
+      paste0(
+        "Changing LD_LIBRARY_PATH as error in soffice ",
+        "with PPTX conversion may be due to path issues!"
+      )
+    )
+    Sys.setenv(
+      LD_LIBRARY_PATH =
+        paste0(
+          "/usr/lib/libreoffice/program",
+          if (nzchar(LD_LIBRARY_PATH)) paste0(":", LD_LIBRARY_PATH)
+        )
+    )
+  }
+}
