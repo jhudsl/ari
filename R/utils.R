@@ -132,6 +132,26 @@ split_up_text <- function(text) {
   map(chunks, paste, collapse = " ")
 }
 
+# Returns type of operating system
+os_type <- function() {
+  .Platform$OS.type
+}
+
+# Determine type of operating system
+sys_type <- function() {
+  if (os_type() == "windows") {
+    "windows"
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    "macos"
+  } else if (Sys.info()["sysname"] == "Linux") {
+    "linux"
+  } else if (os_type() == "unix") {
+    # "unix"
+    "linux"
+  } else {
+    stop("Unknown OS")
+  }
+}
 
 # Sets LD_LIBRARY_PATH environment variable to path of
 # LibreOffice program on Linux or macOS systems if the variable is not already set
