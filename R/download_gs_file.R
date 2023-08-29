@@ -218,7 +218,6 @@ pptx_to_pdf = function(path, verbose = TRUE) {
     docxtractr::convert_to_pdf(path, pdf_file = pdf_file)
   })
   if (inherits(out, "try-error")) {
-    fix_soffice_library_path()
     docxtractr::convert_to_pdf(path, pdf_file = pdf_file)
   }
   if (verbose > 1) {
