@@ -1,4 +1,4 @@
-#' Create a video from slides and a script
+#' Generate video from slides and a script
 #'
 #' \code{ari_narrate} creates a video from a script written in markdown and HTML
 #' slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
@@ -53,37 +53,41 @@
 #' }
 ari_narrate <- function(script, slides,
                         output = tempfile(fileext = ".mp4"),
-                        voice = text2speech::tts_default_voice(service = service),
-                        service = "amazon",
+                        tts_engine = text2speech::tts(),
+                        tts_engine_args = list(service = "coqui",
+                                                 model_name = "tacotron2-DDC_ph",
+                                                 vocoder_name = "ljspeech/univnet"),
+                        tts_engine_auth = text2speech::tts_auth(),
                         capture_method = c("vectorized", "iterative"),
-                        subtitles = FALSE, ...,
+                        subtitles = FALSE,
                         verbose = FALSE,
                         audio_codec = get_audio_codec(),
                         video_codec = get_video_codec(),
-                        cleanup = TRUE) {
-  auth <- text2speech::tts_auth(service = service)
+                        cleanup = TRUE,
+                        ...) {
+  # Authentication for Text-to-Speech Engines
+  auth <- tts_engine_auth(service =  tts_engine_args$service)
   if (!auth) {
     stop(paste0(
       "It appears you're not authenticated with ",
-      service, ". Make sure you've ",
+      tts_engine_args$service, ". Make sure you've ",
       "set the appropriate environmental variables ",
       "before you proceed."
     ))
   }
-
-
+  # Check capture_method
   capture_method <- match.arg(capture_method)
   if (!(capture_method %in% c("vectorized", "iterative"))) {
     stop('capture_method must be either "vectorized" or "iterative"')
   }
-
+ # Output directory, path to script
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
   if (file_ext(script) %in% c("Rmd", "rmd") & missing(slides)) {
     tfile <- tempfile(fileext = ".html")
     slides <- rmarkdown::render(input = script, output_file = tfile)
   }
-
+  # Slides
   if (file.exists(slides)) {
     slides <- normalizePath(slides)
     if (.Platform$OS.type == "windows") {
@@ -92,11 +96,12 @@ ari_narrate <- function(script, slides,
       slides <- paste0("file://localhost", slides)
     }
   }
+  # Check if script and output_dir exists
   stopifnot(
     file.exists(script),
     dir.exists(output_dir)
   )
-
+  # Pargraphs
   if (file_ext(script) %in% c("Rmd", "rmd")) {
     paragraphs <- parse_html_comments(script)
   } else {
@@ -112,7 +117,7 @@ ari_narrate <- function(script, slides,
       }
     )
   }
-
+  # Path to images
   slide_nums <- seq_along(paragraphs)
   img_paths <- file.path(
     output_dir,
@@ -122,22 +127,28 @@ ari_narrate <- function(script, slides,
       get_random_string(), ".jpeg"
     )
   )
-
+  # Take screenshot
   if (capture_method == "vectorized") {
-    webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)
+    webshot::webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)
   } else {
     for (i in slide_nums) {
-      webshot(url = paste0(slides, "#", i), file = img_paths[i], ...)
+      webshot::webshot(url = paste0(slides, "#", i), file = img_paths[i], ...)
     }
   }
 
   if (cleanup) {
     on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
   }
+
+  # Pass along ari_spin()
   ari_spin(
     images = img_paths, paragraphs = paragraphs,
-    output = output, voice = voice,
-    service = service, subtitles = subtitles,
-    verbose = verbose, cleanup = cleanup
+    output = output,
+    tts_engine = tts_engine,
+    tts_engine_args =  tts_engine_args,
+    tts_engine_auth = tts_engine_auth,
+    subtitles = subtitles,
+    verbose = verbose,
+    cleanup = cleanup
   )
 }
