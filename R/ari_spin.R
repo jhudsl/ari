@@ -62,7 +62,9 @@ ari_spin <- function(images, paragraphs,
                      tts_engine_auth = text2speech::tts_auth,
                      subtitles = FALSE,
                      duration = NULL,
-                     key_or_json_file = NULL) {
+                     key_or_json_file = NULL,
+                     verbose = FALSE,
+                     cleanup = TRUE) {
   # Check for ffmpeg
   ffmpeg_exec()
   # Argument checks

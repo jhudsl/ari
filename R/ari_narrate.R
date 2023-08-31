@@ -44,20 +44,17 @@
 #' @export
 #' @examples
 #' \dontrun{
-#'
-#' #
 #' ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-#'   system.file("test", "ari_intro.html", package = "ari"),
-#'   voice = "Joey"
-#' )
+#'             system.file("test", "ari_intro.html", package = "ari"))
 #' }
 ari_narrate <- function(script, slides,
                         output = tempfile(fileext = ".mp4"),
-                        tts_engine = text2speech::tts(),
+                        tts_engine = text2speech::tts,
                         tts_engine_args = list(service = "coqui",
-                                                 model_name = "tacotron2-DDC_ph",
-                                                 vocoder_name = "ljspeech/univnet"),
-                        tts_engine_auth = text2speech::tts_auth(),
+                                               voice = NULL,
+                                               model_name = "tacotron2-DDC_ph",
+                                               vocoder_name = "ljspeech/univnet"),
+                        tts_engine_auth = text2speech::tts_auth,
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE,
                         verbose = FALSE,
@@ -67,6 +64,7 @@ ari_narrate <- function(script, slides,
                         ...) {
   # Authentication for Text-to-Speech Engines
   auth <- tts_engine_auth(service =  tts_engine_args$service)
+  # Stop message
   if (!auth) {
     stop(paste0(
       "It appears you're not authenticated with ",
@@ -80,7 +78,7 @@ ari_narrate <- function(script, slides,
   if (!(capture_method %in% c("vectorized", "iterative"))) {
     stop('capture_method must be either "vectorized" or "iterative"')
   }
- # Output directory, path to script
+  # Output directory, path to script
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
   if (file_ext(script) %in% c("Rmd", "rmd") & missing(slides)) {
@@ -101,7 +99,7 @@ ari_narrate <- function(script, slides,
     file.exists(script),
     dir.exists(output_dir)
   )
-  # Pargraphs
+  # Convert script to html and get text
   if (file_ext(script) %in% c("Rmd", "rmd")) {
     paragraphs <- parse_html_comments(script)
   } else {
@@ -109,9 +107,9 @@ ari_narrate <- function(script, slides,
     if (cleanup) {
       on.exit(unlink(html_path, force = TRUE), add = TRUE)
     }
-    render(script, output_format = html_document(), output_file = html_path)
+    rmarkdown::render(script, output_format = rmarkdown::html_document(), output_file = html_path)
     paragraphs <- map_chr(
-      html_text(html_nodes(read_html(html_path), "p")),
+      rvest::html_text(rvest::html_nodes(xml2::read_html(html_path), "p")),
       function(x) {
         gsub("\u2019", "'", x)
       }
