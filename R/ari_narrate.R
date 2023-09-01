@@ -2,8 +2,6 @@
 #'
 #' \code{ari_narrate} creates a video from a script written in markdown and HTML
 #' slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
-#' This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly}
-#' via \code{\link{ari_spin}}.
 #'
 #' @param script Either a markdown file where every paragraph will be read over
 #' a corresponding slide, or an \code{.Rmd} file where each HTML comment will
@@ -15,7 +13,7 @@
 #' @param voice The voice you want to use. See
 #' \code{\link[text2speech]{tts_voices}} for more information
 #' about what voices are available.
-#' @param service speech synthesis service to use,
+#' @param service Speech Synthesis service to use,
 #' passed to \code{\link[text2speech]{tts}}.
 #' Either \code{"amazon"} or \code{"google"}.
 #' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
@@ -28,10 +26,6 @@
 #' \code{.srt}.
 #' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
-#' @param audio_codec The audio encoder for the splicing.  If this
-#' fails, try \code{copy}.
-#' @param video_codec The video encoder for the splicing.  If this
-#' fails, see \code{ffmpeg -codecs}
 #' @param cleanup If \code{TRUE}, interim files are deleted
 #'
 #' @return The output from \code{\link{ari_spin}}
@@ -58,8 +52,6 @@ ari_narrate <- function(script, slides,
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE,
                         verbose = FALSE,
-                        audio_codec = get_audio_codec(),
-                        video_codec = get_video_codec(),
                         cleanup = TRUE,
                         ...) {
   # Authentication for Text-to-Speech Engines
