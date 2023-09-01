@@ -4,20 +4,23 @@
 #' \code{--enable-libass} as per
 #' \url{https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo}
 #'
-#' @param video Video in \code{mp4} format
-#' @param srt Subtitle file in \code{srt} format
+#' @param input_video Path to video in \code{mp4} format
+#' @param srt Path to subtitle file in \code{srt} format
+#' @param output_video Path to video with subtitles
 #' @param verbose print diagnostic messages.  If > 1,
 #' then more are printed
 #'
 #' @return Name of output video
-ari_burn_subtitles <- function(video, srt, verbose = FALSE) {
+ari_burn_subtitles <- function(input_video, srt,
+                               output_video = tempfile(fileext = ".mp4"),
+                               verbose = FALSE) {
   ffmpeg <- ffmpeg_exec(quote = TRUE)
   if (verbose > 0) {
     message("Burning in Subtitles")
   }
   command <- paste(
-    ffmpeg, "-y -i", video, paste0("-vf subtitles=", srt),
-    video
+    ffmpeg, "-y -i", input_video, paste0("-vf subtitles=", srt),
+    output_video
   )
 
   if (verbose > 0) {
@@ -28,5 +31,5 @@ ari_burn_subtitles <- function(video, srt, verbose = FALSE) {
     warning("Result was non-zero for ffmpeg")
   }
 
-  return(video)
+  output_video
 }
