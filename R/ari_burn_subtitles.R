@@ -11,6 +11,7 @@
 #' then more are printed
 #'
 #' @return Name of output video
+#' @export
 ari_burn_subtitles <- function(input_video, srt,
                                output_video = tempfile(fileext = ".mp4"),
                                verbose = FALSE) {

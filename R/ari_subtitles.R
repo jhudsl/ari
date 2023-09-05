@@ -1,9 +1,12 @@
-# Generate subtitle files for audio or video content
-# paragraphs - strings of text
-# dutations - paragraph duration in seconds
-# path - path to .srt file output
-#' @importFrom purrr map map_dbl map2
-#' @importFrom hms hms
+#' Generate subtitle files for audio for video content
+#'
+#' @param paragraphs String of text
+#' @param wavs Wave objects from tuneR
+#' @param path Path to .srt file output
+#' @param width Width of each subtitle
+#'
+#' @return
+#' @export
 ari_subtitles <- function(paragraphs, wavs, path, width = 42) {
   # Calculate the duration of each audio file
   durations <- map_dbl(wavs, ~ length(.x@left) / .x@samp.rate)
