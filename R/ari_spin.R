@@ -130,7 +130,7 @@ ari_spin <- function(images, paragraphs,
   }
   # Burn subtitles
   if (subtitles) {
-    sub_file <- paste0(file_path_sans_ext(output), ".srt")
+    sub_file <- paste0(tools::file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wave_objects, sub_file)
   }
   print("Audio succesfully converted...............")

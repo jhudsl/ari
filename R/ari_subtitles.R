@@ -5,7 +5,8 @@
 #' @param path Path to .srt file output
 #' @param width Width of each subtitle
 #'
-#' @return
+#' @importFrom purrr map_dbl
+#' @importFrom hms hms
 #' @export
 ari_subtitles <- function(paragraphs, wavs, path, width = 42) {
   # Calculate the duration of each audio file
@@ -20,7 +21,7 @@ ari_subtitles <- function(paragraphs, wavs, path, width = 42) {
 
   # Convery cumulative duration to format hh:mm:ss,ms
   cumdur <- cumsum(durations)
-  cumdur <- map(cumdur, hms)
+  cumdur <- map(cumdur, hms::hms)
   cumdur <- map(cumdur, as.character)
   cumdur <- map(cumdur, substr, start = 0, stop = 12)
   cumdur <- map(cumdur, gsub, pattern = "\\.", replacement = ",")
