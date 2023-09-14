@@ -15,8 +15,6 @@ ari_narrate(
   capture_method = c("vectorized", "iterative"),
   subtitles = FALSE,
   verbose = FALSE,
-  audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(),
   cleanup = TRUE,
   ...
 )
@@ -44,12 +42,6 @@ as the \code{output} argument will be created, but with the file extension
 
 \item{verbose}{print diagnostic messages.  If > 1, then more are printed}
 
-\item{audio_codec}{The audio encoder for the splicing.  If this
-fails, try \code{copy}.}
-
-\item{video_codec}{The video encoder for the splicing.  If this
-fails, see \code{ffmpeg -codecs}}
-
 \item{cleanup}{If \code{TRUE}, interim files are deleted}
 
 \item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
@@ -58,7 +50,7 @@ fails, see \code{ffmpeg -codecs}}
 \code{\link[text2speech]{tts_voices}} for more information
 about what voices are available.}
 
-\item{service}{speech synthesis service to use,
+\item{service}{Speech Synthesis service to use,
 passed to \code{\link[text2speech]{tts}}.
 Either \code{"amazon"} or \code{"google"}.}
 }
@@ -68,8 +60,6 @@ The output from \code{\link{ari_spin}}
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML
 slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
-This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly}
-via \code{\link{ari_spin}}.
 }
 \examples{
 \dontrun{
