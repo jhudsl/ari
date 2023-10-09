@@ -112,6 +112,11 @@ ari_spin <- function(images, paragraphs,
   paragraphs_along <- seq_along(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
 
+  # Progress bar
+  pb <- progress_bar$new(
+    format = "  Downloading [:bar] :percent eta: :eta",
+    total = 100, clear = TRUE, width = 60)
+
   # Iterate through arguments used in tts()
   for (ii in paragraphs_along) {
     args <- tts_engine_args
@@ -127,6 +132,8 @@ ari_spin <- function(images, paragraphs,
     wav <- pad_wav(wav, duration = duration[ii])
     ideal_duration[ii] <- length(wav@left) / wav@samp.rate
     wave_objects[[ii]] <- wav
+    # Advance progress bar
+    pb$tick()
   }
   # Burn subtitles
   if (subtitles) {
