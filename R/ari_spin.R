@@ -113,7 +113,7 @@ ari_spin <- function(images, paragraphs,
   ideal_duration <- rep(NA, length(paragraphs))
 
   # Progress bar
-  pb <- progress_bar$new(
+  pb <- progress::progress_bar$new(
     format = "  Downloading [:bar] :percent eta: :eta",
     total = 100, clear = TRUE, width = 60)
 
