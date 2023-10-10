@@ -9,8 +9,7 @@ ari_narrate(
   slides,
   output = tempfile(fileext = ".mp4"),
   tts_engine = text2speech::tts,
-  tts_engine_args = list(service = "coqui", voice = NULL, model_name =
-    "tacotron2-DDC_ph", vocoder_name = "ljspeech/univnet"),
+  tts_engine_args = coqui_args(),
   tts_engine_auth = text2speech::tts_auth,
   capture_method = c("vectorized", "iterative"),
   subtitles = FALSE,

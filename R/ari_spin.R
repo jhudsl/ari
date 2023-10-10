@@ -53,12 +53,9 @@
 #' }
 #'
 ari_spin <- function(images, paragraphs,
-                     output = tempfile(fileext = ".mp4"),
+                     output,
                      tts_engine = text2speech::tts,
-                     tts_engine_args = list(service = "coqui",
-                                            voice = NULL,
-                                            model_name = "tacotron2-DDC_ph",
-                                            vocoder_name = "ljspeech/univnet"),
+                     tts_engine_args = coqui_args(),
                      tts_engine_auth = text2speech::tts_auth,
                      subtitles = FALSE,
                      duration = NULL,
@@ -114,7 +111,7 @@ ari_spin <- function(images, paragraphs,
 
   # Progress bar
   pb <- progress::progress_bar$new(
-    format = "  Downloading [:bar] :percent eta: :eta",
+    format = " Downloading [:bar] :percent eta: :eta",
     total = 100, clear = TRUE, width = 60)
 
   # Iterate through arguments used in tts()
@@ -122,11 +119,6 @@ ari_spin <- function(images, paragraphs,
     args <- tts_engine_args
     args$text <- paragraphs[ii]
     args$bind_audio <- TRUE
-    # coqui+ari doesn't work with mp3
-    if (tts_engine_args$service == "coqui") {
-      args$output_format <- "wav"
-      args$voice <- NULL
-    }
     wav <- do.call(tts_engine, args = args)
     wav <- reduce(wav$wav, bind)
     wav <- pad_wav(wav, duration = duration[ii])
