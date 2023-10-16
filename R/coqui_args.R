@@ -9,9 +9,9 @@
 #' @examples
 #' coqui_args(model_name = "tacotron2-DDC_ph", vocoder_name = "ljspeech/univnet")
 coqui_args <- function(model_name = "jenny", vocoder_name = "jenny") {
-list(service = "coqui",
-     voice = NULL,
-     model_name = model_name,
-     vocoder_name = vocoder_name,
-     output_format = "wav")
+  list(service = "coqui",
+       voice = NULL,
+       model_name = model_name,
+       vocoder_name = vocoder_name,
+       output_format = "wav")
 }

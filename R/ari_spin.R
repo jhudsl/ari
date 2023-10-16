@@ -132,23 +132,21 @@ ari_spin <- function(images, paragraphs,
     sub_file <- paste0(file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wave_objects, sub_file)
   }
+
   # Create a video from images and audio
   res <- ari_stitch(images, wave_objects, output)
-  # Collect output
-  args <- list()
-  cleanup <- args$cleanup
-  if (is.null(cleanup)) {
-    cleanup <- TRUE
+  # Path to output
+  output_path <- attr(res, "outfile")
+
+  # Check if larger than 0 bytes
+  output_size <- file.info(output_path)$size
+
+  if (output_size > 0) {
+    return(output_path)
+  } else {
+    stop("File does not exist. Something went wrong.")
   }
-  if (!cleanup) {
-    attr(res, "wavs") <- wave_objects
-  }
-  attr(res, "voice") <- tts_engine_args$voice
-  if (subtitles) {
-    attr(res, "subtitles") <- sub_file
-  }
-  attr(res, "service") <- tts_engine_args$service
-  return(res)
+
 }
 
 #' @rdname ari_spin
