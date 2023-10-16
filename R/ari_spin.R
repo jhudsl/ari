@@ -119,6 +119,7 @@ ari_spin <- function(images, paragraphs, output,
   if (subtitles) {
     sub_file <- paste0(file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wave_objects, sub_file)
+    message("Subtitle file successfully generated")
   }
 
   # Create a video from images and audio

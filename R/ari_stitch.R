@@ -1,4 +1,4 @@
-#' Create a video from images and audio
+#' Generate video from images and audio
 #'
 #' Given a vector of paths to images (preferably \code{.jpg}s
 #' or \code{.png}s) and a flat list of \code{\link[tuneR]{Wave}}s of equal
@@ -74,44 +74,28 @@ ari_stitch <- function(images, audio,
                        output,
                        verbose = FALSE,
                        cleanup = TRUE,
-                       ffmpeg_opts = "",
-                       divisible_height = TRUE,
-                       audio_codec = get_audio_codec(),
-                       video_codec = get_video_codec(),
-                       video_sync_method = "2",
-                       audio_bitrate = NULL,
-                       video_bitrate = NULL,
-                       pixel_format = "yuv420p",
-                       fast_start = FALSE,
-                       deinterlace = FALSE,
-                       stereo_audio = TRUE,
+                       ffmpeg_args = set_ffmpeg_args(),
                        duration = NULL,
-                       video_filters = NULL,
-                       frames_per_second = NULL,
                        check_inputs = TRUE) {
-  # Argument check and file path processing
+  # File path processing
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
   output <- file.path(output_dir, basename(output))
-  stopifnot(
-    length(audio) > 0,
-    dir.exists(output_dir)
-  )
+  stopifnot(length(audio) > 0, dir.exists(output_dir))
+  # Input check
   if (check_inputs) {
-    stopifnot(
-      identical(length(images), length(audio)),
-      all(file.exists(images))
-    )
+    stopifnot(identical(length(images), length(audio)),
+              all(file.exists(images)))
   }
+  # If audio is filename instead of Wave object
   if (is.character(audio)) {
     audio <- lapply(audio, function(x) {
       ext <- tolower(tools::file_ext(x))
       func <- switch(ext,
                      wav = tuneR::readWave,
                      mp3 = tuneR::readMP3,
-                     tuneR::readMP3
-      )
+                     tuneR::readMP3)
       func(x)
     })
     audio <- pad_wav(audio, duration = duration)
@@ -123,19 +107,17 @@ ari_stitch <- function(images, audio,
   if (verbose > 1) {
     print(audio)
   }
-  # End of Argument check and file path processing
 
   # Audio preprocessing
   audio <- match_sample_rate(audio, verbose = verbose)
   wav <- purrr::reduce(audio, tuneR::bind)
   wav_path <- file.path(output_dir, paste0("ari_audio_", get_random_string(), ".wav"))
   tuneR::writeWave(wav, filename = wav_path)
-
   if (cleanup) {
     on.exit(unlink(wav_path, force = TRUE), add = TRUE)
   }
 
-  # if there are any gif images, convert all images to gif
+  # If any gif images, convert all images to gif
   img_ext <- tolower(tools::file_ext(images))
   any_gif <- any(img_ext %in% "gif")
   if (any_gif & !all(img_ext %in% "gif")) {
@@ -152,14 +134,6 @@ ari_stitch <- function(images, audio,
     }
   }
 
-  input_txt_path <- file.path(
-    output_dir,
-    paste0(
-      "ari_input_",
-      get_random_string(),
-      ".txt"
-    )
-  )
   ## on windows ffmpeg cancats names adding the working directory, so if
   ## complete url is provided it adds it twice.
   if (.Platform$OS.type == "windows") {
@@ -172,7 +146,15 @@ ari_stitch <- function(images, audio,
     images <- basename(images)
   }
 
-  # add "file 'IMAGE_PATH'" and duration in txt file located at input_txt_path
+  # Add "file 'IMAGE_PATH'" and duration in txt file located at input_txt_path
+  input_txt_path <- file.path(
+    output_dir,
+    paste0(
+      "ari_input_",
+      get_random_string(),
+      ".txt"
+    )
+  )
   for (i in seq_along(images)) {
     cat(paste0("file ", "'", images[i], "'", "\n"),
         file = input_txt_path,
@@ -189,78 +171,9 @@ ari_stitch <- function(images, audio,
   # define separator to be used on Windows
   input_txt_path <- normalizePath(input_txt_path, winslash = "/")
 
-  # needed for users as per
-  # https://superuser.com/questions/718027/
-  # ffmpeg-concat-doesnt-work-with-absolute-path
-  # input_txt_path = normalizePath(input_txt_path, winslash = "\\")
+  # Build ffmpeg command to input into system()
+  command <- build_ffmpeg_command(input_txt_path, wav_path, ffmpeg_args, output)
 
-  ffmpeg <- ffmpeg_exec(quote = TRUE)
-
-  # set video filters
-  if (!is.null(frames_per_second)) {
-    video_filters <- c(video_filters, paste0("fps=", frames_per_second))
-  } else {
-    video_filters <- c(video_filters, "fps=5")
-  }
-  if (divisible_height) {
-    video_filters <- c(video_filters, '"scale=trunc(iw/2)*2:trunc(ih/2)*2"')
-  }
-
-
-  # workaround for older ffmpeg
-  # https://stackoverflow.com/questions/32931685/
-  # the-encoder-aac-is-experimental-but-experimental-codecs-are-not-enabled
-  experimental <- FALSE
-  if (!is.null(audio_codec)) {
-    if (audio_codec == "aac") {
-      experimental <- TRUE
-    }
-  }
-  if (deinterlace) {
-    video_filters <- c(video_filters, "yadif")
-  }
-  video_filters <- paste(video_filters, collapse = ",")
-  video_filters <- paste0("-vf ", video_filters)
-
-  if (any(grepl("-vf", ffmpeg_opts))) {
-    warning("Found video filters in ffmpeg_opts, may not be used correctly!")
-  }
-  ffmpeg_opts <- c(video_filters, ffmpeg_opts)
-  ffmpeg_opts <- paste(ffmpeg_opts, collapse = " ")
-
-  # create ffmpeg command
-  command <- paste(
-    ffmpeg, "-y",
-    "-f concat -safe 0 -i", shQuote(input_txt_path),
-    "-i", shQuote(wav_path),
-    ifelse(!is.null(video_codec), paste("-c:v", video_codec),
-           ""
-    ),
-    ifelse(!is.null(audio_codec), paste("-c:a", audio_codec),
-           ""
-    ),
-    ifelse(stereo_audio, "-ac 2", ""),
-    ifelse(!is.null(audio_bitrate), paste("-b:a", audio_bitrate),
-           ""
-    ),
-    ifelse(!is.null(video_bitrate), paste("-b:v", video_bitrate),
-           ""
-    ),
-    # ifelse(deinterlace, "-vf yadif", ""),
-    ifelse(!is.null(video_sync_method), paste("-fps_mode", "auto"),
-           ""
-    ),
-    ifelse(!is.null(pixel_format), paste("-pix_fmt", pixel_format),
-           ""
-    ),
-    ifelse(fast_start, "-movflags +faststart", ""),
-    ffmpeg_opts,
-    ifelse(!is.null(frames_per_second), paste0("-r ", frames_per_second), ""),
-    ifelse(experimental, "-strict experimental", ""),
-    "-max_muxing_queue_size 9999",
-    "-threads 2",
-    shQuote(output)
-  )
   if (verbose > 0) {
     message(command)
   }
