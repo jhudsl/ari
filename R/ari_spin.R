@@ -10,24 +10,15 @@
 #' @param images A vector of paths to images.
 #' @param paragraphs A vector strings that will be spoken by Amazon Polly.
 #' @param output A path to the video file which will be created.
-#' @param voice The voice you want to use. See
-#' \code{\link[text2speech]{tts_voices}} for more information
-#' about what voices are available.
-#' @param model_name (Coqui TTS only) Deep Learning model for Text-to-Speech
-#'   Conversion
-#' @param vocoder_name (Coqui TTS only) Voice coder used for speech coding and
-#'   transmission
-#' @param service Speech synthesis service to use,
-#' passed to \code{\link[text2speech]{tts}},
-#' Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.
+#' @param tts_engine The desired engine for converting text-to-speech
+#' @param tts_engine_args List of parameters provided to the designated text-to-speech engine
+#' @param tts_engine_auth Authentication required for the designated text-to-speech engine
 #' @param subtitles Should a \code{.srt} file be created with subtitles? The
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
 #' @param duration a vector of numeric durations for each audio
 #' track.  See \code{\link{pad_wav}}
-#' @param ... Additional arguments to voice_engine
-#' @param tts_args list of arguments to pass to \code{\link{tts}}
 #' @param key_or_json_file access key or JSON file to pass to
 #' \code{\link{tts_auth}} for authorization
 #'
@@ -49,22 +40,16 @@
 #'   "Welcome to my very interesting lecture.",
 #'   "Here are some fantastic equations I came up with."
 #' )
-#' ari_spin(slides, sentences)
+#' ari_spin(slides, sentences, output = "test.mp4",
+#'          tts_engine_args = coqui_args(model_name = "tacotron2-DDC_ph",
+#'           vocoder_name = "ljspeech/univnet"))
 #' }
 #'
-ari_spin <- function(images, paragraphs,
-                     output = tempfile(fileext = ".mp4"),
+ari_spin <- function(images, paragraphs, output,
                      tts_engine = text2speech::tts,
-                     tts_engine_args = list(service = "coqui",
-                                            voice = NULL,
-                                            model_name = "tacotron2-DDC_ph",
-                                            vocoder_name = "ljspeech/univnet"),
+                     tts_engine_args = coqui_args(),
                      tts_engine_auth = text2speech::tts_auth,
-                     subtitles = FALSE,
-                     duration = NULL,
-                     key_or_json_file = NULL,
-                     verbose = FALSE,
-                     cleanup = TRUE) {
+                     subtitles = FALSE, duration = NULL, key_or_json_file = NULL) {
   # Check for ffmpeg
   ffmpeg_exec()
   # Argument checks
@@ -112,45 +97,44 @@ ari_spin <- function(images, paragraphs,
   paragraphs_along <- seq_along(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
 
+  # Progress bar
+  pb <- progress::progress_bar$new(
+    format = " Downloading [:bar] :percent eta: :eta",
+    total = 100, clear = TRUE, width = 60)
+
   # Iterate through arguments used in tts()
   for (ii in paragraphs_along) {
     args <- tts_engine_args
     args$text <- paragraphs[ii]
     args$bind_audio <- TRUE
-    # coqui+ari doesn't work with mp3
-    if (tts_engine_args$service == "coqui") {
-      args$output_format <- "wav"
-      args$voice <- NULL
-    }
     wav <- do.call(tts_engine, args = args)
     wav <- reduce(wav$wav, bind)
     wav <- pad_wav(wav, duration = duration[ii])
     ideal_duration[ii] <- length(wav@left) / wav@samp.rate
     wave_objects[[ii]] <- wav
+    # Advance progress bar
+    pb$tick()
   }
   # Burn subtitles
   if (subtitles) {
     sub_file <- paste0(tools::file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wave_objects, sub_file)
   }
-  print("Audio succesfully converted...............")
+
   # Create a video from images and audio
   res <- ari_stitch(images, wave_objects, output)
-  # Collect output
-  args <- list()
-  cleanup <- args$cleanup
-  if (is.null(cleanup)) {
-    cleanup <- TRUE
+  # Path to output
+  output_path <- attr(res, "outfile")
+
+  # Check if larger than 0 bytes
+  output_size <- file.info(output_path)$size
+
+  if (output_size > 0) {
+    return(output_path)
+  } else {
+    stop("File does not exist. Something went wrong.")
   }
-  if (!cleanup) {
-    attr(res, "wavs") <- wave_objects
-  }
-  attr(res, "voice") <- tts_engine_args$voice
-  if (subtitles) {
-    attr(res, "subtitles") <- sub_file
-  }
-  attr(res, "service") <- tts_engine_args$service
-  return(res)
+
 }
 
 #' @rdname ari_spin

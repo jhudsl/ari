@@ -7,7 +7,7 @@
 ari_stitch(
   images,
   audio,
-  output = tempfile(fileext = ".mp4"),
+  output,
   verbose = FALSE,
   cleanup = TRUE,
   ffmpeg_opts = "",
