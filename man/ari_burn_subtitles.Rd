@@ -4,12 +4,7 @@
 \alias{ari_burn_subtitles}
 \title{Burn Subtitles into a video}
 \usage{
-ari_burn_subtitles(
-  input_video,
-  srt,
-  output_video = tempfile(fileext = ".mp4"),
-  verbose = FALSE
-)
+ari_burn_subtitles(input_video, srt, output_video, verbose = FALSE)
 }
 \arguments{
 \item{input_video}{Path to video in \code{mp4} format}
