@@ -10,12 +10,9 @@
 #' \code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a
 #' similar package.
 #' @param output The path to the video file which will be created.
-#' @param voice The voice you want to use. See
-#' \code{\link[text2speech]{tts_voices}} for more information
-#' about what voices are available.
-#' @param service Speech Synthesis service to use,
-#' passed to \code{\link[text2speech]{tts}}.
-#' Either \code{"amazon"} or \code{"google"}.
+#' @param tts_engine The desired engine for converting text-to-speech
+#' @param tts_engine_args List of parameters provided to the designated text-to-speech engine
+#' @param tts_engine_auth Authentication required for the designated text-to-speech engine
 #' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
 #' The vectorized mode is faster though it can cause screens to repeat. If
 #' making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
@@ -24,9 +21,9 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
-#' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
 #' @param cleanup If \code{TRUE}, interim files are deleted
+#' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #'
 #' @return The output from \code{\link{ari_spin}}
 #' @importFrom xml2 read_html
@@ -41,13 +38,9 @@
 #' ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
 #'             system.file("test", "ari_intro.html", package = "ari"))
 #' }
-ari_narrate <- function(script, slides,
-                        output = tempfile(fileext = ".mp4"),
+ari_narrate <- function(script, slides, output,
                         tts_engine = text2speech::tts,
-                        tts_engine_args = list(service = "coqui",
-                                               voice = NULL,
-                                               model_name = "tacotron2-DDC_ph",
-                                               vocoder_name = "ljspeech/univnet"),
+                        tts_engine_args = coqui_args(),
                         tts_engine_auth = text2speech::tts_auth,
                         capture_method = c("vectorized", "iterative"),
                         subtitles = FALSE,
@@ -137,8 +130,5 @@ ari_narrate <- function(script, slides,
     tts_engine = tts_engine,
     tts_engine_args =  tts_engine_args,
     tts_engine_auth = tts_engine_auth,
-    subtitles = subtitles,
-    verbose = verbose,
-    cleanup = cleanup
-  )
+    subtitles = subtitles)
 }

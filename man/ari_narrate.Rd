@@ -7,10 +7,9 @@
 ari_narrate(
   script,
   slides,
-  output = tempfile(fileext = ".mp4"),
+  output,
   tts_engine = text2speech::tts,
-  tts_engine_args = list(service = "coqui", voice = NULL, model_name =
-    "tacotron2-DDC_ph", vocoder_name = "ljspeech/univnet"),
+  tts_engine_args = coqui_args(),
   tts_engine_auth = text2speech::tts_auth,
   capture_method = c("vectorized", "iterative"),
   subtitles = FALSE,
@@ -30,6 +29,12 @@ similar package.}
 
 \item{output}{The path to the video file which will be created.}
 
+\item{tts_engine}{The desired engine for converting text-to-speech}
+
+\item{tts_engine_args}{List of parameters provided to the designated text-to-speech engine}
+
+\item{tts_engine_auth}{Authentication required for the designated text-to-speech engine}
+
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
 The vectorized mode is faster though it can cause screens to repeat. If
 making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
@@ -45,14 +50,6 @@ as the \code{output} argument will be created, but with the file extension
 \item{cleanup}{If \code{TRUE}, interim files are deleted}
 
 \item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
-
-\item{voice}{The voice you want to use. See
-\code{\link[text2speech]{tts_voices}} for more information
-about what voices are available.}
-
-\item{service}{Speech Synthesis service to use,
-passed to \code{\link[text2speech]{tts}}.
-Either \code{"amazon"} or \code{"google"}.}
 }
 \value{
 The output from \code{\link{ari_spin}}

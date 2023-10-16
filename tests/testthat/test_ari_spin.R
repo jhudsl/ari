@@ -8,7 +8,7 @@ skip_spin <- function(){
 
 video <- file.path(tempdir(), "output.mp4")
 
-qmm <- c("I will now perform the Mercutio's speech from Shakespeare's Romeo and Juliet.", 
+qmm <- c("I will now perform the Mercutio's speech from Shakespeare's Romeo and Juliet.",
          "O, then, I see Queen Mab hath been with you.
 She is the fairies' midwife, and she comes
 In shape no bigger than an agate-stone
@@ -59,7 +59,7 @@ if (ffmpeg_version_sufficient()) {
     fdk_enabled = FALSE
   } else {
     fdk_enabled = grepl("fdk", res[ res$codec == "aac", "codec_name"])
-  }  
+  }
 } else {
   fdk_enabled = FALSE
 }
@@ -76,11 +76,16 @@ test_that("Ari can process text with over 1500 characters.", {
   run_voice = "Joanna"
 
   ari_spin(
-    system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
-    qmm, output = video, voice = run_voice,
-    service = "amazon",
-    audio_codec = audio_codec)
-  
+    images = system.file("test", c("mab1.png", "mab2.png"), package = "ari"),
+    paragraphs = qmm,
+    output = video,
+    tts_engine = text2speech::tts,
+    tts_engine_args = coqui_args(),
+    tts_engine_auth = text2speech::tts_auth,
+    subtitles = FALSE,
+    duration = NULL,
+    key_or_json_file = NULL)
+
   expect_true(file.size(video) > 50000)
 })
 
