@@ -18,5 +18,8 @@ List of arguments
 List of arguments to the Coqui text-to-speech engine
 }
 \examples{
+# Female Voices:
+coqui_args(model_name = "jenny", vocoder_name = "jenny")
 coqui_args(model_name = "tacotron2-DDC_ph", vocoder_name = "ljspeech/univnet")
+
 }
