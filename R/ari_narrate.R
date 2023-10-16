@@ -36,7 +36,8 @@
 #' @examples
 #' \dontrun{
 #' ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-#'             system.file("test", "ari_intro.html", package = "ari"))
+#'             system.file("test", "ari_intro.html", package = "ari"),
+#'             output = "test.mp4")
 #' }
 ari_narrate <- function(script, slides, output,
                         tts_engine = text2speech::tts,

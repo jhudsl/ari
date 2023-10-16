@@ -61,6 +61,7 @@ slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
 \examples{
 \dontrun{
 ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-            system.file("test", "ari_intro.html", package = "ari"))
+            system.file("test", "ari_intro.html", package = "ari"),
+            output = "test.mp4")
 }
 }
