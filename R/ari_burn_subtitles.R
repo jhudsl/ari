@@ -12,16 +12,13 @@
 #'
 #' @return Name of output video
 #' @export
-ari_burn_subtitles <- function(input_video, srt,
-                               output_video = tempfile(fileext = ".mp4"),
-                               verbose = FALSE) {
+ari_burn_subtitles <- function(input_video, srt, output_video, verbose = FALSE) {
   ffmpeg <- ffmpeg_exec(quote = TRUE)
   if (verbose > 0) {
     message("Burning in Subtitles")
   }
   command <- paste(
-    ffmpeg, "-y -i", input_video, paste0("-vf subtitles=", srt),
-    output_video
+    ffmpeg, "-y -i", input_video, paste0("-vf subtitles=", srt), output_video
   )
 
   if (verbose > 0) {
