@@ -2,21 +2,20 @@
 % Please edit documentation in R/ari_narrate.R
 \name{ari_narrate}
 \alias{ari_narrate}
-\title{Create a video from slides and a script}
+\title{Generate video from slides and a script}
 \usage{
 ari_narrate(
   script,
   slides,
-  output = tempfile(fileext = ".mp4"),
-  voice = text2speech::tts_default_voice(service = service),
-  service = "amazon",
+  output,
+  tts_engine = text2speech::tts,
+  tts_engine_args = coqui_args(),
+  tts_engine_auth = text2speech::tts_auth,
   capture_method = c("vectorized", "iterative"),
   subtitles = FALSE,
-  ...,
   verbose = FALSE,
-  audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(),
-  cleanup = TRUE
+  cleanup = TRUE,
+  ...
 )
 }
 \arguments{
@@ -30,13 +29,11 @@ similar package.}
 
 \item{output}{The path to the video file which will be created.}
 
-\item{voice}{The voice you want to use. See
-\code{\link[text2speech]{tts_voices}} for more information
-about what voices are available.}
+\item{tts_engine}{The desired engine for converting text-to-speech}
 
-\item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}}.
-Either \code{"amazon"} or \code{"google"}.}
+\item{tts_engine_args}{List of parameters provided to the designated text-to-speech engine}
+
+\item{tts_engine_auth}{Authentication required for the designated text-to-speech engine}
 
 \item{capture_method}{Either \code{"vectorized"} or \code{"iterative"}.
 The vectorized mode is faster though it can cause screens to repeat. If
@@ -48,17 +45,11 @@ default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 as the \code{output} argument will be created, but with the file extension
 \code{.srt}.}
 
-\item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
-
 \item{verbose}{print diagnostic messages.  If > 1, then more are printed}
 
-\item{audio_codec}{The audio encoder for the splicing.  If this
-fails, try \code{copy}.}
-
-\item{video_codec}{The video encoder for the splicing.  If this
-fails, see \code{ffmpeg -codecs}}
-
 \item{cleanup}{If \code{TRUE}, interim files are deleted}
+
+\item{...}{Arguments that will be passed to \code{\link[webshot]{webshot}}.}
 }
 \value{
 The output from \code{\link{ari_spin}}
@@ -66,16 +57,11 @@ The output from \code{\link{ari_spin}}
 \description{
 \code{ari_narrate} creates a video from a script written in markdown and HTML
 slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
-This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly}
-via \code{\link{ari_spin}}.
 }
 \examples{
 \dontrun{
-
-#
 ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-  system.file("test", "ari_intro.html", package = "ari"),
-  voice = "Joey"
-)
+            system.file("test", "ari_intro.html", package = "ari"),
+            output = "test.mp4")
 }
 }

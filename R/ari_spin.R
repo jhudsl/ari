@@ -1,40 +1,24 @@
-#' Create a video from images and text
+#' Generate video from images and text
 #'
 #' Given equal length vectors of paths to images (preferably \code{.jpg}s
 #' or \code{.png}s) and strings which will be
-#' synthesized by
-#' \href{https://aws.amazon.com/polly/}{Amazon Polly} or
-#' any other synthesizer available in
-#' \code{\link[text2speech]{tts}}, this function creates an
+#' synthesized by a text-to-speech engine, this function creates an
 #' \code{.mp4} video file where each image is shown with
 #' its corresponding narration. This function uses \code{\link{ari_stitch}} to
 #' create the video.
 #'
-#' This function needs to connect to
-#' \href{https://aws.amazon.com/}{Amazon Web Services} in order to create the
-#' narration. You can find a guide for accessing AWS from R
-#' \href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
-#' For more information about how R connects
-#' to Amazon Polly see the \code{aws.polly} documentation
-#' \href{https://github.com/cloudyr/aws.polly}{here}.
-#'
 #' @param images A vector of paths to images.
 #' @param paragraphs A vector strings that will be spoken by Amazon Polly.
 #' @param output A path to the video file which will be created.
-#' @param voice The voice you want to use. See
-#' \code{\link[text2speech]{tts_voices}} for more information
-#' about what voices are available.
-#' @param service speech synthesis service to use,
-#' passed to \code{\link[text2speech]{tts}},
-#' Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.
+#' @param tts_engine The desired engine for converting text-to-speech
+#' @param tts_engine_args List of parameters provided to the designated text-to-speech engine
+#' @param tts_engine_auth Authentication required for the designated text-to-speech engine
 #' @param subtitles Should a \code{.srt} file be created with subtitles? The
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
 #' @param duration a vector of numeric durations for each audio
 #' track.  See \code{\link{pad_wav}}
-#' @param ... additional arguments to \code{\link{ari_stitch}}
-#' @param tts_args list of arguments to pass to \code{\link{tts}}
 #' @param key_or_json_file access key or JSON file to pass to
 #' \code{\link{tts_auth}} for authorization
 #'
@@ -43,7 +27,6 @@
 #' @importFrom text2speech tts_auth tts tts_default_voice
 #' @importFrom tuneR bind Wave
 #' @importFrom purrr map reduce
-#' @importFrom progress progress_bar
 #' @importFrom tools file_path_sans_ext
 #' @importFrom cli cli_alert_info
 #' @export
@@ -57,46 +40,43 @@
 #'   "Welcome to my very interesting lecture.",
 #'   "Here are some fantastic equations I came up with."
 #' )
-#' ari_spin(slides, sentences, voice = "Joey")
+#' ari_spin(slides, sentences, output = "test.mp4",
+#'          tts_engine_args = coqui_args(model_name = "tacotron2-DDC_ph",
+#'           vocoder_name = "ljspeech/univnet"))
 #' }
 #'
-ari_spin <- function(images, paragraphs,
-                     output = tempfile(fileext = ".mp4"),
-                     voice = text2speech::tts_default_voice(service = service),
-                     service = ifelse(have_polly(), "amazon", "google"),
-                     subtitles = FALSE,
-                     duration = NULL,
-                     tts_args = NULL,
-                     key_or_json_file = NULL,
-                     ...) {
+ari_spin <- function(images, paragraphs, output,
+                     tts_engine = text2speech::tts,
+                     tts_engine_args = coqui_args(),
+                     tts_engine_auth = text2speech::tts_auth,
+                     subtitles = FALSE, duration = NULL, key_or_json_file = NULL) {
   # Check for ffmpeg
   ffmpeg_exec()
-
   # Argument checks
-  auth <- text2speech::tts_auth(
-    service = service,
+  auth <- tts_engine_auth(
+    service = tts_engine_args$service,
     key_or_json_file = key_or_json_file
   )
   if (!auth) {
     stop(paste0(
       "It appears you're not authenticated with ",
-      service, ". Make sure you've ",
+      tts_engine_args$service, ". Make sure you've ",
       "set the appropriate environmental variables ",
       "before you proceed."
     ))
   }
-
+  # Create file path to output
   stopifnot(length(images) > 0)
   images <- normalizePath(images)
   output_dir <- normalizePath(dirname(output))
-
+  # Paragraphs
   if (length(paragraphs) == 1) {
     if (file.exists(paragraphs)) {
       paragraphs <- readLines(paragraphs, warn = FALSE)
       paragraphs <- paragraphs[!paragraphs %in% ""]
     }
   }
-
+  # Paragraphs: Check for semicolons
   semi_colon <- trimws(paragraphs) == ";"
   if (any(semi_colon)) {
     warning(paste0(
@@ -104,69 +84,58 @@ ari_spin <- function(images, paragraphs,
       "likely needs to be replaced or slide removed!"
     ))
   }
+  # Check for arguments
   stopifnot(
     length(paragraphs) > 0,
     identical(length(images), length(paragraphs)),
     all(file.exists(images)),
     dir.exists(output_dir)
   )
-  # End of Argument checks
 
   # Setup objects to populate in for-loop with tts()
   wave_objects <- vector(mode = "list", length = length(paragraphs))
-  par_along <- seq_along(paragraphs)
+  paragraphs_along <- seq_along(paragraphs)
   ideal_duration <- rep(NA, length(paragraphs))
 
-  pb <- progress_bar$new(
-    format = "Fetching Narration [:bar] :percent",
-    total = length(par_along)
-  )
+  # Progress bar
+  pb <- progress::progress_bar$new(
+    format = " Downloading [:bar] :percent eta: :eta",
+    total = 100, clear = TRUE, width = 60)
+
   # Iterate through arguments used in tts()
-  for (i in par_along) {
-    args <- tts_args
-    args$text <- paragraphs[i]
-    args$voice <- voice
-    args$service <- service
+  for (ii in paragraphs_along) {
+    args <- tts_engine_args
+    args$text <- paragraphs[ii]
     args$bind_audio <- TRUE
-    # coqui+ari doesn't work with mp3
-    if (service == "coqui") {
-      args$output_format <- "wav"
-    }
-    wav <- do.call(text2speech::tts, args = args)
+    wav <- do.call(tts_engine, args = args)
     wav <- reduce(wav$wav, bind)
-    wav <- pad_wav(wav, duration = duration[i])
-    ideal_duration[i] <- length(wav@left) / wav@samp.rate
-    wave_objects[[i]] <- wav
+    wav <- pad_wav(wav, duration = duration[ii])
+    ideal_duration[ii] <- length(wav@left) / wav@samp.rate
+    wave_objects[[ii]] <- wav
+    # Advance progress bar
     pb$tick()
   }
-  if (service == "coqui") {
-    cli::cli_alert_info("Coqui TTS does not support MP3 format; will produce a WAV audio output.")
-  }
-
   # Burn subtitles
   if (subtitles) {
-    sub_file <- paste0(file_path_sans_ext(output), ".srt")
+    sub_file <- paste0(tools::file_path_sans_ext(output), ".srt")
     ari_subtitles(paragraphs, wave_objects, sub_file)
+    message("Subtitle file successfully generated")
   }
 
   # Create a video from images and audio
-  res <- ari_stitch(images, wave_objects, output, ...)
+  res <- ari_stitch(images, wave_objects, output)
+  # Path to output
+  output_path <- attr(res, "outfile")
 
-  # Collect output
-  args <- list(...)
-  cleanup <- args$cleanup
-  if (is.null(cleanup)) {
-    cleanup <- TRUE
+  # Check if larger than 0 bytes
+  output_size <- file.info(output_path)$size
+
+  if (output_size > 0) {
+    return(output_path)
+  } else {
+    stop("File does not exist. Something went wrong.")
   }
-  if (!cleanup) {
-    attr(res, "wavs") <- wave_objects
-  }
-  attr(res, "voice") <- voice
-  if (subtitles) {
-    attr(res, "subtitles") <- sub_file
-  }
-  attr(res, "service") <- service
-  return(res)
+
 }
 
 #' @rdname ari_spin

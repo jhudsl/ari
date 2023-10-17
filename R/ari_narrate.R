@@ -1,9 +1,7 @@
-#' Create a video from slides and a script
+#' Generate video from slides and a script
 #'
 #' \code{ari_narrate} creates a video from a script written in markdown and HTML
 #' slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
-#' This function uses \href{https://aws.amazon.com/polly/}{Amazon Polly}
-#' via \code{\link{ari_spin}}.
 #'
 #' @param script Either a markdown file where every paragraph will be read over
 #' a corresponding slide, or an \code{.Rmd} file where each HTML comment will
@@ -12,12 +10,9 @@
 #' \code{\link[rmarkdown]{rmarkdown}}, \code{xaringan}, or a
 #' similar package.
 #' @param output The path to the video file which will be created.
-#' @param voice The voice you want to use. See
-#' \code{\link[text2speech]{tts_voices}} for more information
-#' about what voices are available.
-#' @param service speech synthesis service to use,
-#' passed to \code{\link[text2speech]{tts}}.
-#' Either \code{"amazon"} or \code{"google"}.
+#' @param tts_engine The desired engine for converting text-to-speech
+#' @param tts_engine_args List of parameters provided to the designated text-to-speech engine
+#' @param tts_engine_auth Authentication required for the designated text-to-speech engine
 #' @param capture_method Either \code{"vectorized"} or \code{"iterative"}.
 #' The vectorized mode is faster though it can cause screens to repeat. If
 #' making a video from an \code{\link[rmarkdown]{ioslides_presentation}}
@@ -26,13 +21,9 @@
 #' default value is \code{FALSE}. If \code{TRUE} then a file with the same name
 #' as the \code{output} argument will be created, but with the file extension
 #' \code{.srt}.
-#' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
-#' @param audio_codec The audio encoder for the splicing.  If this
-#' fails, try \code{copy}.
-#' @param video_codec The video encoder for the splicing.  If this
-#' fails, see \code{ffmpeg -codecs}
 #' @param cleanup If \code{TRUE}, interim files are deleted
+#' @param ... Arguments that will be passed to \code{\link[webshot]{webshot}}.
 #'
 #' @return The output from \code{\link{ari_spin}}
 #' @importFrom xml2 read_html
@@ -44,46 +35,43 @@
 #' @export
 #' @examples
 #' \dontrun{
-#'
-#' #
 #' ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
-#'   system.file("test", "ari_intro.html", package = "ari"),
-#'   voice = "Joey"
-#' )
+#'             system.file("test", "ari_intro.html", package = "ari"),
+#'             output = "test.mp4")
 #' }
-ari_narrate <- function(script, slides,
-                        output = tempfile(fileext = ".mp4"),
-                        voice = text2speech::tts_default_voice(service = service),
-                        service = "amazon",
+ari_narrate <- function(script, slides, output,
+                        tts_engine = text2speech::tts,
+                        tts_engine_args = coqui_args(),
+                        tts_engine_auth = text2speech::tts_auth,
                         capture_method = c("vectorized", "iterative"),
-                        subtitles = FALSE, ...,
+                        subtitles = FALSE,
                         verbose = FALSE,
-                        audio_codec = get_audio_codec(),
-                        video_codec = get_video_codec(),
-                        cleanup = TRUE) {
-  auth <- text2speech::tts_auth(service = service)
+                        cleanup = TRUE,
+                        ...) {
+  # Authentication for Text-to-Speech Engines
+  auth <- tts_engine_auth(service =  tts_engine_args$service)
+  # Stop message
   if (!auth) {
     stop(paste0(
       "It appears you're not authenticated with ",
-      service, ". Make sure you've ",
+      tts_engine_args$service, ". Make sure you've ",
       "set the appropriate environmental variables ",
       "before you proceed."
     ))
   }
-
-
+  # Check capture_method
   capture_method <- match.arg(capture_method)
   if (!(capture_method %in% c("vectorized", "iterative"))) {
     stop('capture_method must be either "vectorized" or "iterative"')
   }
-
+  # Output directory, path to script
   output_dir <- normalizePath(dirname(output))
   script <- normalizePath(script)
   if (file_ext(script) %in% c("Rmd", "rmd") & missing(slides)) {
     tfile <- tempfile(fileext = ".html")
     slides <- rmarkdown::render(input = script, output_file = tfile)
   }
-
+  # Slides
   if (file.exists(slides)) {
     slides <- normalizePath(slides)
     if (.Platform$OS.type == "windows") {
@@ -92,52 +80,56 @@ ari_narrate <- function(script, slides,
       slides <- paste0("file://localhost", slides)
     }
   }
+  # Check if script and output_dir exists
   stopifnot(
     file.exists(script),
     dir.exists(output_dir)
   )
-
+  # Convert script to html and get text
   if (file_ext(script) %in% c("Rmd", "rmd")) {
     paragraphs <- parse_html_comments(script)
   } else {
-    html_path <- file.path(output_dir, paste0("ari_script_", grs(), ".html"))
+    html_path <- file.path(output_dir, paste0("ari_script_", get_random_string(), ".html"))
     if (cleanup) {
       on.exit(unlink(html_path, force = TRUE), add = TRUE)
     }
-    render(script, output_format = html_document(), output_file = html_path)
+    rmarkdown::render(script, output_format = rmarkdown::html_document(), output_file = html_path)
     paragraphs <- map_chr(
-      html_text(html_nodes(read_html(html_path), "p")),
+      rvest::html_text(rvest::html_nodes(xml2::read_html(html_path), "p")),
       function(x) {
         gsub("\u2019", "'", x)
       }
     )
   }
-
+  # Path to images
   slide_nums <- seq_along(paragraphs)
   img_paths <- file.path(
     output_dir,
     paste0(
       "ari_img_",
       slide_nums, "_",
-      grs(), ".jpeg"
+      get_random_string(), ".jpeg"
     )
   )
-
+  # Take screenshot
   if (capture_method == "vectorized") {
-    webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)
+    webshot::webshot(url = paste0(slides, "#", slide_nums), file = img_paths, ...)
   } else {
     for (i in slide_nums) {
-      webshot(url = paste0(slides, "#", i), file = img_paths[i], ...)
+      webshot::webshot(url = paste0(slides, "#", i), file = img_paths[i], ...)
     }
   }
 
   if (cleanup) {
     on.exit(walk(img_paths, unlink, force = TRUE), add = TRUE)
   }
+
+  # Pass along ari_spin()
   ari_spin(
     images = img_paths, paragraphs = paragraphs,
-    output = output, voice = voice,
-    service = service, subtitles = subtitles,
-    verbose = verbose, cleanup = cleanup
-  )
+    output = output,
+    tts_engine = tts_engine,
+    tts_engine_args =  tts_engine_args,
+    tts_engine_auth = tts_engine_auth,
+    subtitles = subtitles)
 }

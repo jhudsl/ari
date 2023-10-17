@@ -4,12 +4,14 @@
 \alias{ari_burn_subtitles}
 \title{Burn Subtitles into a video}
 \usage{
-ari_burn_subtitles(video, srt, verbose = FALSE)
+ari_burn_subtitles(input_video, srt, output_video, verbose = FALSE)
 }
 \arguments{
-\item{video}{Video in \code{mp4} format}
+\item{input_video}{Path to video in \code{mp4} format}
 
-\item{srt}{Subtitle file in \code{srt} format}
+\item{srt}{Path to subtitle file in \code{srt} format}
+
+\item{output_video}{Path to video with subtitles}
 
 \item{verbose}{print diagnostic messages.  If > 1,
 then more are printed}

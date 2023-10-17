@@ -2,28 +2,16 @@
 % Please edit documentation in R/ari_stitch.R
 \name{ari_stitch}
 \alias{ari_stitch}
-\title{Create a video from images and audio}
+\title{Generate video from images and audio}
 \usage{
 ari_stitch(
   images,
   audio,
-  output = tempfile(fileext = ".mp4"),
+  output,
   verbose = FALSE,
   cleanup = TRUE,
-  ffmpeg_opts = "",
-  divisible_height = TRUE,
-  audio_codec = get_audio_codec(),
-  video_codec = get_video_codec(),
-  video_sync_method = "2",
-  audio_bitrate = NULL,
-  video_bitrate = NULL,
-  pixel_format = "yuv420p",
-  fast_start = FALSE,
-  deinterlace = FALSE,
-  stereo_audio = TRUE,
+  ffmpeg_args = set_ffmpeg_args(),
   duration = NULL,
-  video_filters = NULL,
-  frames_per_second = NULL,
   check_inputs = TRUE
 )
 }
@@ -38,45 +26,10 @@ ari_stitch(
 
 \item{cleanup}{If \code{TRUE}, interim files are deleted}
 
-\item{ffmpeg_opts}{additional options to send to \code{ffmpeg}.
-This is an advanced option, use at your own risk}
-
-\item{divisible_height}{Make height divisible by 2, which may
-be required if getting "height not divisible by 2" error.}
-
-\item{audio_codec}{The audio encoder for the splicing.  If this
-fails, try \code{copy}.}
-
-\item{video_codec}{The video encoder for the splicing.  If this
-fails, see \code{ffmpeg -codecs}}
-
-\item{video_sync_method}{Video sync method.  Should be
-"auto" or `"vfr"` or a numeric.  See \url{https://ffmpeg.org/ffmpeg.html}.}
-
-\item{audio_bitrate}{Bit rate for audio. Passed to \code{-b:a}.}
-
-\item{video_bitrate}{Bit rate for video. Passed to \code{-b:v}.}
-
-\item{pixel_format}{pixel format to encode for `ffmpeg`.}
-
-\item{fast_start}{Adding `faststart` flags for YouTube and other sites,
-see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}}
-
-\item{deinterlace}{should the video be de-interlaced,
-see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for
-YouTube}
-
-\item{stereo_audio}{should the audio be forced to stereo,
-corresponds to `-ac 2`}
+\item{ffmpeg_args}{Ffmpeg arguments set by \code{set_ffmpeg_args()}}
 
 \item{duration}{a vector of numeric durations for each audio
-track.  See \code{\link{pad_wav}}}
-
-\item{video_filters}{any options that are passed to \code{-vf} arguments
-for \code{ffmpeg}}
-
-\item{frames_per_second}{frames per second of the video, should
-be an integer}
+track. See \code{\link{pad_wav}}}
 
 \item{check_inputs}{Should the inputs be checked?  Almost always should
 be \code{TRUE}, but may be useful if trying to do customized stuff.}

@@ -3,19 +3,18 @@
 \name{ari_spin}
 \alias{ari_spin}
 \alias{have_polly}
-\title{Create a video from images and text}
+\title{Generate video from images and text}
 \usage{
 ari_spin(
   images,
   paragraphs,
-  output = tempfile(fileext = ".mp4"),
-  voice = text2speech::tts_default_voice(service = service),
-  service = ifelse(have_polly(), "amazon", "google"),
+  output,
+  tts_engine = text2speech::tts,
+  tts_engine_args = coqui_args(),
+  tts_engine_auth = text2speech::tts_auth,
   subtitles = FALSE,
   duration = NULL,
-  tts_args = NULL,
-  key_or_json_file = NULL,
-  ...
+  key_or_json_file = NULL
 )
 
 have_polly()
@@ -27,13 +26,11 @@ have_polly()
 
 \item{output}{A path to the video file which will be created.}
 
-\item{voice}{The voice you want to use. See
-\code{\link[text2speech]{tts_voices}} for more information
-about what voices are available.}
+\item{tts_engine}{The desired engine for converting text-to-speech}
 
-\item{service}{speech synthesis service to use,
-passed to \code{\link[text2speech]{tts}},
-Either \code{"amazon"}, \code{"microsoft"}, or \code{"google"}.}
+\item{tts_engine_args}{List of parameters provided to the designated text-to-speech engine}
+
+\item{tts_engine_auth}{Authentication required for the designated text-to-speech engine}
 
 \item{subtitles}{Should a \code{.srt} file be created with subtitles? The
 default value is \code{FALSE}. If \code{TRUE} then a file with the same name
@@ -43,12 +40,8 @@ as the \code{output} argument will be created, but with the file extension
 \item{duration}{a vector of numeric durations for each audio
 track.  See \code{\link{pad_wav}}}
 
-\item{tts_args}{list of arguments to pass to \code{\link{tts}}}
-
 \item{key_or_json_file}{access key or JSON file to pass to
 \code{\link{tts_auth}} for authorization}
-
-\item{...}{additional arguments to \code{\link{ari_stitch}}}
 }
 \value{
 The output from \code{\link{ari_stitch}}
@@ -56,22 +49,10 @@ The output from \code{\link{ari_stitch}}
 \description{
 Given equal length vectors of paths to images (preferably \code{.jpg}s
 or \code{.png}s) and strings which will be
-synthesized by
-\href{https://aws.amazon.com/polly/}{Amazon Polly} or
-any other synthesizer available in
-\code{\link[text2speech]{tts}}, this function creates an
+synthesized by a text-to-speech engine, this function creates an
 \code{.mp4} video file where each image is shown with
 its corresponding narration. This function uses \code{\link{ari_stitch}} to
 create the video.
-}
-\details{
-This function needs to connect to
-\href{https://aws.amazon.com/}{Amazon Web Services} in order to create the
-narration. You can find a guide for accessing AWS from R
-\href{http://seankross.com/2017/05/02/Access-Amazon-Web-Services-in-R.html}{here}.
-For more information about how R connects
-to Amazon Polly see the \code{aws.polly} documentation
-\href{https://github.com/cloudyr/aws.polly}{here}.
 }
 \examples{
 \dontrun{
@@ -83,7 +64,9 @@ sentences <- c(
   "Welcome to my very interesting lecture.",
   "Here are some fantastic equations I came up with."
 )
-ari_spin(slides, sentences, voice = "Joey")
+ari_spin(slides, sentences, output = "test.mp4",
+         tts_engine_args = coqui_args(model_name = "tacotron2-DDC_ph",
+          vocoder_name = "ljspeech/univnet"))
 }
 
 }
