@@ -17,35 +17,12 @@
 #'
 #' @param images A vector of paths to images.
 #' @param audio A list of \code{Wave}s from tuneR.
-#' @param duration a vector of numeric durations for each audio
-#' track.  See \code{\link{pad_wav}}
 #' @param output A path to the video file which will be created.
 #' @param verbose print diagnostic messages.  If > 1, then more are printed
 #' @param cleanup If \code{TRUE}, interim files are deleted
-#' @param ffmpeg_opts additional options to send to \code{ffmpeg}.
-#' This is an advanced option, use at your own risk
-#' @param divisible_height Make height divisible by 2, which may
-#' be required if getting "height not divisible by 2" error.
-#' @param audio_codec The audio encoder for the splicing.  If this
-#' fails, try \code{copy}.
-#' @param video_codec The video encoder for the splicing.  If this
-#' fails, see \code{ffmpeg -codecs}
-#' @param audio_bitrate Bit rate for audio. Passed to \code{-b:a}.
-#' @param video_bitrate Bit rate for video. Passed to \code{-b:v}.
-#' @param video_sync_method Video sync method.  Should be
-#' "auto" or `"vfr"` or a numeric.  See \url{https://ffmpeg.org/ffmpeg.html}.
-#' @param pixel_format pixel format to encode for `ffmpeg`.
-#' @param fast_start Adding `faststart` flags for YouTube and other sites,
-#' see \url{https://trac.ffmpeg.org/wiki/Encode/YouTube}
-#' @param deinterlace should the video be de-interlaced,
-#' see \url{https://ffmpeg.org/ffmpeg-filters.html}, generally for
-#' YouTube
-#' @param frames_per_second frames per second of the video, should
-#' be an integer
-#' @param stereo_audio should the audio be forced to stereo,
-#' corresponds to `-ac 2`
-#' @param video_filters any options that are passed to \code{-vf} arguments
-#' for \code{ffmpeg}
+#' @param ffmpeg_args Ffmpeg arguments set by \code{set_ffmpeg_args()}
+#' @param duration a vector of numeric durations for each audio
+#' track. See \code{\link{pad_wav}}
 #' @param check_inputs Should the inputs be checked?  Almost always should
 #' be \code{TRUE}, but may be useful if trying to do customized stuff.
 #' @return A logical value, with the attribute \code{outfile} for the
