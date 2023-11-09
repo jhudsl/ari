@@ -8,6 +8,25 @@
 #' @importFrom purrr map_dbl
 #' @importFrom hms hms
 #' @export
+#' @examples
+#' \dontrun{
+#' # Audio files (.wav)
+#' audio <- system.file("test", c("audio1.wav", "audio2.wav"), package = "ari")
+#'
+#' # Import audio files as wave objects
+#' first_wav_object <- tuneR::readWave(audio[1])
+#' second_wav_object <- tuneR::readWave(audio[2])
+#' # Put wave objects inside a list
+#' wavs <- list(first_wav_object, second_wav_object)
+#'
+#' # Text
+#' sentences <- c(
+#'   "Welcome to my very interesting lecture.",
+#'   "Here are some fantastic equations I came up with."
+#' )
+#'
+#' ari_subtitles(sentences, wavs, "output.srt")
+#' }
 ari_subtitles <- function(paragraphs, wavs, path, width = 42) {
   # Calculate the duration of each audio file
   durations <- map_dbl(wavs, ~ length(.x@left) / .x@samp.rate)
@@ -19,7 +38,7 @@ ari_subtitles <- function(paragraphs, wavs, path, width = 42) {
   durations <- rep(durations / lines_per_paragraph, times = lines_per_paragraph)
   paragraphs <- unlist(paragraphs)
 
-  # Convery cumulative duration to format hh:mm:ss,ms
+  # Convert cumulative duration to format hh:mm:ss,ms
   cumdur <- cumsum(durations)
   cumdur <- map(cumdur, hms::hms)
   cumdur <- map(cumdur, as.character)
