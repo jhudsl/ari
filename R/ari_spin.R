@@ -172,9 +172,17 @@ ari_spin <- function(images, paragraphs, output,
 #' @export
 #' @examples
 #' \dontrun{
-#' # TODO
-#' }
+#' slides <- system.file("test", c("mab2.png", "mab1.png"),
+#'   package = "ari"
+#' )
+#' sentences <- c(
+#'   "Welcome to my very interesting lecture.",
+#'   "Here are some fantastic equations I came up with."
+#' )
 #'
+#' ari_spin_vc(slides, sentences, output = "test.mp4",
+#'          tts_engine_args = list(speaker_wav = "speaker.wav"))
+#' }
 ari_spin_vc <- function(images, paragraphs, output,
                         tts_engine = text2speech::tts_coqui_vc,
                         tts_engine_args = list(
