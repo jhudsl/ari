@@ -186,7 +186,8 @@ ari_spin <- function(images, paragraphs, output,
 ari_spin_vc <- function(images, paragraphs, output,
                         tts_engine = text2speech::tts_coqui_vc,
                         tts_engine_args = list(
-                          speaker_wav = "speaker.wav"
+                          speaker_wav = "speaker.wav",
+                          python_version
                         ),
                         subtitles = FALSE,
                         duration = NULL,
