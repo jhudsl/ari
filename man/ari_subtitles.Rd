@@ -18,3 +18,23 @@ ari_subtitles(paragraphs, wavs, path, width = 42)
 \description{
 Generate subtitle files for audio for video content
 }
+\examples{
+\dontrun{
+# Audio files (.wav)
+audio <- system.file("test", c("audio1.wav", "audio2.wav"), package = "ari")
+
+# Import audio files as wave objects
+first_wav_object <- tuneR::readWave(audio[1])
+second_wav_object <- tuneR::readWave(audio[2])
+# Put wave objects inside a list
+wavs <- list(first_wav_object, second_wav_object)
+
+# Text
+sentences <- c(
+  "Welcome to my very interesting lecture.",
+  "Here are some fantastic equations I came up with."
+)
+
+ari_subtitles(sentences, wavs, "output.srt")
+}
+}

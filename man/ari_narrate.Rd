@@ -60,8 +60,12 @@ slides created with \code{\link[rmarkdown]{rmarkdown}} or a similar package.
 }
 \examples{
 \dontrun{
+# Narrate example slides with script
 ari_narrate(system.file("test", "ari_intro_script.md", package = "ari"),
             system.file("test", "ari_intro.html", package = "ari"),
-            output = "test.mp4")
+            output = "test.mp4",
+             tts_engine = text2speech::tts,
+             tts_engine_args = coqui_args(),
+             tts_engine_auth = text2speech::tts_auth)
 }
 }

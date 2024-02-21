@@ -27,3 +27,8 @@ This needs \code{ffmpeg} that was compiled with
 \code{--enable-libass} as per
 \url{https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo}
 }
+\examples{
+\dontrun{
+
+}
+}

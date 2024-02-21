@@ -65,8 +65,11 @@ sentences <- c(
   "Here are some fantastic equations I came up with."
 )
 ari_spin(slides, sentences, output = "test.mp4",
+          tts_engine = text2speech::tts,
          tts_engine_args = coqui_args(model_name = "tacotron2-DDC_ph",
-          vocoder_name = "ljspeech/univnet"))
+                                      vocoder_name = "ljspeech/univnet"),
+         tts_engine_auth = text2speech::tts_auth)
+
 }
 
 }
